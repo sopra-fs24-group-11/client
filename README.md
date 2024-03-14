@@ -1,4 +1,4 @@
-# SoPra FS24 - Client Template with build pack
+# SoPra FS24 - Client Template with build pack :)
 
 ## Getting started
 
