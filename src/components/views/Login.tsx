@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Login.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import { Switch } from "../ui/switch"
-import { Card,  CardContent, CardDescription, 
-  CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { Label } from "../ui/label"
-import { Progress } from "../ui/progress"
-
-
+import { Switch } from "../ui/switch";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Label } from "../ui/label";
+import { Progress } from "../ui/progress";
 
 const FormField = (props) => {
   return (
@@ -53,9 +57,7 @@ const Login = () => {
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/Dashboard");
     } catch (error) {
-      alert(
-        `Something went wrong during the login: \n${handleError(error)}`
-      );
+      alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
   };
 
@@ -68,11 +70,7 @@ const Login = () => {
             value={username}
             onChange={(un: string) => setUsername(un)}
           />
-          <FormField
-            label="Name"
-            value={name}
-            onChange={(n) => setName(n)}
-          />
+          <FormField label="Name" value={name} onChange={(n) => setName(n)} />
           <div className="login button-container">
             <Button
               disabled={!username || !name}
@@ -84,7 +82,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-
     </BaseContainer>
   );
 };
