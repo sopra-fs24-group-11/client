@@ -6,13 +6,14 @@ import { Button } from "components/ui/Button";
 import "styles/views/Login.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
+import { Switch } from "../ui/switch"
+import { Card,  CardContent, CardDescription, 
+  CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Label } from "../ui/label"
+import { Progress } from "../ui/progress"
 
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
+
+
 const FormField = (props) => {
   return (
     <div className="login field">
@@ -50,7 +51,7 @@ const Login = () => {
       localStorage.setItem("token", user.token);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/game");
+      navigate("/Dashboard");
     } catch (error) {
       alert(
         `Something went wrong during the login: \n${handleError(error)}`
@@ -83,11 +84,9 @@ const Login = () => {
           </div>
         </div>
       </div>
+
     </BaseContainer>
   );
 };
 
-/**
- * You can get access to the history object's properties via the useLocation, useNavigate, useParams, ... hooks.
- */
 export default Login;

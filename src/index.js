@@ -2,6 +2,7 @@ import React from "react";
 import {createRoot} from "react-dom/client";
 import "./styles/index.scss";
 import App from "./App";
+import './styles/tailwind.css';
 
 /**
  * This is the entry point of your React application where the root element is in the public/index.html.
