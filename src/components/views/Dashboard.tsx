@@ -1,32 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Login.scss";
-import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import { Switch } from "../ui/switch";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
-import { Skeleton } from "../ui/skeleton";
 
-import "../../styles/views/Dashboard.scss"; // Assuming you have a CSS file for styles
+import "../../styles/views/Dashboard.scss";
+import LinearIndeterminate from "components/ui/loader";
 
 // Components
 const FriendList: React.FC = () => {
   return (
     <div className="friend-list component">
       <h2>Friend List</h2>
-      {/* Placeholder content */}
       <ul>
         <li>Michael B - Online</li>
         <li>Ulf Z. - Online</li>
@@ -40,11 +29,10 @@ const WelcomeMessage: React.FC = () => {
   return (
     <div className="welcome component">
       <h1 className="welcome-title">Welcome back, Alberto!</h1>
-      <p>Your progress:</p>
+      <p className="font-bold text-lg">Your progress</p>
       <div className="mb-8">
-        {" "}
-        {/* This adds a bottom margin. '8' can be adjusted to the desired space */}{" "}
         <Progress value={35} />
+        <p>Level: X</p>
       </div>
 
       <div className="current-trips component">
@@ -154,6 +142,20 @@ const FriendLeaderboard: React.FC = () => {
 
 // Main Dashboard component
 const Dashboard2: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // 3000ms = 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <LinearIndeterminate />;
+  }
+
   return (
     <div className="dashboard">
       <div className="column friend-list">
@@ -173,52 +175,3 @@ const Dashboard2: React.FC = () => {
 };
 
 export default Dashboard2;
-
-/* const Dashboard = () => {
-  return (
-    <div>
-    <h1>Dashboard</h1>
-    
-    <div>
-        <div className="my-4"></div>
-
-        <div className="max-w-md mx-auto">
-            <Card>
-                <CardHeader >
-                    <CardTitle>This is an example Card</CardTitle>
-                    <CardDescription>Card Description</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>Card Content</p>
-                </CardContent>
-                <CardFooter>
-                    <p>Card Footer</p>
-                </CardFooter>
-            </Card>
-        </div>
-
-        <div className="flex justify-center items-center h-20">
-            <div className="flex items-center space-x-3">
-                <Switch id="airplane-mode" />
-                <Label htmlFor="airplane-mode">Airplane Mode</Label>
-            </div>
-        </div>
-
-        <div>
-            <Progress value={20} />
-        </div>
-
-        
-        <div className="flex flex-col space-y-3 h-36 items-center justify-center">
-            <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-            <div className="space-y-2">
-                <Skeleton className="h-4 w-[250px]" />
-                <Skeleton className="h-4 w-[200px]" />
-            </div>
-        </div>
-    </div>
-    </div>
-  );
-} */
-
-// export default Dashboard;

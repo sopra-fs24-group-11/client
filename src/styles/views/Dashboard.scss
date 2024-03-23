@@ -9,7 +9,7 @@
   background-image: url("../../graphics/netzplan.svg");
   background-size: cover;
   background-position: center;
-  min-height: 100vh; /* 80% of the viewport */
+  min-height: 100vh;
   position: relative;
   overflow: hidden; // Contain the pseudo-element for the overlay
 
@@ -38,8 +38,8 @@
 .component {
   background: #d8d8d8;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 15px;
+  box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
 }
 
 .component h2 {
@@ -84,9 +84,10 @@
     align-items: center;
     background: #6e90ae;
     color: white; /* Text color for trip items */
-    margin-bottom: 5px; /* Spacing between trip items */
+    margin-bottom: 10px; /* Spacing between trip items */
     padding: 5px; /* Padding inside trip items */
     border-radius: 4px; /* Rounded corners for trip items */
+    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.3);
   }
 }
 

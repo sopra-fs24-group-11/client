@@ -1,28 +1,85 @@
-import React from "react";
-import {ReactLogo} from "../ui/ReactLogo";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api, handleError } from "helpers/api";
 import PropTypes from "prop-types";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import logo from "../../graphics/Get-Together.png"; // Importing the image
 import "../../styles/views/Header.scss";
 
-/**
- * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
- * Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
- * They are reusable pieces, and think about each piece in isolation.
- * Functional components have to return always something. However, they don't need a "render()" method.
- * https://react.dev/learn/your-first-component and https://react.dev/learn/passing-props-to-a-component 
- * @FunctionalComponent
- */
-const Header = props => (
-  <div className="header container" style={{height: props.height}}>
-    <h1 className="header title">Group 11 rocks with React!</h1>
-    <ReactLogo width="60px" height="60px"/>
-  </div>
-);
+const Header = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    // Removed the type declaration to fit standard JS syntax
+    // No need to call useNavigate here, use the navigate function directly
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        // await api.put("/auth/logout", { token });
+
+        localStorage.removeItem("token");
+        handleClose();
+        navigate("/login");
+      } catch (error) {
+        console.error(error);
+        handleError(error);
+      }
+    } else {
+      console.error("No token found in local storage.");
+    }
+  };
+
+  return (
+    <div className="header cont">
+      <div className="logo">
+        <img src={logo} alt="Get-Together" />
+      </div>
+      <IconButton
+        edge="end"
+        color="inherit"
+        aria-label="menu"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
+        onClick={handleMenu}
+        className="menu-icon"
+      >
+        <MenuIcon />
+      </IconButton>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
+    </div>
+  );
+};
 
 Header.propTypes = {
   height: PropTypes.string,
 };
 
-/**
- * Don't forget to export your component!
- */
 export default Header;
