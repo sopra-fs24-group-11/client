@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 
 export const LoginGuard = () => {
-  if (localStorage.getItem("token")) {
+  if (!localStorage.getItem("token")) {
     
     return <Outlet />;
   }

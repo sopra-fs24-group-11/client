@@ -4,7 +4,7 @@ import {GameGuard} from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import {LoginGuard} from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
-import Dashboard from "../../views/Dashboard";
+import Dashboard2 from "../../views/Dashboard";
 
 const AppRouter = () => {
   return (
@@ -19,8 +19,8 @@ const AppRouter = () => {
           <Route path="/login" element={<Login/>} />
         </Route>
 
-        <Route path="/Dashboard" element={<LoginGuard />}>
-          <Route path="/Dashboard" element={<Dashboard/>} />
+        <Route path="/Dashboard" element={<GameGuard />}>
+          <Route path="/Dashboard" element={<Dashboard2/>} />
         </Route>
 
         <Route path="/" element={

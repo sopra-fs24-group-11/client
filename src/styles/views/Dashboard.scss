@@ -1,0 +1,120 @@
+/* Extending the existing Dashboard SCSS */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Adjust the ratios according to your design */
+    gap: 30px; /* Spacing between columns */
+    padding-top: 20px;
+    padding-bottom: 60px;
+    padding-right: 50px;
+    padding-left: 50px;
+    background-image: url('../../graphics/netzplan.svg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh; /* 80% of the viewport */
+    position: relative;
+    overflow: hidden; // Contain the pseudo-element for the overlay
+  
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0; // Shorthand for top: 0; right: 0; bottom: 0; left: 0;
+      background: rgba(0, 0, 0, 0.4); // Dark overlay
+      backdrop-filter: blur(4px); // Blur effect
+      pointer-events: none; // Allows clicks to pass through to elements below
+    }
+  
+    // To ensure content is visible above the overlay
+    & > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
+  
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Spacing between items in the column */
+  }
+  
+  .component {
+    background: #D8D8D8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+  }
+  
+  .component h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    border-bottom: 2px solid #222222;
+    padding-bottom: 3px;
+    margin-bottom: 20px;
+  }
+  
+  /* Styling for the welcome message */
+  .welcome {
+    background: #3A4A58;
+    .welcome-title {
+        color: #ffffff;
+      border-bottom: 2px solid #ffffff;
+      padding-bottom: 3px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+  
+    p {
+      margin-bottom: 10px; /* Adjust as needed */
+      color: rgb(255, 255, 255);
+    }
+    .create-button-container {
+        display: flex;
+        justify-content: center;
+    }
+    .trip-container {
+        display: flex;
+        flex-direction: column;
+      }
+      
+    .trip-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch; /* Optional: adjust this based on your design */
+    align-items: center;
+    background: #6E90AE;
+    color: white; /* Text color for trip items */
+    margin-bottom: 5px; /* Spacing between trip items */
+    padding: 5px; /* Padding inside trip items */
+    border-radius: 4px; /* Rounded corners for trip items */
+    }
+  }
+  
+  /* Styling for the current trips component */
+  .current-trips {
+    background: #21689E; /* Change the background color to blue */
+    padding: 10px; /* Smaller padding to make the component a bit smaller */
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+
+    h2 {
+      color: white; /* Color of the title text */
+      margin-bottom: 10px;
+    }
+
+  }
+  
+  /* Add media queries below for responsiveness */
+  @media (max-width: 768px) {
+    .dashboard {
+      grid-template-columns: 1fr; /* Stack columns on small screens */
+    }
+    .column {
+      width: 100%; /* Full width on small screens */
+    }
+  }
+  
+  
