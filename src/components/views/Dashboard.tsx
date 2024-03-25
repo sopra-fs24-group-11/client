@@ -175,7 +175,7 @@ const Dashboard2: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 4000); // Show loader for x seconds
+    }, 2000); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);
