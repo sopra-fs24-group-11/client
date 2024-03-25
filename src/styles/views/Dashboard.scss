@@ -105,6 +105,26 @@
   }
 }
 
+.trip-invitations {
+  .trip-invitation-list {
+    display: flex; // This enables Flexbox for the container
+    align-items: center; // This vertically centers the items in the container
+    flex-wrap: wrap;
+    justify-content: space-between; // This positions the items on opposite ends of the container
+    overflow-y: auto; // Enable scrolling for the list
+    max-height: 150px; // Limit the height of the list to enable scrolling
+
+    div {
+      // Style for the invitation text
+      flex-grow: 1; // This allows the text to take up the available space, pushing the button to the right
+      margin-right: 10px; // Optional: Adds some space between the text and the button
+      margin-bottom: 10px; // Optional: Adds some space between the invitation items
+      margin-top: 10px; // Optional: Adds some space between the invitation items
+    }
+  }
+}
+
+
 /* Add media queries below for responsiveness */
 @media (max-width: 768px) {
   .dashboard {

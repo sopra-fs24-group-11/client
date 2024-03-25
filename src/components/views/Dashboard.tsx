@@ -83,7 +83,6 @@ const NotificationsLog: React.FC = () => {
   return (
     <div className="notifications-log component">
       <h2>Notifications Log</h2>
-      {/* Placeholder content */}
       <div>
         <ol>
           <li>11:34 - Michael updated trip members XXXXXX XXXXXX XXX</li>
@@ -99,8 +98,32 @@ const TripInvitations: React.FC = () => {
   return (
     <div className="trip-invitations component">
       <h2>Trip Invitations</h2>
-      {/* Placeholder content */}
-      <div>Invitation to Binzmühlestrasse, Zürich</div>
+      <div className="trip-invitation-list">
+        <div>Invitation to Binzmühlestrasse, Zürich</div>
+        <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          Accept
+        </Button>
+        <div>Invitation to Binzmühlestrasse, Zürich</div>
+        <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          Accept
+        </Button>
+        <div>Invitation to Binzmühlestrasse, Zürich</div>
+        <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          Accept
+        </Button>
+        <div>Invitation to Binzmühlestrasse, Zürich</div>
+        <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          Accept
+        </Button>
+        <div>Invitation to Binzmühlestrasse, Zürich</div>
+        <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          Accept
+        </Button>
+        <div>Invitation to Binzmühlestrasse, Zürich</div>
+        <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          Accept
+        </Button>
+      </div>
     </div>
   );
 };
@@ -109,7 +132,6 @@ const YourFavorites: React.FC = () => {
   return (
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
-      {/* Placeholder content */}
       <ol>
         <li>Binzmühlestrasse</li>
         <li>Universität Zürich</li>
@@ -147,7 +169,7 @@ const Dashboard2: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // 3000ms = 3 seconds
+    }, 4000); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);

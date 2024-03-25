@@ -6,6 +6,8 @@ import { LoginGuard } from "../routeProtectors/LoginGuard";
 import Login from "../../views/Login";
 import Dashboard2 from "../../views/Dashboard";
 import Header from "../../views/Header";
+import RegisterExample from "../../views/RegisterExample";
+
 
 const AppRouter = () => {
   return (
@@ -18,6 +20,10 @@ const AppRouter = () => {
 
         <Route path="/login" element={<LoginGuard />}>
           <Route path="" element={<Login />} />
+        </Route>
+
+        <Route path="/registerexample" element={<LoginGuard />}>
+          <Route path="" element={<RegisterExample />} />
         </Route>
 
         <Route path="/dashboard" element={<GameGuard />}>
