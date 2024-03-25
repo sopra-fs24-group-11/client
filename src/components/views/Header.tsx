@@ -23,7 +23,7 @@ const Header = () => {
 
   const goToProfile = () => {
     navigate("/profile");
-  }
+  };
 
   const goToDashboard = () => {
     navigate("/dashboard");
@@ -51,7 +51,11 @@ const Header = () => {
 
   return (
     <div className="header cont">
-      <div className="logo" onClick={goToDashboard} style={{ cursor: 'pointer' }}>
+      <div
+        className="logo"
+        onClick={goToDashboard}
+        style={{ cursor: "pointer" }}
+      >
         <img src={logo} alt="Get-Together" />
       </div>
       <IconButton
