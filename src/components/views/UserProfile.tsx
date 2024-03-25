@@ -58,7 +58,9 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="profile-page container">
       <div className="avatar-and-text pt-10 pb-10">
-          {user && user.avatar && <img className="avatar" src={user.avatar} alt="User" />}
+        {user && user.avatar && (
+          <img className="avatar" src={user.avatar} alt="User" />
+        )}
         <div className="text">
           <h1 className="title">Profile</h1>
           <Label>Username</Label>
