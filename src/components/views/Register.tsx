@@ -33,7 +33,7 @@ const Register = () => {
   const [secondPassword, setSecondPassword] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
   const [birthday, setBirthday] = useState<string>(null);
-  const [email, setMail] = useState<string>(null)
+  const [email, setMail] = useState<string>(null);
 
   const handleBirthdayChange = (event) => {
     const { value } = event.target;
@@ -47,11 +47,15 @@ const Register = () => {
   };
 
   const doRegister = async () => {
-
     try {
-      validatePassword
+      validatePassword;
 
-      const requestBody = JSON.stringify({ username, password, birthday, email });
+      const requestBody = JSON.stringify({
+        username,
+        password,
+        birthday,
+        email,
+      });
       const response = await api.post("/users/register", requestBody);
 
       // Store the token into the local storage.
@@ -59,7 +63,6 @@ const Register = () => {
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/Dashboard");
-
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
@@ -82,10 +85,10 @@ const Register = () => {
           />
           <div className="register field">
             <label className="login label">Birthday</label>
-            <input 
-              className="register input" 
+            <input
+              className="register input"
               type="date"
-              placeholder="enter here.." 
+              placeholder="enter here.."
               value={birthday}
               onChange={handleBirthdayChange}
             />
@@ -104,7 +107,9 @@ const Register = () => {
           />
           <div className="register button-container ">
             <Button
-              disabled={!username || !password || !secondPassword || !email || !birthday}
+              disabled={
+                !username || !password || !secondPassword || !email || !birthday
+              }
               width="100%"
               onClick={() => doRegister()}
             >
