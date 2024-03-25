@@ -72,7 +72,7 @@ const ProfilePage: React.FC = () => {
           <img className="avatar" src={user.avatar} alt="User" />
         )}
         <div className="text">
-          <h1 className="title font-extrabold">Profile</h1>
+          <h1 className="title font-extrabold text-3xl">Profile</h1>
           <Label className="label">Username</Label>
           <p>{user && user.username}</p>
           <Label className="label">Email</Label>

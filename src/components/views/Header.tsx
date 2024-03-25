@@ -21,9 +21,13 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const handleProfile = () => {
+  const goToProfile = () => {
     navigate("/profile");
   }
+
+  const goToDashboard = () => {
+    navigate("/dashboard");
+  };
 
   const handleLogout = async () => {
     // Removed the type declaration to fit standard JS syntax
@@ -47,7 +51,7 @@ const Header = () => {
 
   return (
     <div className="header cont">
-      <div className="logo">
+      <div className="logo" onClick={goToDashboard} style={{ cursor: 'pointer' }}>
         <img src={logo} alt="Get-Together" />
       </div>
       <IconButton
@@ -77,7 +81,7 @@ const Header = () => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        <MenuItem onClick={goToProfile}>Profile</MenuItem>
       </Menu>
     </div>
   );

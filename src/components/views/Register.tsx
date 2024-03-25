@@ -49,18 +49,13 @@ const Register = () => {
   const doRegister = async () => {
 
     try {
-      validatePassword();
-    } catch (error) {
-      // Handle the error, such as displaying it to the user
-      alert(`The two provided passwords don't match!: \n${handleError(error)}`);
-    }
-    
-    try {
+      validatePassword
+
       const requestBody = JSON.stringify({ username, password, birthday, email });
       const response = await api.post("/users/register", requestBody);
 
       // Store the token into the local storage.
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data);
 
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/Dashboard");
@@ -74,7 +69,7 @@ const Register = () => {
     <BaseContainer>
       <div className="register container">
         <div className="register form">
-          <h1>Register</h1>
+          <h1>Register Form</h1>
           <FormField
             label="Username"
             value={username}
@@ -107,13 +102,22 @@ const Register = () => {
             type="password"
             onChange={(n) => setSecondPassword(n)}
           />
-          <div className="register button-container">
+          <div className="register button-container ">
             <Button
-              disabled={!username || !password}
+              disabled={!username || !password || !secondPassword || !email || !birthday}
               width="100%"
               onClick={() => doRegister()}
             >
               Register
+            </Button>
+          </div>
+          <div className="register button-container ">
+            <Button
+              backgroundColor={"#FFB703"}
+              width="100%"
+              onClick={() => navigate("/login")}
+            >
+              Go to Login
             </Button>
           </div>
         </div>

@@ -62,8 +62,9 @@ const Login = () => {
             type="password"
             onChange={(n) => setPassword(n)}
           />
-          <div className="login button-container">
+          <div className="login button-container mb-5">
             <Button
+              className={"drop-shadow-xl"}
               disabled={!username || !password}
               width="100%"
               onClick={() => doLogin()}
@@ -71,6 +72,13 @@ const Login = () => {
               Login
             </Button>
           </div>
+          <Button
+            className={"drop-shadow-xl"}
+            backgroundColor="#FFB703"
+            onClick={() => navigate("/register")}
+          >
+            Go To Register
+          </Button>
         </div>
       </div>
     </BaseContainer>
