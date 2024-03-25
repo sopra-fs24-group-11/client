@@ -22,6 +22,7 @@ const ProfilePage: React.FC = () => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 3000); // Show loader for x seconds
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -30,7 +31,7 @@ const ProfilePage: React.FC = () => {
     async function fetchDataAndCheckEditability() {
       try {
         const token = localStorage.getItem("token");
-        const responseimage = await api.get(`/users/image`, {
+        const responseimage = await api.get("/users/image", {
           headers: { token: token },
           responseType: "blob",
         });
@@ -40,6 +41,7 @@ const ProfilePage: React.FC = () => {
           ...prevUser,
           avatar: imageUrl,
         }));
+        
         // Revoke the Blob URL on cleanup
         return () => {
           URL.revokeObjectURL(imageUrl);
