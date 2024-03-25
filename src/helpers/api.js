@@ -6,6 +6,11 @@ export const api = axios.create({
   headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
 });
 
+export const api2 = axios.create({
+  baseURL: getDomain(),
+  headers: { "Content-Type": "application/img", "Access-Control-Allow-Origin": "*" }
+});
+
 export const handleError = error => {
   const response = error.response;
 

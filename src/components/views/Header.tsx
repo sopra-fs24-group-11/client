@@ -21,6 +21,10 @@ const Header = () => {
     setAnchorEl(null);
   };
 
+  const handleProfile = () => {
+    navigate("/profile");
+  }
+
   const handleLogout = async () => {
     // Removed the type declaration to fit standard JS syntax
     // No need to call useNavigate here, use the navigate function directly
@@ -73,6 +77,7 @@ const Header = () => {
         onClose={handleClose}
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleProfile}>Profile</MenuItem>
       </Menu>
     </div>
   );

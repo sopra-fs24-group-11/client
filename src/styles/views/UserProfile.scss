@@ -1,0 +1,31 @@
+.profile-page.container {
+    padding: 200px;
+    padding-left: 300px;
+    padding-right: 300px;
+    .avatar-and-text{
+        display: flex;
+        align-items: stretch;
+        border-radius: 15px;
+        background-color: aquamarine;
+        .avatar{
+            width: 300px;
+            height: 300px;
+            margin-left: 30px;
+            margin-right: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .text{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            .username{
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+            .email{
+                font-size: 1rem;
+            }
+        }
+    }
+}
