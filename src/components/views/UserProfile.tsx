@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api, api2, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
@@ -26,22 +26,30 @@ const ProfilePage: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Fetching image data effect
+  // Fetching image
   useEffect(() => {
-    async function fetchDataAndCheckEditability() {
+    async function fetchData() {
       try {
         const token = localStorage.getItem("token");
-        const responseimage = await api.get("/users/image", {
+        const userdata = await api.get("/users", {
+          headers: { token: token },
+        });
+        const user: User = userdata.data;
+        setUser(user);
+
+        const response = await api.get("/users/image", {
           headers: { token: token },
           responseType: "blob",
         });
+        console.log("RESPONSE", response.data);
         // Create a URL for the Blob
-        const imageUrl = URL.createObjectURL(responseimage.data);
+        const imageUrl = URL.createObjectURL(response.data);
+        console.log(response.data);
         setUser((prevUser) => ({
           ...prevUser,
           avatar: imageUrl,
         }));
-        
+
         // Revoke the Blob URL on cleanup
         return () => {
           URL.revokeObjectURL(imageUrl);
@@ -50,7 +58,7 @@ const ProfilePage: React.FC = () => {
         handleError(error);
       }
     }
-    fetchDataAndCheckEditability();
+    fetchData();
   }, []);
 
   if (isLoading) {
@@ -64,11 +72,21 @@ const ProfilePage: React.FC = () => {
           <img className="avatar" src={user.avatar} alt="User" />
         )}
         <div className="text">
-          <h1 className="title">Profile</h1>
-          <Label>Username</Label>
+          <h1 className="title font-extrabold">Profile</h1>
+          <Label className="label">Username</Label>
           <p>{user && user.username}</p>
-          <Label>Birthday</Label>
+          <Label className="label">Email</Label>
+          <p>{user && user.email}</p>
+          <Label className="label">Creation Date</Label>
+          <p>{user && user.creationDate}</p>
+          <Label className="label">Birthday</Label>
           <p>{user && user.birthday}</p>
+          <Button
+            backgroundColor={"#FB8500"}
+            onClick={() => navigate("/Dashboard")}
+          >
+            Back to Dashboard
+          </Button>
         </div>
       </div>
     </div>

@@ -1,31 +1,51 @@
 .profile-page.container {
-    padding: 200px;
-    padding-left: 300px;
-    padding-right: 300px;
-    .avatar-and-text{
-        display: flex;
-        align-items: stretch;
-        border-radius: 15px;
-        background-color: aquamarine;
-        .avatar{
-            width: 300px;
-            height: 300px;
-            margin-left: 30px;
-            margin-right: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .text{
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            .username{
-                font-size: 1.5rem;
-                font-weight: bold;
-            }
-            .email{
-                font-size: 1rem;
-            }
-        }
+  height: 100vh;
+  padding: 20%; // use relative padding
+  box-sizing: border-box; // make sure padding doesn't affect the total width
+
+  @media (max-width: 768px) {
+    padding: 10%; // less padding on smaller screens
+  }
+
+  .avatar-and-text {
+    display: flex;
+    align-items: stretch;
+    border-radius: 15px;
+    background-color: rgb(172, 255, 227);
+
+    @media (max-width: 768px) {
+      flex-direction: column; // stack elements vertically on smaller screens
+      align-items: center; // center items when stacked
     }
+
+    .avatar {
+      width: 200px;
+      height: 200px;
+      margin: 30px 60px 30px 30px; // shorthand for margin values
+      border-radius: 50%;
+      object-fit: cover;
+
+      @media (max-width: 768px) {
+        width: 40vw; // make the avatar width responsive
+        height: 40vw; // maintain aspect ratio
+        margin: 20px 0; // adjust margins for smaller screens
+      }
+    }
+    .label {
+      // Angenommen, Ihre Label-Komponente verwendet eine Klasse namens 'label'
+      font-size: 1.25rem; // Größere Schriftgröße
+      margin-bottom: 0.5rem; // Optional: Fügen Sie Abstand zum nächsten Element hinzu
+    }
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      @media (max-width: 768px) {
+        align-items: center; // center text on smaller screens
+        text-align: center; // ensure text is centered
+      }
+    }
+  }
 }
