@@ -3,12 +3,14 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
+import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../views/Login";
 import Dashboard2 from "../../views/Dashboard";
 import Header from "../../views/Header";
 import RegisterExample from "../../views/RegisterExample";
 import UserProfile from "../../views/UserProfile"
 import Register from "../../views/Register"
+
 
 
 const AppRouter = () => {
@@ -24,7 +26,7 @@ const AppRouter = () => {
           <Route path="" element={<Login />} />
         </Route>
 
-        <Route path="/register" element={<LoginGuard />}>
+        <Route path="/register" element={<RegisterGuard />}>
           <Route path="" element={<Register />} />
         </Route>
 
@@ -40,7 +42,7 @@ const AppRouter = () => {
           <Route path="" element={<UserProfile />} />
         </Route>
 
-        <Route path="/" element={<Navigate to="/game" replace />} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   );

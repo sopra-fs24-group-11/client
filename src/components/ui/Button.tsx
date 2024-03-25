@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { PropTypes } from "prop-types";
 import "../../styles/ui/Button.scss";
 
 export const Button = ({ width, height, backgroundColor, style, className, children, ...rest }) => (
