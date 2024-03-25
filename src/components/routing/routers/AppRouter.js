@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import GameRouter from "./GameRouter";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
-import { RegisterGuard } from "../routeProtectors/RegisteGuard";
+import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../views/Login";
 import Dashboard2 from "../../views/Dashboard";
 import Header from "../../views/Header";
