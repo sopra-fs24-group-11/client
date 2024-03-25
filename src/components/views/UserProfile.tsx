@@ -21,7 +21,7 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000); // Show loader for x seconds
+    }, 2000); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -66,7 +66,7 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="profile-page container">
+    <div className="profile-page-container">
       <div className="avatar-and-text pt-10 pb-10">
         {user && user.avatar && (
           <img className="avatar" src={user.avatar} alt="User" />

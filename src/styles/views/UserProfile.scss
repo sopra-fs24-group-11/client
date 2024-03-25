@@ -1,6 +1,6 @@
-.profile-page.container {
+.profile-page-container {
   height: 100vh;
-  padding: 20%; // use relative padding
+  padding: 10% 20% 20% 20%; // use relative padding
   box-sizing: border-box; // make sure padding doesn't affect the total width
 
   @media (max-width: 768px) {
@@ -11,7 +11,7 @@
     display: flex;
     align-items: stretch;
     border-radius: 15px;
-    background-color: rgb(172, 255, 227);
+    background-color: rgb(194, 255, 235);
 
     @media (max-width: 768px) {
       flex-direction: column; // stack elements vertically on smaller screens
