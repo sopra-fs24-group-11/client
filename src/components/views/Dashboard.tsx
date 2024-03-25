@@ -16,7 +16,8 @@ const FriendList: React.FC = () => {
   return (
     <div className="friend-list component">
       <h2>Friend List</h2>
-      <ul>
+
+      <ul className="friend-list-list">
         <li>Michael B - Online</li>
         <li>Ulf Z. - Online</li>
         <li>Christiane B. - Offline</li>
@@ -83,10 +84,15 @@ const NotificationsLog: React.FC = () => {
   return (
     <div className="notifications-log component">
       <h2>Notifications Log</h2>
-      <div>
+      <div className="notifications-log-list">
         <ol>
           <li>11:34 - Michael updated trip members XXXXXX XXXXXX XXX</li>
           <li>11:37 - Michael updated trip members XXXXXX XXXXXX XXX</li>
+          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
+          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
+          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
+          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
+          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
           <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
         </ol>
       </div>
@@ -99,30 +105,30 @@ const TripInvitations: React.FC = () => {
     <div className="trip-invitations component">
       <h2>Trip Invitations</h2>
       <div className="trip-invitation-list">
-        <div>Invitation to Binzmühlestrasse, Zürich</div>
-        <Button width="80px" height="35px" backgroundColor="#82FF6D">
-          Accept
-        </Button>
-        <div>Invitation to Binzmühlestrasse, Zürich</div>
-        <Button width="80px" height="35px" backgroundColor="#82FF6D">
-          Accept
-        </Button>
-        <div>Invitation to Binzmühlestrasse, Zürich</div>
-        <Button width="80px" height="35px" backgroundColor="#82FF6D">
-          Accept
-        </Button>
-        <div>Invitation to Binzmühlestrasse, Zürich</div>
-        <Button width="80px" height="35px" backgroundColor="#82FF6D">
-          Accept
-        </Button>
-        <div>Invitation to Binzmühlestrasse, Zürich</div>
-        <Button width="80px" height="35px" backgroundColor="#82FF6D">
-          Accept
-        </Button>
-        <div>Invitation to Binzmühlestrasse, Zürich</div>
-        <Button width="80px" height="35px" backgroundColor="#82FF6D">
-          Accept
-        </Button>
+        <div className="trip-invitation">
+          <div>Invitation to Binzmühlestrasse, Zürich</div>
+          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+            Accept
+          </Button>
+        </div>
+        <div className="trip-invitation">
+          <div>Invitation to Binzmühlestrasse, Zürich</div>
+          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+            Accept
+          </Button>
+        </div>
+        <div className="trip-invitation">
+          <div>Invitation to Binzmühlestrasse, Zürich</div>
+          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+            Accept
+          </Button>
+        </div>
+        <div className="trip-invitation">
+          <div>Invitation to Binzmühlestrasse, Zürich</div>
+          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+            Accept
+          </Button>
+        </div>
       </div>
     </div>
   );
