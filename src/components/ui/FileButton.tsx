@@ -18,7 +18,12 @@ const FileButton: React.FC = () => {
     <>
       <FileInputButton onChange={updateFiles} value={files} />
       {files.map((file) => (
-        <FileCard key={file.id} {...file} onDelete={() => removeFile(file)} info />
+        <FileCard
+          key={file.id}
+          {...file}
+          onDelete={() => removeFile(file)}
+          info
+        />
       ))}
     </>
   );
