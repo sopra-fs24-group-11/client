@@ -158,8 +158,18 @@ const ProfilePage: React.FC = () => {
             {editMode && (
               <div className="avatar-buttons">
                 <input type="file" onChange={handleAvatarChange} />
-                <Button backgroundColor={"#6E90AE"} onClick={handleAvatarUpload}>Upload Avatar</Button>
-                <Button backgroundColor={"#6E90AE"} onClick={handleAvatarDelete}>Delete Avatar</Button>
+                <Button
+                  backgroundColor={"#6E90AE"}
+                  onClick={handleAvatarUpload}
+                >
+                  Upload Avatar
+                </Button>
+                <Button
+                  backgroundColor={"#6E90AE"}
+                  onClick={handleAvatarDelete}
+                >
+                  Delete Avatar
+                </Button>
               </div>
             )}
           </div>
