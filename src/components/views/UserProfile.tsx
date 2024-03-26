@@ -22,6 +22,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -146,6 +147,7 @@ const ProfilePage: React.FC = () => {
   };
 
   if (isLoading) {
+    
     return <LinearIndeterminate />;
   }
 
