@@ -1,65 +1,149 @@
 import React, { useState, useEffect } from "react";
-import { api, api2, handleError } from "helpers/api";
+import { api, handleError } from "helpers/api";
 import User from "models/User";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
-import "styles/views/Login.scss";
-import PropTypes from "prop-types";
 import { Label } from "../ui/label";
-import { Progress } from "../ui/progress";
-
-import "../../styles/views/UserProfile.scss";
 import LinearIndeterminate from "components/ui/loader";
+import "../../styles/views/UserProfile.scss";
 
 // Main Profile component
 const ProfilePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editedUser, setEditedUser] = useState({
+    username: "",
+    email: "",
+    birthday: "",
+  });
   const navigate = useNavigate();
 
-  // Loader timeout effect
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Show loader for x seconds
-
+    const timer = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Fetching image
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
         const userdata = await api.get("/users", {
-          headers: { token: token },
+          headers: { token },
         });
         const user: User = userdata.data;
         setUser(user);
-
-        const response = await api.get("/users/image", {
-          headers: { token: token },
-          responseType: "blob",
+        setEditedUser({
+          username: user.username,
+          email: user.email,
+          birthday: user.birthday || "",
         });
-        console.log("RESPONSE", response.data);
-        // Create a URL for the Blob
-        const imageUrl = URL.createObjectURL(response.data);
-        console.log(response.data);
-        setUser((prevUser) => ({
-          ...prevUser,
-          avatar: imageUrl,
-        }));
 
-        // Revoke the Blob URL on cleanup
-        return () => {
-          URL.revokeObjectURL(imageUrl);
-        };
+        getAvatar();
       } catch (error) {
         handleError(error);
       }
-    }
+    };
     fetchData();
   }, []);
+
+  const getAvatar = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get("/users/image", {
+        headers: { token },
+        responseType: "blob",
+      });
+      const imageUrl = URL.createObjectURL(response.data);
+      setUser((prevUser) => ({
+        ...prevUser,
+        avatar: imageUrl,
+      }));
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
+  };
+
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setAvatar(event.target.files[0]);
+    }
+  };
+
+  const handleAvatarUpload = async () => {
+    if (!avatar) return;
+
+    const formData = new FormData();
+    formData.append("avatar", avatar);
+
+    try {
+      const token = localStorage.getItem("token");
+      await api.put("/users/image", formData, {
+        headers: {
+          token,
+          "Content-Type": "Multipart/form-data",
+        },
+      });
+      const imageUrl = URL.createObjectURL(avatar);
+      setUser((prevUser) => ({
+        ...prevUser,
+        avatar: imageUrl,
+      }));
+      setAvatar(null); // Clear the avatar state
+      alert("Avatar uploaded successfully.");
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleAvatarDelete = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await api.delete("/users/image", {
+        headers: { token },
+      });
+      getAvatar();
+
+      alert("Avatar deleted successfully.");
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const updatedUser = {
+      username: editedUser.username,
+      email: editedUser.email,
+      birthday: editedUser.birthday,
+      password: "q", // Dummy password to pass validation
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+      await api.put("/users", updatedUser, {
+        headers: { token },
+      });
+      setUser((prev) => ({ ...prev, ...updatedUser }));
+      setEditMode(false);
+      alert("Profile updated successfully.");
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setEditedUser({
+      username: user?.username || "",
+      email: user?.email || "",
+      birthday: user?.birthday || "",
+    });
+  };
 
   if (isLoading) {
     return <LinearIndeterminate />;
@@ -68,25 +152,83 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="profile-page-container">
       <div className="avatar-and-text pt-10 pb-10">
-        {user && user.avatar && (
-          <img className="avatar" src={user.avatar} alt="User" />
+        {user && (
+          <div className="avatar-and-buttons">
+            <img className="avatar" src={user.avatar} alt="User Avatar" />
+            {editMode && (
+              <div className="avatar-buttons">
+                <input type="file" onChange={handleAvatarChange} />
+                <Button backgroundColor={"#6E90AE"} onClick={handleAvatarUpload}>Upload Avatar</Button>
+                <Button backgroundColor={"#6E90AE"} onClick={handleAvatarDelete}>Delete Avatar</Button>
+              </div>
+            )}
+          </div>
         )}
         <div className="text">
           <h1 className="title font-extrabold text-3xl">Profile</h1>
-          <Label className="label">Username</Label>
-          <p>{user && user.username}</p>
-          <Label className="label">Email</Label>
-          <p>{user && user.email}</p>
-          <Label className="label">Creation Date</Label>
-          <p>{user && user.creationDate}</p>
-          <Label className="label">Birthday</Label>
-          <p>{user && user.birthday}</p>
-          <Button
-            backgroundColor={"#FB8500"}
-            onClick={() => navigate("/Dashboard")}
-          >
-            Back to Dashboard
-          </Button>
+          {editMode ? (
+            <>
+              <Label className="label">Username</Label>
+              <input
+                type="text"
+                value={editedUser.username}
+                name="username"
+                onChange={handleChange}
+              />
+              <Label className="label">Email</Label>
+              <input
+                type="email"
+                value={editedUser.email}
+                name="email"
+                onChange={handleChange}
+              />
+              <Label className="label">Birthday</Label>
+              <input
+                type="date"
+                value={editedUser.birthday}
+                name="birthday"
+                onChange={handleChange}
+              />
+            </>
+          ) : (
+            <>
+              <Label className="label">Username</Label>
+              <p>{user.username}</p>
+              <Label className="label">Email</Label>
+              <p>{user.email}</p>
+              <Label className="label">Birthday</Label>
+              <p>{user.birthday}</p>
+              <Label className="label">Creation Date</Label>
+              <p>{user.creationDate}</p>
+            </>
+          )}
+          <div className="buttons-container">
+            {editMode ? (
+              <>
+                <Button backgroundColor={"#FFB703"} onClick={handleSubmit}>
+                  Save Changes
+                </Button>
+                <Button backgroundColor={"#E63946"} onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  backgroundColor={"#FFB703"}
+                  onClick={() => setEditMode(true)}
+                >
+                  Edit Profile
+                </Button>
+                <Button
+                  backgroundColor={"#FB8500"}
+                  onClick={() => navigate("/Dashboard")}
+                >
+                  Back to Dashboard
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

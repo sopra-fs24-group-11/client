@@ -10,18 +10,31 @@
   .avatar-and-text {
     display: flex;
     align-items: stretch;
-    border-radius: 15px;
-    background-color: rgb(194, 255, 235);
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.6);
+    border-radius: 50px;
+    background-image: linear-gradient(0deg, rgb(120, 120, 120) 0%, rgb(235, 235, 235) 90%);
 
     @media (max-width: 768px) {
       flex-direction: column; // stack elements vertically on smaller screens
       align-items: center; // center items when stacked
     }
+    .avatar-and-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px; // Space between avatar and buttons
+    }
 
+    .avatar-buttons{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px; // Space between buttons
+    }
     .avatar {
       width: 200px;
       height: 200px;
-      margin: 30px 60px 30px 30px; // shorthand for margin values
+      margin: 30px 30px 30px 30px; // shorthand for margin values
       border-radius: 50%;
       object-fit: cover;
 
@@ -32,9 +45,8 @@
       }
     }
     .label {
-      // Angenommen, Ihre Label-Komponente verwendet eine Klasse namens 'label'
-      font-size: 1.2rem; // Größere Schriftgröße
-      margin-bottom: 0.5rem; // Optional: Fügen Sie Abstand zum nächsten Element hinzu
+      font-size: 1.2rem;
+      margin-bottom: 0.2rem;
     }
 
     .text {
@@ -46,6 +58,18 @@
         align-items: center; // center text on smaller screens
         text-align: center; // ensure text is centered
       }
+    }
+
+    .buttons-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+
+      @media (max-width: 768px) {
+        flex-direction: column; // stack buttons vertically on smaller screens
+        align-items: center; // center buttons when stacked
+      }
+
     }
   }
 }
