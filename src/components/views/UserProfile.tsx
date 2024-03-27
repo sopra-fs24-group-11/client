@@ -79,15 +79,15 @@ const ProfilePage: React.FC = () => {
   const handleAvatarUpload = async () => {
     if (!avatar) return;
 
-    const formData = new FormData();
-    formData.append("avatar", avatar);
+    // const formData = new FormData();
+    // formData.append("avatar", avatar);
 
     try {
       const token = localStorage.getItem("token");
-      await api.put("/users/image", formData, {
+      await api.put("/users/image", avatar, {
         headers: {
           token,
-          "Content-Type": "Multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       });
       const imageUrl = URL.createObjectURL(avatar);
