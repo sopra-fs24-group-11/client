@@ -106,14 +106,6 @@ const ProfilePage: React.FC = () => {
           avatar: imageUrl, // This should trigger a re-render of the component displaying the avatar
         }));
         setAvatar(null); // Clear the avatar state
-        console.log(
-          "USER:",
-          user.avatar,
-          user.username,
-          user.email,
-          user.birthday,
-          user.creationDate
-        );
         alert("Avatar uploaded successfully.");
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
@@ -131,8 +123,6 @@ const ProfilePage: React.FC = () => {
       });
       getAvatar();
       setSelectedFileName("");
-
-      alert("Avatar deleted successfully.");
     } catch (error) {
       handleError(error);
     }
@@ -171,7 +161,6 @@ const ProfilePage: React.FC = () => {
   };
 
   if (isLoading) {
-    
     return <LinearIndeterminate />;
   }
 
