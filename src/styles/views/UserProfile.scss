@@ -1,7 +1,7 @@
 @import "../theme";
 
 .profile-page-container {
-  height: 100vh;
+  overflow: hidden;
   padding: 10% 20% 20% 20%; // use relative padding
   box-sizing: border-box; // make sure padding doesn't affect the total width
 
@@ -11,7 +11,7 @@
 
   .avatar-and-text {
     display: flex;
-    align-items: stretch;
+    max-width: 800px; // limit the width of the container
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.6);
     border-radius: 50px;
     background-image: linear-gradient(
@@ -36,6 +36,40 @@
       flex-direction: column;
       align-items: center;
       gap: 15px; // Space between buttons
+
+      .file-upload-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 10px;
+
+        .choose-file {
+          display: none; // Verstecke das tatsächliche Input-Element
+        }
+
+        .file-upload-btn {
+          font-weight: 700;
+          background-image: linear-gradient(to bottom, #00e0c6, #0095b3);
+          box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.7);
+          color: rgb(0, 0, 0);
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.4s ease;
+          margin-bottom: 10px; // Abstand zum "Keine ausgewählt"-Text
+
+          &:hover {
+            background-color: darken(#007bff, 90%);
+            transform: translateY(-3px);
+          }
+        }
+
+        .file-selected {
+          font-size: 0.8rem;
+          color: #3a3a3a;
+        }
+      }
     }
     .avatar {
       width: 200px;
@@ -57,6 +91,7 @@
 
     .text {
       display: flex;
+      align-items: stretch;
       flex-direction: column;
       gap: 10px;
 

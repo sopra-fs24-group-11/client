@@ -9,16 +9,17 @@ import "../../styles/views/UserProfile.scss";
 
 // Main Profile component
 const ProfilePage: React.FC = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
   const [editedUser, setEditedUser] = useState({
     username: "",
     email: "",
     birthday: "",
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -73,30 +74,50 @@ const ProfilePage: React.FC = () => {
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       setAvatar(event.target.files[0]);
+      setSelectedFileName(event.target.files[0].name);
     }
   };
 
   const handleAvatarUpload = async () => {
     if (!avatar) return;
 
-    // const formData = new FormData();
-    // formData.append("avatar", avatar);
+    const formData = new FormData();
+    formData.append("image", avatar); // Match the server's expected parameter name
 
     try {
       const token = localStorage.getItem("token");
-      await api.put("/users/image", avatar, {
+      const response = await api.put("/users/image", formData, {
         headers: {
-          token,
+          token: token,
           "Content-Type": "multipart/form-data",
         },
       });
-      const imageUrl = URL.createObjectURL(avatar);
-      setUser((prevUser) => ({
-        ...prevUser,
-        avatar: imageUrl,
-      }));
-      setAvatar(null); // Clear the avatar state
-      alert("Avatar uploaded successfully.");
+
+      if (response.status === 204) {
+        setSelectedFileName("");
+        // If the user previously had an avatar, revoke the object URL to free up memory
+        if (user.avatar) {
+          URL.revokeObjectURL(user.avatar);
+        }
+
+        const imageUrl = URL.createObjectURL(avatar);
+        setUser((prevUser) => ({
+          ...prevUser,
+          avatar: imageUrl, // This should trigger a re-render of the component displaying the avatar
+        }));
+        setAvatar(null); // Clear the avatar state
+        console.log(
+          "USER:",
+          user.avatar,
+          user.username,
+          user.email,
+          user.birthday,
+          user.creationDate
+        );
+        alert("Avatar uploaded successfully.");
+      } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
     } catch (error) {
       handleError(error);
     }
@@ -109,6 +130,7 @@ const ProfilePage: React.FC = () => {
         headers: { token },
       });
       getAvatar();
+      setSelectedFileName("");
 
       alert("Avatar deleted successfully.");
     } catch (error) {
@@ -139,6 +161,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleCancel = () => {
+    setSelectedFileName("");
     setEditMode(false);
     setEditedUser({
       username: user?.username || "",
@@ -160,7 +183,20 @@ const ProfilePage: React.FC = () => {
             <img className="avatar" src={user.avatar} alt="User Avatar" />
             {editMode && (
               <div className="avatar-buttons">
-                <input type="file" onChange={handleAvatarChange} />
+                <div className="file-upload-container">
+                  <input
+                    type="file"
+                    id="file"
+                    className="choose-file"
+                    onChange={handleAvatarChange}
+                  />
+                  <label htmlFor="file" className="file-upload-btn">
+                    Datei auswählen
+                  </label>
+                  <span className="file-selected">
+                    {selectedFileName || "Keine ausgewählt"}
+                  </span>
+                </div>
                 <Button
                   backgroundColor={"#6E90AE"}
                   onClick={handleAvatarUpload}
