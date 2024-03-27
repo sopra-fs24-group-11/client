@@ -87,8 +87,9 @@
     align-items: stretch;
     align-items: center;
     background: #6e90ae;
+    min-height: 50px;
     color: white; /* Text color for trip items */
-    margin-bottom: 10px; /* Spacing between trip items */
+    margin-bottom: 20px; /* Spacing between trip items */
     padding: 5px 15px 5px 15px; /* Padding inside trip items */
     border-radius: 4px; /* Rounded corners for trip items */
     box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.3);
@@ -111,7 +112,7 @@
   background: #21689e;
   padding: 10px; /* Smaller padding to make the component a bit smaller */
   max-height: 300px;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 
   h2 {
     color: white; /* Color of the title text */
@@ -131,6 +132,7 @@
       // Enable scrolling for the list
       // Limit the height of the list to enable scrolling
       border-bottom: 1px solid #a5a5a5;
+      padding: 5px 15px 5px 15px;
 
       div {
         // Style for the invitation text

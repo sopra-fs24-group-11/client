@@ -29,7 +29,7 @@ const FriendList: React.FC = () => {
 const WelcomeMessage: React.FC = () => {
   return (
     <div className="welcome component">
-      <h1 className="welcome-title">Welcome back, Alberto!</h1>
+      <h1 className="welcome-title">Welcome back, Test!</h1>
       <p className="font-bold text-lg">Your progress</p>
       <div className="mb-8">
         <Progress value={35} />
