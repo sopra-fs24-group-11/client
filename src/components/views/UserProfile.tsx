@@ -134,6 +134,7 @@ const ProfilePage: React.FC = () => {
       alert("Profile updated successfully.");
     } catch (error) {
       handleError(error);
+      alert("There was an error: " + error);
     }
   };
 
