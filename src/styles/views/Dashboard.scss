@@ -1,3 +1,5 @@
+@import "../theme";
+
 .dashboard {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr; /* Adjust the ratios according to your design */
@@ -6,10 +8,10 @@
   padding-bottom: 60px;
   padding-right: 50px;
   padding-left: 50px;
-  background-image: url("../../graphics/netzplan.svg");
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+  //background-image: url("../../graphics/netzplan.svg");
+  //background-size: cover;
+  //background-position: center;
+  //min-height: 99vh;
   position: relative;
   overflow: hidden; // Contain the pseudo-element for the overlay
 
