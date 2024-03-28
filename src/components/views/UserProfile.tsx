@@ -142,7 +142,7 @@ const ProfilePage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await api.put("/users", updatedUser, {
-        headers: { Authorization: token },
+        headers: { Authorization: token }
       });
       setUser((prev) => ({ ...prev, ...updatedUser }));
       setEditMode(false);
