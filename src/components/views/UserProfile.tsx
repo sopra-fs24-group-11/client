@@ -91,7 +91,7 @@ const ProfilePage: React.FC = () => {
       const token = localStorage.getItem("token");
       const response = await api.put("/users/image", formData, {
         headers: {
-          "Authorization": token,
+          Authorization: token,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -122,7 +122,7 @@ const ProfilePage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await api.delete("/users/image", {
-        headers: { "Authorization": token },
+        headers: { Authorization: token },
       });
       getAvatar();
       setSelectedFileName("");

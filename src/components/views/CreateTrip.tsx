@@ -6,7 +6,7 @@ import image from "../../graphics/add.png";
 import { Button } from "components/ui/Button";
 import "styles/views/Flex.scss";
 import BaseContainer from "components/ui/BaseContainer";
-import DateTimePicker from 'react-datetime-picker';
+import DateTimePicker from "react-datetime-picker";
 import LinearIndeterminate from "components/ui/loader";
 
 const CreateTrip = () => {
@@ -20,7 +20,7 @@ const CreateTrip = () => {
   const [tripDescription, setTripDescription] = useState<string>("");
   const [friends, setFriends] = useState<(BigInt | null)[]>(null);
   const [date, setDate] = useState<string>(""); // hier fehlt noch time
-  
+
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
 
@@ -160,10 +160,10 @@ const CreateTrip = () => {
               >
                 CANCEL TRIP
               </Button>
-              <Button 
-                width="200px" 
-                backgroundColor="#1A9554" 
-                color="#FFFFFF" 
+              <Button
+                width="200px"
+                backgroundColor="#1A9554"
+                color="#FFFFFF"
                 onClick={createNewTrip}
               >
                 CREATE TRIP
