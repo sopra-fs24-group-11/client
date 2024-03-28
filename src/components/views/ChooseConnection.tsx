@@ -19,11 +19,10 @@ const ChooseConnection = () => {
   };
 
   return (
-  <BaseContainer headline="Choose Connection">
-    <h1>Choose Connection</h1>
-  </BaseContainer>
-
-    );
+    <BaseContainer headline="Choose Connection">
+      <h1>Choose Connection</h1>
+    </BaseContainer>
+  );
 };
 
 export default ChooseConnection;
