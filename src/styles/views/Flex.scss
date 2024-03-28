@@ -1,0 +1,147 @@
+@import "../theme";
+
+.flex {
+  &.container {
+    display: flex;
+    margin-top: 2em; // Abstand oben
+    margin-bottom: 2em;
+    min-height: 300px;
+    @include center;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  &.outer-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%;
+    max-width: 800px;
+    border-radius: 0.75em;
+    background-color: rgba(#011A27, 0.5); 
+    padding: 40px; 
+  }
+  
+  .inner-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    background-color: #011A27; 
+    border-radius: 0.75em;
+    padding: 30px;
+    min-height: 800px;
+    
+  }
+
+  .row-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap; // boxen rücken nach unten, wenn kein platz mehr
+    width: 100%;
+  }
+
+  .row-form-center {
+    @extend .row-form; /* Erbe alle Eigenschaften von .row-form */
+    justify-content: center; /* Überschreibe justify-content mit center */
+    align-items: center;
+  }
+
+  .row-form-end {
+    @extend .row-form; 
+    width: 80%;
+  }
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    //padding: 20px;
+    flex-basis: 280px;
+    //background-color: bisque;
+  }
+
+  .box-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .bar {
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+    align-items: center;
+    width: 65%;
+    border-radius: 3em;
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .date {
+    display: flex;
+    border-radius: 0.4em;
+    padding: 5px;
+    color: black
+  }
+
+  .input {
+    display: flex;
+    width: 100%;
+    border-radius: 0.4em;
+    padding: 5px;
+    color: black
+  }
+
+  .input-large {
+    @extend .input; /* Erbe alle Eigenschaften von .row-form */
+    height: 100%; /* Überschreibe justify-content mit center */
+    resize: none;
+  }
+
+  .horizontal-line {
+    border: none;
+    border-top: 10px solid white; /* Weiß als Linienfarbe */
+    //margin: 5px 0; /* Anpassen des Abstands oberhalb und unterhalb der Linie */
+    width: 80%;
+  }
+
+  .names {
+    display: flex;
+    width: 90%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .participants {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 150px;
+    background-color: rgb(146, 190, 207);
+    margin-block: 10px;
+    border-radius: 0.75em;
+    padding: 10px;
+  }
+
+  .cancel {
+    display: flex;
+    justify-content: center ;
+    flex-basis: 200px;
+    padding: 10px;
+    background-color: rgb(255, 0, 0);
+    border-radius: 0.75em;
+  }
+
+  .create {
+    @extend .cancel;
+    background-color: green;
+  }
+
+  .image {
+    height: 30px;
+  }
+}

@@ -8,27 +8,9 @@
   padding-bottom: 60px;
   padding-right: 50px;
   padding-left: 50px;
-  //background-image: url("../../graphics/netzplan.svg");
-  //background-size: cover;
-  //background-position: center;
-  //min-height: 99vh;
   position: relative;
   overflow: hidden; // Contain the pseudo-element for the overlay
 
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0; // Shorthand for top: 0; right: 0; bottom: 0; left: 0;
-    background: rgba(0, 0, 0, 0.4); // Dark overlay
-    backdrop-filter: blur(4px); // Blur effect
-    pointer-events: none; // Allows clicks to pass through to elements below
-  }
-
-  // To ensure content is visible above the overlay
-  & > * {
-    position: relative;
-    z-index: 1;
-  }
 }
 
 .column {

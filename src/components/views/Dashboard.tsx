@@ -27,6 +27,12 @@ const FriendList: React.FC = () => {
 };
 
 const WelcomeMessage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleCreateTrip = () => {
+    navigate("/createTrip");
+  };
+
   return (
     <div className="welcome component">
       <h1 className="welcome-title">Welcome back, Test!</h1>
@@ -72,7 +78,11 @@ const WelcomeMessage: React.FC = () => {
         </div>
       </div>
       <div className="create-button-container">
-        <Button width="150px" backgroundColor="#FB8500">
+        <Button
+          width="150px"
+          backgroundColor="#FB8500"
+          onClick={handleCreateTrip}
+        >
           CREATE TRIP
         </Button>
       </div>
@@ -169,7 +179,7 @@ const FriendLeaderboard: React.FC = () => {
 };
 
 // Main Dashboard component
-const Dashboard2: React.FC = () => {
+const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -202,4 +212,4 @@ const Dashboard2: React.FC = () => {
   );
 };
 
-export default Dashboard2;
+export default Dashboard;

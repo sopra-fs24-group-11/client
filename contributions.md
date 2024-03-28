@@ -3,7 +3,7 @@
 ## Contributions by jxn.jo
 
 ### Before the easter break
-![alt text](/src/graphics/doc/Dashboard_v1.png) ![alt text](/src/graphics/doc/UserProfile_v1.png) ![alt text](/src/graphics/doc/UserProfile_edit_v1.png)
+![Dash](/src/graphics/doc/Dashboard_v1.png) ![User Profile](/src/graphics/doc/UserProfile_v1.png) ![User Profile edit](/src/graphics/doc/UserProfile_edit_v1.png)
 
 - Added a static Dashboard with a progress bar and containers to fill in with dynamic content later when requests will be answered from the backend.
 - Added a loader ui component to wait for page rendering.

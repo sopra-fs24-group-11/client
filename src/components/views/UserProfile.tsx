@@ -19,6 +19,7 @@ const ProfilePage: React.FC = () => {
     username: "",
     email: "",
     birthday: "",
+    password: "",
   });
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const ProfilePage: React.FC = () => {
       try {
         const token = localStorage.getItem("token");
         const userdata = await api.get("/users", {
-          headers: { token },
+          headers: { Authorization: token },
         });
         const user: User = userdata.data;
         setUser(user);
@@ -40,7 +41,9 @@ const ProfilePage: React.FC = () => {
           username: user.username,
           email: user.email,
           birthday: user.birthday || "",
+          password: user.password,
         });
+        console.log("USER FROM BACKEND:", user);
 
         getAvatar();
       } catch (error) {
@@ -54,7 +57,7 @@ const ProfilePage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await api.get("/users/image", {
-        headers: { token },
+        headers: { Authorization: token },
         responseType: "blob",
       });
       const imageUrl = URL.createObjectURL(response.data);
@@ -88,7 +91,7 @@ const ProfilePage: React.FC = () => {
       const token = localStorage.getItem("token");
       const response = await api.put("/users/image", formData, {
         headers: {
-          token: token,
+          "Authorization": token,
           "Content-Type": "multipart/form-data",
         },
       });
@@ -119,7 +122,7 @@ const ProfilePage: React.FC = () => {
     try {
       const token = localStorage.getItem("token");
       await api.delete("/users/image", {
-        headers: { token },
+        headers: { "Authorization": token },
       });
       getAvatar();
       setSelectedFileName("");
@@ -157,6 +160,7 @@ const ProfilePage: React.FC = () => {
       username: user?.username || "",
       email: user?.email || "",
       birthday: user?.birthday || "",
+      password: user?.password || "",
     });
   };
 
