@@ -12,16 +12,69 @@ import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
 
 // Components
-const FriendList: React.FC = () => {
-  return (
-    <div className="friend-list component">
-      <h2>Friend List</h2>
+const FriendList = () => {
+  // Example friends data - will be replaced with backend data
+  const friends = [
+    { name: "Michael B.", status: "ONLINE" },
+    { name: "Ulf Z.", status: "ONLINE" },
+    { name: "Christiane B.", status: "OFFLINE" },
+    { name: "Hanspeter B.", status: "ONLINE" },
+    { name: "Elaine H.", status: "OFFLINE" },
+    { name: "Elaine H.", status: "OFFLINE" },
+    { name: "Livio Hartmann", status: "ONLINE" },
+  ];
 
-      <ul className="friend-list-list">
-        <li>Michael B - Online</li>
-        <li>Ulf Z. - Online</li>
-        <li>Christiane B. - Offline</li>
+  const request = [
+    { name: "Michael B." },
+    { name: "Ulf Z." },
+    { name: "Christiane B." },
+    { name: "Christiane B." },
+    { name: "Christiane B." },
+  ];
+
+  // Function to determine the status class
+  const getStatusClass = (status) => {
+    return status.toLowerCase() === "online"
+      ? "status online"
+      : "status offline";
+  };
+
+  return (
+    <div className="friends component">
+      <h2>Friend List</h2>
+      <ul className="friend-list">
+        {friends.map((friend, index) => (
+          <li key={index} className="friend">
+            <span className="name">{friend.name}</span>
+            <span className={getStatusClass(friend.status)}>
+              {friend.status}
+            </span>
+          </li>
+        ))}
       </ul>
+      <div className="requests">
+        <h2>New requests</h2>
+        <div className="request-list">
+          {request.map((request, index) => (
+            <div key={index} className="request">
+              <span className="name">{request.name}</span>
+              <Button
+                className="accept-button"
+                width="80px"
+                height="35px"
+                backgroundColor="#82FF6D"
+              >
+                Accept
+              </Button>
+            </div>
+          ))}
+        </div>
+        <div className="show-details-button-container">
+          <Button width="150px" backgroundColor="#FFB703">
+            Show Details
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -117,25 +170,45 @@ const TripInvitations: React.FC = () => {
       <div className="trip-invitation-list">
         <div className="trip-invitation">
           <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          <Button
+            className="accept-button"
+            width="80px"
+            height="35px"
+            backgroundColor="#82FF6D"
+          >
             Accept
           </Button>
         </div>
         <div className="trip-invitation">
           <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          <Button
+            className="accept-button"
+            width="80px"
+            height="35px"
+            backgroundColor="#82FF6D"
+          >
             Accept
           </Button>
         </div>
         <div className="trip-invitation">
           <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          <Button
+            className="accept-button"
+            width="80px"
+            height="35px"
+            backgroundColor="#82FF6D"
+          >
             Accept
           </Button>
         </div>
         <div className="trip-invitation">
           <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button width="80px" height="35px" backgroundColor="#82FF6D">
+          <Button
+            className="accept-button"
+            width="80px"
+            height="35px"
+            backgroundColor="#82FF6D"
+          >
             Accept
           </Button>
         </div>
@@ -196,15 +269,15 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard">
-      <div className="column friend-list">
+      <div className="column left">
         <FriendList />
         <FriendLeaderboard />
       </div>
-      <div className="column middle-column">
+      <div className="column middle">
         <WelcomeMessage />
         <TripInvitations />
       </div>
-      <div className="column notifications-favorites">
+      <div className="column right">
         <NotificationsLog />
         <YourFavorites />
       </div>
