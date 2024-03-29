@@ -19,7 +19,7 @@
 }
 
 .component {
-  background: #d8d8d8;
+  background: rgba(216, 216, 216, 0.7);
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
@@ -77,10 +77,76 @@
   }
 }
 
-.friend-list-list {
-  max-height: 400px;
-  min-height: 400px;
+// Friend list component styles
+
+.friend-list {
+  overflow-y: auto;
+  max-height: 200px;
+  min-height: 200px;
+  padding: 0px 10px 10px 10px;
 }
+
+.friend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* Adjust as needed */
+}
+
+.name {
+  font-weight: bold;
+}
+
+.status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.8em;
+}
+
+.online {
+  background-color: green;
+}
+
+.offline {
+  background-color: red;
+}
+
+.request-list {
+  overflow-y: auto;
+  max-height: 100px;
+  min-height: 100px;
+}
+.request {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 15px 5px 15px;
+  border-bottom: 1px solid #a5a5a5;
+}
+
+.accept-button {
+  animation: glow 3s infinite ease-in-out;
+
+  @keyframes glow {
+    0%,
+    100% {
+      box-shadow: 0 0 8px rgb(0, 255, 8), 0 0 8px rgb(0, 255, 4),
+        0 0 8px rgb(0, 255, 30);
+    }
+    50% {
+      box-shadow: 0 0 8px rgba(105, 105, 105, 0.504),
+        0 0 8px rgba(96, 96, 96, 0.389), 0 0 8px rgba(87, 87, 87, 0.382);
+    }
+  }
+}
+.show-details-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+//--------------------------------------------------
 
 .notifications-log-list {
   overflow-y: auto;
