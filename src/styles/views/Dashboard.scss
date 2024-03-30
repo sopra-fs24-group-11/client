@@ -83,7 +83,7 @@
   overflow-y: auto;
   max-height: 200px;
   min-height: 200px;
-  padding: 0px 10px 10px 10px;
+  padding: 0px 6px 10px 0px;
   margin-bottom: 20px;
 }
 
@@ -107,10 +107,14 @@
 
 .online {
   background-color: green;
+  min-width: 74px;
+  text-align: center;
 }
 
 .offline {
   background-color: red;
+  min-width: 74px;
+  text-align: center;
 }
 
 .request-list {
@@ -122,7 +126,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 15px 5px 15px;
+  padding: 5px 8px 5px 0px;
   border-bottom: 1px solid #a5a5a5;
 }
 

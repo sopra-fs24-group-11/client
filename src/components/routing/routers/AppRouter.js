@@ -9,15 +9,15 @@ import Header from "../../views/Header";
 import RegisterExample from "../../views/RegisterExample";
 import UserProfile from "../../views/UserProfile";
 import Register from "../../views/Register";
-import CreateTrip from "../../views/CreateTrip"
-import ChooseConnection from "../../views/ChooseConnection"
+import CreateTrip from "../../views/CreateTrip";
+import FriendListPage from "../../views/FriendListPage";
+import ChooseConnection from "../../views/ChooseConnection";
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-
         <Route path="/login" element={<LoginGuard />}>
           <Route path="" element={<Login />} />
         </Route>
@@ -36,6 +36,10 @@ const AppRouter = () => {
 
         <Route path="/profile" element={<GameGuard />}>
           <Route path="" element={<UserProfile />} />
+        </Route>
+
+        <Route path="/friends" element={<GameGuard />}>
+          <Route path="" element={<FriendListPage />} />
         </Route>
 
         <Route path="/createTrip" element={<GameGuard />}>
