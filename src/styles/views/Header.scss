@@ -8,6 +8,7 @@
     align-items: center;
     background: linear-gradient(90deg, #001f33 20%, #999da1 100%);
     height: 90px;
+    position: relative;
 
     .logo img {
       height: 90px; 
@@ -16,5 +17,37 @@
     .menu-icon {
       margin-right: 2rem; // Adjust this value to move the burger icon towards the middle
     }
+
+    &::after { // Creates the "track" for the train
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 5px; // Adjust the height
+      background: #333; // Track color
+    }
+  }
+
+  .train-container {
+    position: absolute;
+    bottom: 0; // Aligns the bottom of the train container to the bottom of the header
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 20px;
+    // This container should be the same height as the train image for proper alignment
+    z-index: 2;
+  
+    .train {
+      position: absolute;
+      bottom: 0; // Align the bottom of the train image with the bottom of its container
+      height: 100%; // Ensure the train takes full height of the container
+      animation: moveTrain 20s linear infinite;
+    }
   }
 }
+  @keyframes moveTrain {
+    0% { transform: translateX(-100%); } // Start off-screen to the left
+    100% { transform: translateX(calc(100% + 100vw)); } // Move to the right, far enough to be fully off-screen
+  }

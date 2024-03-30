@@ -7,6 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import logo from "../../graphics/Get-Together.png"; // Importing the image
+import trainImage from "../../graphics/train.png";
 import "../../styles/views/Header.scss";
 
 const Header = () => {
@@ -88,6 +89,9 @@ const Header = () => {
         <MenuItem onClick={goToProfile}>Profile</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
+      <div className="train-container">
+        <img src={trainImage} alt="Animated Train" className="train"/>
+      </div>
     </div>
   );
 };
