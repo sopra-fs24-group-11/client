@@ -9,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import logo from "../../graphics/Get-Together.png"; // Importing the image
 import trainImage from "../../graphics/train2.png";
 import signalImage from "../../graphics/signal.png";
+import rails from "../../graphics/rails.png";
 import "../../styles/views/Header.scss";
 
 const Header = () => {
@@ -92,6 +93,7 @@ const Header = () => {
       </Menu>
       <div className="train-container">
         <img src={trainImage} alt="Animated Train" className="train" />
+        <div className="rails"></div>
       </div>
       <img src={signalImage} alt="Signal" className="signal" />
     </div>

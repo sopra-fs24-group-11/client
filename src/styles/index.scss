@@ -4,21 +4,12 @@
 body {
   margin: 0;
   padding: 0;
-  min-width: 99vw;
-  min-height: 99vh;
   font-family: $fontDefault;
-  background-image: url("../graphics/netzplan.svg");
+  background-image: url("../graphics/netzplan.png");
   background-size: cover;
   background-position: center;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0; // Shorthand for top: 0; right: 0; bottom: 0; left: 0;
-    background: rgba(0, 0, 0, 0.4); // Dark overlay
-    backdrop-filter: blur(4px); // Blur effect
-    pointer-events: none; // Allows clicks to pass through to elements below
-  }
+  background-repeat: repeat;
+  background-attachment: fixed;
 
   // To ensure content is visible above the overlay
   & > * {

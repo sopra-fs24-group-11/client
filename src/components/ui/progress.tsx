@@ -18,6 +18,7 @@ const Progress = React.forwardRef<
     const timeoutId = setTimeout(() => {
       setLoadedValue(value);
     }, 500); // This timeout can be adjusted as needed
+    
     return () => clearTimeout(timeoutId);
   }, [value]); // Only re-run if the value changes
 
