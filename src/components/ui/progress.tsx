@@ -9,26 +9,39 @@ import { cn } from "lib/utils";
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => (
-  <ProgressPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
-      className
-    )}
-    {...props}
-  >
-    <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 bg-green-700 transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
-    />
-  </ProgressPrimitive.Root>
-));
+>(({ className, value, ...props }, ref) => {
+  // Use a React state to manage the loaded value
+  const [loadedValue, setLoadedValue] = React.useState(0);
+
+  React.useEffect(() => {
+    // Set a timeout to update the loaded value after 10 seconds
+    const timeoutId = setTimeout(() => {
+      setLoadedValue(value);
+    }, 500); // This timeout can be adjusted as needed
+    return () => clearTimeout(timeoutId);
+  }, [value]); // Only re-run if the value changes
+
+  return (
+    <ProgressPrimitive.Root
+      ref={ref}
+      className={cn(
+        "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
+        className
+      )}
+      {...props}
+    >
+      <ProgressPrimitive.Indicator
+        className="h-full w-full flex-1 bg-green-600 transition-all duration-1000" // duration-10000 makes the transition take 10 seconds
+        style={{ transform: `translateX(-${100 - loadedValue}%)` }} // use loadedValue here
+      />
+    </ProgressPrimitive.Root>
+  );
+});
 
 Progress.propTypes = {
   className: PropTypes.string,
   value: PropTypes.number,
 };
-Progress.displayName = ProgressPrimitive.Root.displayName;
+Progress.displayName = "Progress";
 
 export { Progress };

@@ -3,7 +3,6 @@ import { api, handleError } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
-import "styles/views/Login.scss";
 import PropTypes from "prop-types";
 import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
@@ -13,6 +12,8 @@ import LinearIndeterminate from "components/ui/loader";
 
 // Components
 const FriendList = () => {
+  const navigate = useNavigate();
+
   // Example friends data - will be replaced with backend data
   const friends = [
     { name: "Michael B.", status: "ONLINE" },
@@ -37,6 +38,10 @@ const FriendList = () => {
     return status.toLowerCase() === "online"
       ? "status online"
       : "status offline";
+  };
+
+  const handleShowDetails = () => {
+    navigate("/friends");
   };
 
   return (
@@ -70,7 +75,11 @@ const FriendList = () => {
           ))}
         </div>
         <div className="show-details-button-container">
-          <Button width="150px" backgroundColor="#FFB703">
+          <Button
+            onClick={handleShowDetails}
+            width="150px"
+            backgroundColor="#FFB703"
+          >
             Show Details
           </Button>
         </div>
@@ -233,7 +242,7 @@ const FriendLeaderboard: React.FC = () => {
   // This component will render the friend leaderboard
   return (
     <div className="friend-leaderboard component">
-      <h2>Friend-Leaderboard</h2>
+      <h2>Friend Leaderboard</h2>
       {/* Placeholder content */}
       <ol>
         <li>Michael B.</li>
