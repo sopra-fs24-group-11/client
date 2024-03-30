@@ -7,25 +7,57 @@
     justify-content: space-between;
     align-items: center;
     background: linear-gradient(90deg, #001f33 20%, #999da1 100%);
-    height: 90px;
+    height: 100px;
     position: relative;
 
     .logo img {
-      height: 90px; 
+      height: 90px;
     }
 
     .menu-icon {
-      margin-right: 2rem; // Adjust this value to move the burger icon towards the middle
+      margin-right: 2.5rem; // Adjust this value to move the burger icon towards the middle
     }
 
-    &::after { // Creates the "track" for the train
+    .signal {
+      position: absolute;
+      bottom: 0; // Positionieren Sie das Signal am unteren Rand der Header-Klasse
+      left: 50%; // Setzt das Signal horizontal in die Mitte
+      transform: translateX(-50%); // Zentriert das Signal genau in der Mitte
+      z-index: 3; // Stellen Sie sicher, dass das Signal über den Schienen liegt
+      height: 50px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 70px; // Positionieren Sie das Pseudo-Element, um das grüne Licht zu überdecken
+        left: 10px; // Die genauen Werte hängen von der Position des Lichts im Bild ab
+        width: 100px; // Breite des grünen Lichts im Signalbild
+        height: 40px; // Höhe des grünen Lichts im Signalbild
+        background-color: green; // Hintergrundfarbe des grünen Lichts
+        border-radius: 50%; // Macht es rund, wenn das Licht rund ist
+        box-shadow: 0 0 10px 10px #00FF00; // Leuchteffekt
+      }
+    }
+
+    &::after {
+      // Modifiziert, um wie eine Schiene auszusehen
       content: "";
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 5px; // Adjust the height
-      background: #333; // Track color
+      height: 6px; // Erhöhen Sie ggf. die Höhe für mehr Sichtbarkeit
+      background: #333; // Die Farbe der Schiene
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3); // Fügt einen weichen Schatten hinzu
+
+      // Erzeugt die Schwellen der Schiene
+      background-image: repeating-linear-gradient(
+        40deg,
+        rgba(219, 219, 219, 0.2) 0,
+        rgba(255, 255, 255, 0.2) 2px,
+        transparent 1px,
+        transparent 30px // Passen Sie den Abstand zwischen den Schwellen an
+      );
     }
   }
 
@@ -35,19 +67,23 @@
     left: 0;
     width: 100%;
     overflow: hidden;
-    height: 20px;
+    height: 30px;
     // This container should be the same height as the train image for proper alignment
     z-index: 2;
-  
+
     .train {
       position: absolute;
       bottom: 0; // Align the bottom of the train image with the bottom of its container
       height: 100%; // Ensure the train takes full height of the container
-      animation: moveTrain 20s linear infinite;
+      animation: moveTrain 25s linear infinite;
     }
   }
 }
-  @keyframes moveTrain {
-    0% { transform: translateX(-100%); } // Start off-screen to the left
-    100% { transform: translateX(calc(100% + 100vw)); } // Move to the right, far enough to be fully off-screen
-  }
+@keyframes moveTrain {
+  0% {
+    transform: translateX(-100%);
+  } // Start off-screen to the left
+  100% {
+    transform: translateX(calc(100% + 100vw));
+  } // Move to the right, far enough to be fully off-screen
+}
