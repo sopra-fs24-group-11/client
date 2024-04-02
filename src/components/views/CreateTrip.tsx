@@ -61,6 +61,7 @@ const CreateTrip = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
+    
     return () => clearTimeout(timer);
   }, []);
 

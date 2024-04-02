@@ -102,6 +102,7 @@
   .input-large {
     @extend .input; /* Erbe alle Eigenschaften von .row-form */
     height: 100%; /* Überschreibe justify-content mit center */
+    width: auto;
     resize: none;
   }
 

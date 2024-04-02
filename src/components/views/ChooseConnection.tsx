@@ -28,7 +28,7 @@ const ChooseConnection = () => {
           <div className="connection inner-form">
             <h2 className="text-2xl mb-5">Starting Location:</h2>
             <textarea
-              className="flex input-large"
+              className="connection input-large"
               placeholder="Select starting location..."
               onChange={(e) => setTripDescription(e.target.value)}
             ></textarea>
