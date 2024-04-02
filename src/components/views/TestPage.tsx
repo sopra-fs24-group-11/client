@@ -68,7 +68,7 @@ const TestPage = () => {
     return <LinearIndeterminate />;
   }
 
- {
+  {
     return (
       <Dialog>
         <DialogTrigger asChild>
