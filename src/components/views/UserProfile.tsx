@@ -92,6 +92,7 @@ const ProfilePage: React.FC = () => {
   const handleAvatarUpload = async () => {
     if (!avatar) {
       alert("Waehle zuerst eine Datei aus");
+      
       return;
     }
 

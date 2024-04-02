@@ -26,13 +26,13 @@ const AppRouter = () => {
         <Route path="/register" element={<RegisterGuard />}>
           <Route path="" element={<Register />} />
         </Route>
-{/*------------------ TESTPAGES ------------------*/ }
+        {/*------------------ TESTPAGES ------------------*/}
         <Route path="/registerexample" element={<LoginGuard />}>
           <Route path="" element={<RegisterExample />} />
         </Route>
 
         <Route path="/testpage" element={<TestPage />} />
-{/*---------------------------------------------- */ }
+        {/*---------------------------------------------- */}
         <Route path="/dashboard" element={<GameGuard />}>
           <Route path="" element={<Dashboard />} />
         </Route>
