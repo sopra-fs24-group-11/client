@@ -151,7 +151,7 @@ const WelcomeMessage: React.FC = () => {
       <p className="font-bold text-lg">Your progress</p>
       <div className="mb-8">
         <Progress
-          value={currentUser ? currentUser.level * 100 : "loading..."}
+          value={currentUser ? currentUser.level * 100 : 0}
         />
         <p>Level: {currentUser ? currentUser.level : "loading..."}</p>
       </div>

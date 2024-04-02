@@ -30,7 +30,7 @@ const ChooseConnection = () => {
             <textarea
               className="flex input-large"
               placeholder="Select starting location..."
-              onChange={(e) => setTr(e.target.value)}
+              onChange={(e) => setTripDescription(e.target.value)}
             ></textarea>
           </div>
         </div>
