@@ -37,6 +37,7 @@ const FriendListPage = () => {
         headers: { Authorization: token },
       });
       setFriendList(response.data);
+      console.log("Friend list: ", response.data);
       setIsLoading(false);
     } catch (error) {
       handleError(error);
@@ -49,9 +50,7 @@ const FriendListPage = () => {
       const response = await api.get("/users/friends/requests", {
         headers: { Authorization: token },
       });
-      console.log("FRIEND REQUESTS", response.data);
       setFriendRequests(response.data); // Assuming this is an array of friend requests
-      console.log("FRIEND REQUESTS ARRAY", friendRequests);
     } catch (error) {
       handleError(error);
     }
@@ -87,12 +86,9 @@ const FriendListPage = () => {
 
   const handleDenyFriendRequest = async (friendRequestId) => {
     try {
-      await api.delete(
-        `/users/friends/${friendRequestId}`,
-        {
-          headers: { Authorization: token },
-        }
-      );
+      await api.delete(`/users/friends/${friendRequestId}`, {
+        headers: { Authorization: token },
+      });
       // Remove the denied request from the list
       setFriendRequests(
         friendRequests.filter((request) => request.id !== friendRequestId)
@@ -205,26 +201,30 @@ const FriendListPage = () => {
           {friendRequests.map((request) => (
             <li key={request.id} className="friend-request">
               <span className="name">{request.username}</span>
-              <Button
-                className="accept-request"
-                onClick={() => handleAcceptFriendRequest(request.friendId)}
-              >
-                Accept
-              </Button>
-              <Button
-                className="deny-request"
-                onClick={() => handleDenyFriendRequest(request.friendId)}
-              >
-                Deny
-              </Button>
+              <div className="accept-deny-buttons">
+                <Button
+                  className="accept-request"
+                  backgroundColor="#82FF6D"
+                  onClick={() => handleAcceptFriendRequest(request.friendId)}
+                >
+                  Accept
+                </Button>
+                <Button
+                  className="deny-request"
+                  backgroundColor={"red"}
+                  onClick={() => handleDenyFriendRequest(request.friendId)}
+                >
+                  Deny
+                </Button>
+              </div>
             </li>
           ))}
         </ul>
         <div className="action-buttons">
           <Button
             className="back-button"
-            backgroundColor="#DD2E2E"
-            color="white"
+            backgroundColor="#FFB703"
+            color="black"
             onClick={handleBackClick}
           >
             Back to Dashboard
@@ -233,8 +233,8 @@ const FriendListPage = () => {
             <DialogTrigger asChild>
               <Button
                 className="add-friend-button"
-                backgroundColor="#14AE5C"
-                color="white"
+                backgroundColor="#FB8500"
+                color="black"
               >
                 Add new Friend
               </Button>

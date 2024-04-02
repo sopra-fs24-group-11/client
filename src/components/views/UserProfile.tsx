@@ -23,6 +23,7 @@ const ProfilePage: React.FC = () => {
     password: "",
   });
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
+  const [isDeleted, setDeleted] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -78,13 +79,20 @@ const ProfilePage: React.FC = () => {
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setAvatar(event.target.files[0]);
-      setSelectedFileName(event.target.files[0].name);
+      if (event.target.files[0].type.match('image.*')) { // checks if image is of MIME image type 
+        setAvatar(event.target.files[0]);
+        setSelectedFileName(event.target.files[0].name); 
+      } else {
+        alert("File is not an image");
+      }
     }
   };
 
   const handleAvatarUpload = async () => {
-    if (!avatar) return;
+    if (!avatar) {
+      alert("Waehle zuerst eine Datei aus");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("image", avatar); // Match the server's expected parameter name
@@ -111,7 +119,6 @@ const ProfilePage: React.FC = () => {
           avatar: imageUrl, // This should trigger a re-render of the component displaying the avatar
         }));
         setAvatar(null); // Clear the avatar state
-        alert("Avatar uploaded successfully.");
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
       }
@@ -123,9 +130,14 @@ const ProfilePage: React.FC = () => {
   const handleAvatarDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      await api.delete("/users/image", {
+      const response = await api.delete("/users/image", {
         headers: { Authorization: token },
       });
+      if (response.status === 204) {
+        
+      } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+      }
       getAvatar();
       setSelectedFileName("");
     } catch (error) {
@@ -150,8 +162,14 @@ const ProfilePage: React.FC = () => {
       setEditMode(false);
       alert("Profile updated successfully.");
     } catch (error) {
-      handleError(error);
-      alert("There was an error: " + error);
+      console.log(error);
+      if (error.response.data.status === 409) {
+        alert("Username can't be changed as selected username is already taken");
+      } else {
+        handleError(error);
+        alert("There was an error: " + error);
+      }
+      
     }
   };
 
@@ -177,7 +195,10 @@ const ProfilePage: React.FC = () => {
     } catch (error) {
       handleError(error);
     }
+
     setPopupOpen(false);
+    setDeleted(true);
+    localStorage.removeItem("token");
   };
 
   if (isLoading) {
@@ -287,14 +308,28 @@ const ProfilePage: React.FC = () => {
                 >
                   Delete Profile
                 </Button>
+
                 <ConfirmPopup
+                  // popup asks for confirmation of profile deletion
                   header="Are you sure you want to delete your profile?"
                   info="You won't be able to recover your account"
                   className="popup"
                   isOpen={isPopupOpen}
-                  onConfirm={handleProfileDelete}
-                  onCancel={() => setPopupOpen(false)}
-                />
+                  >
+                    <div>
+                      <button className="left confirm-button" onClick={handleProfileDelete}>Yes</button>
+                      <button className="right confirm-button" onClick={() => setPopupOpen(false)}>No</button>
+                    </div>
+                </ConfirmPopup>
+                <ConfirmPopup
+                  // popup tells the user when profile was deleted
+                  header="Profile was deleted"
+                  className="popup"
+                  info=""
+                  isOpen={isDeleted}
+                  >
+                    <button className="confirm-button" onClick={() => navigate("/login")}>Return to Login</button>
+                </ConfirmPopup>
                 <Button
                   backgroundColor={"#FB8500"}
                   onClick={() => navigate("/Dashboard")}
