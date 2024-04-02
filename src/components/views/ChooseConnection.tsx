@@ -39,17 +39,22 @@ const ChooseConnection = () => {
           <h1 className="text-3xl mb-5 font-bold"> Choose Connection</h1>
           <div className="connection inner-form">
             <h2 className="text-2xl mb-5">Starting Location:</h2>
-            <textarea
-              id="startLocation"
-              className="connection input"
-              placeholder="Select starting location..."
-              onChange={(e) => setTripDescription(e.target.value)}
-            ></textarea>
-            <textarea
-              className="connection input"
-              placeholder=""
-              onChange={(e) => setTripDescription(e.target.value)}
-            ></textarea>
+            <div className="connection locations_container">
+              <textarea
+                id="startLocation"
+                className="connection input"
+                placeholder="Select starting location..."
+                onChange={(e) => setTripDescription(e.target.value)}
+              ></textarea>
+              <textarea
+                className="connection input"
+                placeholder=""
+                onChange={(e) => setTripDescription(e.target.value)}
+              ></textarea>
+              <div className="connection connector"></div>
+              <div id="first" className="black-circle"></div>
+              <div id="second" className="black-circle"></div>
+            </div>
           </div>
         </div>
       </div>
