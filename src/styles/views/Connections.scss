@@ -94,12 +94,13 @@
   .input {
     display: flex;
     height: 40px;
-    width: 50%;
+    width: 100%;
     border-radius: 2em;
     padding-left: 20px;
     padding: 5px;
     color: black;
-    margin: 10px;
+    position: relative;
+    margin-bottom: 40px;
   }
 
   .input-large {
@@ -161,15 +162,41 @@
     }
   }
 
-  #startLocation :after {
-    content: "";
-    background-color: #000;
+  .connector {
+    border-right: 8px solid #000000;
     position: absolute;
-    width: 5px;
+    top: 25px;
+    width: 10px;
     height: 100px;
+    left: 21px;
+  }
+
+  .locations_container {
+    height: 400px;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    position:relative
+  }
+
+  .black-circle {
+    width: 35px; /* size of the circle - width */
+    height: 35px; /* size of the circle - height */
+    background-color: #000000; /* black color */
+    border-radius: 50%; /* rounded edges to form a circle */
+    display: flex; /* to enable centering of content (if any) */
+    justify-content: center; /* horizontal centering of content (if any) */
+    align-items: center; /* vertical centering of content (if any) */
+    position: absolute;
+  }
+  #first.black-circle {
     top: 10px;
-    left: 50%;
-    display: block;
+    left: 10px;
+  }
+
+  #second.black-circle {
+    top: 100px;
+    left: 10px;
   }
 
 }

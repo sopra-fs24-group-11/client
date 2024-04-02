@@ -27,13 +27,16 @@ const CreateTrip = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const[temp, setTemp] = useState<string>("enter...")
+
   // used to manage trip
   const [tripAdmin, setTripAdmin] = useState<User>(null);
 
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
   const [temporaryMeetUpPlace, setTemporaryMeetUpPlace] = useState<string>("");
-  const [temporaryMeetUpCode, setTemporaryMeetUpCode] = useState<string>("1234");
+  const [temporaryMeetUpCode, setTemporaryMeetUpCode] =
+    useState<string>("1234");
   const [tripDescription, setTripDescription] = useState<string>("");
   const [friends, setFriends] = useState<Record<number, string>>({});
   const [meetUpTime, setMeetUpTime] = useState<string>("");
@@ -43,14 +46,18 @@ const CreateTrip = () => {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const closeDialogRef = useRef(null);
 
+  const [locationSuggestions, setLocationSuggestions] = useState([]);
+  const [locationSearchTerm, setLocationSearchTerm] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
   const fetchLocation = async () => {
     const options: any = {
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0,
-      accuracy: 10 // Minimale gewünschte Genauigkeit in Metern
+      accuracy: 10, // Minimale gewünschte Genauigkeit in Metern
     };
-    
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         // Erfolgreich, die Position wurde abgerufen
@@ -60,7 +67,7 @@ const CreateTrip = () => {
         console.log("Latitude:", latitude);
         console.log("Longitude:", longitude);
         console.log("Accuracy:", accuracy, "meters");
-    
+
         if (accuracy < 100) {
           // Die Genauigkeit ist ausreichend, um den Standort zu verwenden
         } else {
@@ -73,7 +80,7 @@ const CreateTrip = () => {
       },
       options
     );
-  }
+  };
 
   const fetchAdmin = async () => {
     fetchLocation();
@@ -93,7 +100,7 @@ const CreateTrip = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -143,6 +150,27 @@ const CreateTrip = () => {
     setFriends(rest);
   };
 
+  const handleLocationSearchChange = async (event) => {
+    const token = localStorage.getItem("token");
+    setLocationSearchTerm(event.target.value);
+    if (event.target.value.trim() === "") {
+      setLocationSuggestions([]);
+    } else {
+      try {
+        const response = await api.get(
+          `/trips/searchStation?start=${event.target.value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setLocationSuggestions(response.data);
+        console.log(response.data);
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
   const handleSearchChange = async (event) => {
     const token = localStorage.getItem("token");
     setSearchTerm(event.target.value);
@@ -168,6 +196,25 @@ const CreateTrip = () => {
     setSelectedFriend(friend);
     setSuggestions([]);
   };
+
+  const handleLocationSuggestionSelect = (station) => {
+    setLocationSearchTerm(station.stationName);
+    setSelectedLocation(station);
+    setSuggestions([]);
+  };
+
+  const handleLocationSubmit = () => {
+    if (selectedLocation) {
+      setTemporaryMeetUpPlace(selectedLocation.stationName);
+      setTemporaryMeetUpCode(selectedLocation.stationCode);
+      setTemp(selectedLocation.stationName);
+      setSearchTerm("");
+    }
+    if (closeDialogRef.current) {
+      closeDialogRef.current.click();
+    }
+  };
+
 
   const handleAddFriendSubmit = () => {
     if (selectedFriend) {
@@ -207,12 +254,53 @@ const CreateTrip = () => {
                 ></input>
                 <br></br>
 
-                <label>Target Location:</label>
-                <input
-                  className="flex input"
-                  placeholder="enter..."
-                  onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
-                ></input>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div>
+                      <label>Target Location:</label>
+                      <input
+                        className="flex input"
+                        placeholder= {temp}
+                        //onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
+                      ></input>
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Select Target Location</DialogTitle>
+                      <DialogDescription>
+                        Enter the Location where you want to get together:
+                      </DialogDescription>
+                    </DialogHeader>
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={locationSearchTerm}
+                      onChange={handleLocationSearchChange}
+                    />
+                    {locationSuggestions.length > 0 && (
+                      <ul className="suggestions-list bg-gray-100">
+                        {locationSuggestions.map((suggestion) => (
+                          <li
+                            key={suggestion.stationCode}
+                            onClick={() => handleLocationSuggestionSelect(suggestion)}
+                          >
+                            {suggestion.stationName}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <DialogFooter>
+                      <Button
+                        onClick={handleLocationSubmit}
+                        backgroundColor="#14AE5C"
+                      >
+                        Add Friend to Trip
+                      </Button>
+                    </DialogFooter>
+                    <DialogClose ref={closeDialogRef} className="hidden" />
+                  </DialogContent>
+                </Dialog>
               </div>
               <div className="flex box">
                 <label>Trip Description:</label>
