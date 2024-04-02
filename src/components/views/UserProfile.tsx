@@ -6,6 +6,7 @@ import { Button } from "components/ui/Button";
 import { Label } from "../ui/label";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
+import ConfirmPopup from "../ui/ConfirmPopup";
 
 // Main Profile component
 const ProfilePage: React.FC = () => {
@@ -21,6 +22,7 @@ const ProfilePage: React.FC = () => {
     birthday: "",
     password: "",
   });
+  const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -164,6 +166,20 @@ const ProfilePage: React.FC = () => {
     });
   };
 
+  const handleProfileDelete = async () => {
+    // logic to delete the item
+    try {
+      const token = localStorage.getItem("token");
+      await api.delete("/users", {
+        headers: { Authorization: token },
+      });
+      document.getElementsByClassName("popup");
+    } catch (error) {
+      handleError(error);
+    }
+    setPopupOpen(false);
+  };
+
   if (isLoading) {
     return <LinearIndeterminate />;
   }
@@ -262,6 +278,23 @@ const ProfilePage: React.FC = () => {
                 >
                   Edit Profile
                 </Button>
+                <Button
+                    backgroundColor={"#FF0006FF"}
+                    onClick={() => {
+                      // opens popup for confirmation of deletion
+                      setPopupOpen(true);
+                    }}
+                >
+                  Delete Profile
+                </Button>
+                <ConfirmPopup
+                  header="Are you sure you want to delete your profile?"
+                  info="You won't be able to recover your account"
+                  className="popup"
+                  isOpen={isPopupOpen}
+                  onConfirm={handleProfileDelete}
+                  onCancel={() => setPopupOpen(false)}
+                />
                 <Button
                   backgroundColor={"#FB8500"}
                   onClick={() => navigate("/Dashboard")}
