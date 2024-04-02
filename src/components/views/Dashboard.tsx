@@ -12,26 +12,55 @@ import LinearIndeterminate from "components/ui/loader";
 
 // Components
 const FriendList = () => {
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [friendList, setFriendList] = useState([]);
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-  // Example friends data - will be replaced with backend data
-  const friends = [
-    { name: "Michael B.", status: "ONLINE" },
-    { name: "Ulf Z.", status: "ONLINE" },
-    { name: "Christiane B.", status: "OFFLINE" },
-    { name: "Hanspeter B.", status: "ONLINE" },
-    { name: "Elaine H.", status: "OFFLINE" },
-    { name: "Elaine H.", status: "OFFLINE" },
-    { name: "Livio Hartmann", status: "ONLINE" },
-  ];
+  useEffect(() => {
+    const fetchFriendRequests = async () => {
+      try {
+        const response = await api.get("/users/friends/requests", {
+          headers: { Authorization: token },
+        });
+        setFriendRequests(response.data); // Assuming this is an array of friend requests
+      } catch (error) {
+        handleError(error);
+      }
+    };
 
-  const request = [
-    { name: "Michael B." },
-    { name: "Ulf Z." },
-    { name: "Christiane B." },
-    { name: "Christiane B." },
-    { name: "Christiane B." },
-  ];
+    const fetchFriends = async () => {
+      try {
+        const response = await api.get("/users/friends", {
+          headers: { Authorization: token },
+        });
+        setFriendList(response.data);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchFriends();
+    fetchFriendRequests();
+  }, []);
+
+  const handleAcceptFriendRequest = async (friendRequestId) => {
+    try {
+      await api.put(
+        `/users/friends/${friendRequestId}`,
+        {},
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setFriendRequests(
+        friendRequests.filter((request) => request.id !== friendRequestId)
+      );
+      window.location.reload();
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
   // Function to determine the status class
   const getStatusClass = (status) => {
@@ -48,26 +77,27 @@ const FriendList = () => {
     <div className="friends component">
       <h2>Friend List</h2>
       <ul className="friend-list">
-        {friends.map((friend, index) => (
+        {friendList.map((friend, index) => (
           <li key={index} className="friend">
-            <span className="name">{friend.name}</span>
-            <span className={getStatusClass(friend.status)}>
+            <span className="name">{friend.username}</span>
+            {/* <span className={getStatusClass(friend.status)}>
               {friend.status}
-            </span>
+            </span> */}
           </li>
         ))}
       </ul>
       <div className="requests">
         <h2>New requests</h2>
         <div className="request-list">
-          {request.map((request, index) => (
+          {friendRequests.map((request, index) => (
             <div key={index} className="request">
-              <span className="name">{request.name}</span>
+              <span className="name">{request.username}</span>
               <Button
                 className="accept-button"
                 width="80px"
                 height="35px"
                 backgroundColor="#82FF6D"
+                onClick={() => handleAcceptFriendRequest(request.friendId)}
               >
                 Accept
               </Button>
@@ -90,18 +120,36 @@ const FriendList = () => {
 
 const WelcomeMessage: React.FC = () => {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const handleCreateTrip = () => {
     navigate("/createTrip");
   };
 
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const userdata = await api.get("/users", {
+          headers: { Authorization: token },
+        });
+        const user: User = userdata.data;
+        console.log("CURRENT USER DATA:", user);
+        setCurrentUser(user);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+    fetchUsername();
+  }, []);
+
   return (
     <div className="welcome component">
-      <h1 className="welcome-title">Welcome back, Test!</h1>
+      <h1 className="welcome-title">Welcome back, {currentUser ? currentUser.username : 'loading...'}!</h1>
       <p className="font-bold text-lg">Your progress</p>
       <div className="mb-8">
-        <Progress value={35} />
-        <p>Level: X</p>
+        <Progress value={currentUser ? currentUser.level * 100 : "loading..."} />
+        <p>Level: {currentUser ? currentUser.level : "loading..."}</p>
       </div>
 
       <div className="current-trips component">

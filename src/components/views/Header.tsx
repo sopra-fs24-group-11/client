@@ -34,10 +34,9 @@ const Header = () => {
 
   const goToFriends = () => {
     navigate("/friends");
-  }
+  };
 
   const handleLogout = async () => {
-
     const token = localStorage.getItem("token");
     if (token) {
       try {

@@ -1,6 +1,6 @@
 @import "../theme";
 
-.flex {
+.connection {
   &.container {
     display: flex;
     margin-top: 2em; // Abstand oben
@@ -28,7 +28,7 @@
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    background-color: #011a27;
+    background-color: #597487;
     border-radius: 0.75em;
     padding: 30px;
     min-height: 800px;
@@ -89,7 +89,6 @@
     padding: 5px;
     color: black;
     max-width: 220px;
-    width: 100%;
   }
 
   .input {
