@@ -93,16 +93,18 @@
 
   .input {
     display: flex;
-    width: 100%;
-    border-radius: 0.4em;
+    height: 40px;
+    width: 50%;
+    border-radius: 2em;
+    padding-left: 20px;
     padding: 5px;
     color: black;
+    margin: 10px;
   }
 
   .input-large {
     @extend .input; /* Erbe alle Eigenschaften von .row-form */
     height: 100%; /* Überschreibe justify-content mit center */
-    width: auto;
     resize: none;
   }
 
@@ -158,4 +160,23 @@
       text-shadow: 0 0 10px black;
     }
   }
+
+  .locations-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .locations-container::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 20px; /* Width of the line */
+    background-color: #000; /* Color of the line */
+    z-index: -1;
+  }
+
 }

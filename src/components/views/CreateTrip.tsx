@@ -33,8 +33,7 @@ const CreateTrip = () => {
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
   const [temporaryMeetUpPlace, setTemporaryMeetUpPlace] = useState<string>("");
-  const [temporaryMeetUpCode, setTemporaryMeetUpCode] =
-    useState<string>("1234");
+  const [temporaryMeetUpCode, setTemporaryMeetUpCode] = useState<string>("1234");
   const [tripDescription, setTripDescription] = useState<string>("");
   const [friends, setFriends] = useState<Record<number, string>>({});
   const [meetUpTime, setMeetUpTime] = useState<string>("");
@@ -44,7 +43,41 @@ const CreateTrip = () => {
   const [selectedFriend, setSelectedFriend] = useState(null);
   const closeDialogRef = useRef(null);
 
+  const fetchLocation = async () => {
+    const options: any = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+      accuracy: 10 // Minimale gewünschte Genauigkeit in Metern
+    };
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // Erfolgreich, die Position wurde abgerufen
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const accuracy = position.coords.accuracy; // Genauigkeit in Metern
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+        console.log("Accuracy:", accuracy, "meters");
+    
+        if (accuracy < 100) {
+          // Die Genauigkeit ist ausreichend, um den Standort zu verwenden
+        } else {
+          // Die Genauigkeit ist nicht ausreichend, um den Standort zu verwenden
+        }
+      },
+      (error) => {
+        // Fehler beim Abrufen der Position
+        console.error("Error getting geolocation:", error);
+      },
+      options
+    );
+  }
+
   const fetchAdmin = async () => {
+    
+    
     try {
       const token = localStorage.getItem("token");
       const adminData = await api.get("/users", {

@@ -24,6 +24,7 @@ const FriendList = () => {
           headers: { Authorization: token },
         });
         setFriendRequests(response.data); // Assuming this is an array of friend requests
+        console.log("FRIEND REQUESTS INFO:", response.data);
       } catch (error) {
         handleError(error);
       }
@@ -34,6 +35,7 @@ const FriendList = () => {
         const response = await api.get("/users/friends", {
           headers: { Authorization: token },
         });
+        console.log("FRIENDS: ", response.data)
         setFriendList(response.data);
       } catch (error) {
         handleError(error);
@@ -80,9 +82,9 @@ const FriendList = () => {
         {friendList.map((friend, index) => (
           <li key={index} className="friend">
             <span className="name">{friend.username}</span>
-            {/* <span className={getStatusClass(friend.status)}>
+            <span className={getStatusClass(friend.status)}>
               {friend.status}
-            </span> */}
+            </span>
           </li>
         ))}
       </ul>

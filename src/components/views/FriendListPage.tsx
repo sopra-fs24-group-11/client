@@ -38,10 +38,8 @@ const FriendListPage = () => {
       });
       setFriendList(response.data);
       console.log("Friend list: ", response.data);
-      setIsLoading(false);
     } catch (error) {
       handleError(error);
-      setIsLoading(false);
     }
   };
 
@@ -172,6 +170,14 @@ const FriendListPage = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); // Show loader for x seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   if (isLoading) {
     return <LinearIndeterminate />;
