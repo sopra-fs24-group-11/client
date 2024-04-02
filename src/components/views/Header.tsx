@@ -32,9 +32,12 @@ const Header = () => {
     navigate("/dashboard");
   };
 
+  const goToFriends = () => {
+    navigate("/friends");
+  }
+
   const handleLogout = async () => {
-    // Removed the type declaration to fit standard JS syntax
-    // No need to call useNavigate here, use the navigate function directly
+
     const token = localStorage.getItem("token");
     if (token) {
       try {
@@ -89,6 +92,7 @@ const Header = () => {
       >
         <MenuItem onClick={goToDashboard}>Dashboard</MenuItem>
         <MenuItem onClick={goToProfile}>Profile</MenuItem>
+        <MenuItem onClick={goToFriends}>Your Friends</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
       <div className="train-container">

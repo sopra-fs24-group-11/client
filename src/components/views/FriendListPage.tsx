@@ -1,48 +1,181 @@
-import React, { useState, useEffect } from "react";
+// =================================================================
+
+import React, { useState, useEffect, useRef } from "react";
 import { api, handleError } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import { Progress } from "../ui/progress";
-import PropTypes from "prop-types";
-import "../../styles/views/FriendListPage.scss";
 import LinearIndeterminate from "components/ui/loader";
+import "../../styles/views/FriendListPage.scss";
+import { Input } from "components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogTrigger,
+} from "components/ui/dialog";
 
 const FriendListPage = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [friendList, setFriendList] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [newFriendUsername, setNewFriendUsername] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedFriend, setSelectedFriend] = useState(null);
+  const closeDialogRef = useRef(null);
 
-  // Example friends data - replace with actual data from your state
-  const friends = [
-    { name: "Alberto A.", stage: 2, progress: 66 },
-    { name: "Alberto B.", stage: 1, progress: 30 },
-    { name: "Alberto C.", stage: 3, progress: 86 },
-    { name: "Alberto D.", stage: 1, progress: 16 },
-    { name: "Verylong Name", stage: 1, progress: 16 },
-    { name: "Alberto F.", stage: 1, progress: 16 },
-    { name: "Alberto G.", stage: 1, progress: 16 },
-    { name: "Alberto H.", stage: 1, progress: 16 },
-  ];
+  const fetchFriends = async () => {
+    try {
+      const response = await api.get("/users/friends", {
+        headers: { Authorization: token },
+      });
+      setFriendList(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      handleError(error);
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFriendRequests = async () => {
+    try {
+      const response = await api.get("/users/friends/requests", {
+        headers: { Authorization: token },
+      });
+      console.log("FRIEND REQUESTS", response.data);
+      setFriendRequests(response.data); // Assuming this is an array of friend requests
+      console.log("FRIEND REQUESTS ARRAY", friendRequests);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFriends();
+    fetchFriendRequests();
+  }, []);
+
+  const handleAcceptFriendRequest = async (friendRequestId) => {
+    try {
+      await api.put(
+        `/users/friends/${friendRequestId}`,
+        {},
+        {
+          headers: { Authorization: token },
+        }
+      );
+      // Remove the accepted request from the list
+      setFriendRequests(
+        friendRequests.filter((request) => request.id !== friendRequestId)
+      );
+      await fetchFriends();
+      await fetchFriendRequests();
+      if (closeDialogRef.current) {
+        closeDialogRef.current.click();
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleDenyFriendRequest = async (friendRequestId) => {
+    try {
+      await api.delete(
+        `/users/friends/${friendRequestId}`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      // Remove the denied request from the list
+      setFriendRequests(
+        friendRequests.filter((request) => request.id !== friendRequestId)
+      );
+      await fetchFriends();
+      await fetchFriendRequests();
+      if (closeDialogRef.current) {
+        closeDialogRef.current.click();
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleSearchChange = async (event) => {
+    setSearchTerm(event.target.value);
+    if (event.target.value.trim() === "") {
+      setSuggestions([]);
+    } else {
+      try {
+        const response = await api.get(
+          `/users/search?name=${event.target.value}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setSuggestions(response.data); // Assuming this is an array of user objects
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
+  const handleSuggestionSelect = (friend) => {
+    setSearchTerm(friend.username); // Set the username in the input field
+    setSelectedFriend(friend); // Store the selected friend's data
+    setSuggestions([]); // Clear suggestions
+  };
 
   const handleBackClick = () => {
     navigate("/dashboard");
   };
 
-  const handleAddFriendClick = () => {
-    // Implement the logic to add a new friend
+  const handleRemoveFriend = async (friendId) => {
+    try {
+      await api.delete(`/users/friends/${friendId}`, {
+        headers: { Authorization: token },
+      });
+      // Remove the friend from the friendList in the UI after successful deletion
+      setFriendList(
+        friendList.filter((friend) => friend.friendId !== friendId)
+      );
+    } catch (error) {
+      handleError(error);
+    }
   };
 
-  const handleRemoveFriend = (name) => {
-    // Implement the logic to remove a friend
+  const handleAddFriendSubmit = async () => {
+    if (selectedFriend) {
+      try {
+        console.log("SELECTED FRIEND", selectedFriend);
+        await api.post(
+          `/users/friends/${selectedFriend.id}`,
+          {},
+          {
+            headers: { Authorization: token },
+          }
+        );
+        // Refresh the friend list to show the newly added friend
+        fetchFriends();
+        setSearchTerm(""); // Clear the search term
+        setSelectedFriend(null); // Clear the selected friend
+        if (closeDialogRef.current) {
+          closeDialogRef.current.click();
+        }
+      } catch (error) {
+        if (closeDialogRef.current) {
+          closeDialogRef.current.click();
+        }
+        handleError(error);
+      }
+    }
   };
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Show loader for x seconds
-
-    return () => clearTimeout(timer);
-  }, []);
 
   if (isLoading) {
     return <LinearIndeterminate />;
@@ -53,16 +186,36 @@ const FriendListPage = () => {
       <div className="friend-list-page">
         <h1>Your Friend List</h1>
         <ul className="friend-list">
-          {friends.map((friend) => (
-            <li key={friend.name} className="friend">
-              <span className="name">{friend.name}</span>
-              <Progress className="progress-bar" value={friend.progress} />
-              <div className="stage">Stage: {friend.stage}</div>
+          {friendList.map((friend) => (
+            <li key={friend.friendId} className="friend">
+              <span className="name">{friend.username}</span>
+              <Progress className="progress-bar" value={friend.points} />
+              <div className="stage">Level: {friend.level}</div>
               <Button
                 className="remove-friend"
-                onClick={() => handleRemoveFriend(friend.name)}
+                onClick={() => handleRemoveFriend(friend.friendId)}
               >
                 X
+              </Button>
+            </li>
+          ))}
+        </ul>
+        <h1>Friend Requests</h1>
+        <ul className="friend-requests">
+          {friendRequests.map((request) => (
+            <li key={request.id} className="friend-request">
+              <span className="name">{request.username}</span>
+              <Button
+                className="accept-request"
+                onClick={() => handleAcceptFriendRequest(request.friendId)}
+              >
+                Accept
+              </Button>
+              <Button
+                className="deny-request"
+                onClick={() => handleDenyFriendRequest(request.friendId)}
+              >
+                Deny
               </Button>
             </li>
           ))}
@@ -76,14 +229,53 @@ const FriendListPage = () => {
           >
             Back to Dashboard
           </Button>
-          <Button
-            className="add-friend-button"
-            backgroundColor="#14AE5C"
-            color="white"
-            onClick={handleAddFriendClick}
-          >
-            Add new Friend
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                className="add-friend-button"
+                backgroundColor="#14AE5C"
+                color="white"
+              >
+                Add new Friend
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Friend</DialogTitle>
+                <DialogDescription>
+                  Enter the username of the friend you want to add.
+                </DialogDescription>
+              </DialogHeader>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="input"
+              />
+              {suggestions.length > 0 && (
+                <ul className="suggestions-list bg-gray-100">
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.friendId}
+                      onClick={() => handleSuggestionSelect(suggestion)}
+                    >
+                      {suggestion.username}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <DialogFooter>
+                <Button
+                  onClick={handleAddFriendSubmit}
+                  backgroundColor="#14AE5C"
+                >
+                  Send Friend Request
+                </Button>
+              </DialogFooter>
+              <DialogClose ref={closeDialogRef} className="hidden" />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </>

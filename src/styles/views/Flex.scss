@@ -78,6 +78,8 @@
     border-radius: 3em;
     padding: 10px;
     flex-wrap: wrap;
+    background-color: white;
+    color: black;
   }
 
   .date {
@@ -120,7 +122,8 @@
     justify-content: space-between;
     align-items: center;
     width: 150px;
-    background-color: rgb(146, 190, 207);
+    background-color: white;
+    color: black;
     margin-block: 10px;
     border-radius: 0.75em;
     padding: 10px;
@@ -142,5 +145,14 @@
 
   .image {
     height: 30px;
+  }
+
+  .button {
+    cursor: pointer; // change to finger pointer
+  
+    &:hover {
+      //color: red;
+      text-shadow: 0 0 10px black;
+    }
   }
 }
