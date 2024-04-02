@@ -33,7 +33,8 @@ const CreateTrip = () => {
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
   const [temporaryMeetUpPlace, setTemporaryMeetUpPlace] = useState<string>("");
-  const [temporaryMeetUpCode, setTemporaryMeetUpCode] = useState<string>("1234");
+  const [temporaryMeetUpCode, setTemporaryMeetUpCode] =
+    useState<string>("1234");
   const [tripDescription, setTripDescription] = useState<string>("");
   const [friends, setFriends] = useState<Record<number, string>>({});
   const [meetUpTime, setMeetUpTime] = useState<string>("");
@@ -53,7 +54,6 @@ const CreateTrip = () => {
       // hier checken, ob wirklich das Richte zurück kommt!!!
       const admin: User = adminData.data;
       setTripAdmin(admin);
-
     } catch (error) {
       handleError(error);
     }
@@ -77,7 +77,7 @@ const CreateTrip = () => {
         participants,
         temporaryMeetUpPlace,
         temporaryMeetUpCode,
-        meetUpTime
+        meetUpTime,
       });
 
       const token = localStorage.getItem("token");
@@ -89,7 +89,6 @@ const CreateTrip = () => {
       console.log("RequestBody: ", requestBody);
 
       navigate("/chooseConnection");
-
     } catch (error) {
       handleError(error);
     }
@@ -100,25 +99,26 @@ const CreateTrip = () => {
   };
 
   const addParticipant = (key: number, value: string) => {
-    setFriends(prevDictionary => ({
+    setFriends((prevDictionary) => ({
       ...prevDictionary,
-      [key]: value
+      [key]: value,
     }));
-  }
+  };
 
   const removeParticipant = (key: number) => {
-    const { [key]: deletedUser, ...rest } = friends; 
+    const { [key]: deletedUser, ...rest } = friends;
     setFriends(rest);
-  }
+  };
 
   const handleSearchChange = async (event) => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     setSearchTerm(event.target.value);
     if (event.target.value.trim() === "") {
       setSuggestions([]);
     } else {
       try {
-        const response = await api.get(`/users/search?name=${event.target.value}`,
+        const response = await api.get(
+          `/users/search?name=${event.target.value}`,
           {
             headers: { Authorization: token },
           }
@@ -131,7 +131,7 @@ const CreateTrip = () => {
   };
 
   const handleSuggestionSelect = (friend) => {
-    setSearchTerm(friend.username); 
+    setSearchTerm(friend.username);
     setSelectedFriend(friend);
     setSuggestions([]);
   };
@@ -148,11 +148,11 @@ const CreateTrip = () => {
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-  }
+  };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-  }
+  };
 
   if (isLoading) {
     return <LinearIndeterminate />;
@@ -181,14 +181,14 @@ const CreateTrip = () => {
                   onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
                 ></input>
               </div>
-                <div className="flex box">
-                  <label>Trip Description:</label>
-                  <textarea
-                    className="flex input-large"
-                    placeholder="enter..."
-                    onChange={(e) => setTripDescription(e.target.value)}
-                  ></textarea>
-                </div>
+              <div className="flex box">
+                <label>Trip Description:</label>
+                <textarea
+                  className="flex input-large"
+                  placeholder="enter..."
+                  onChange={(e) => setTripDescription(e.target.value)}
+                ></textarea>
+              </div>
             </div>
             <div className="flex row-form">
               <div className="flex box">
@@ -254,11 +254,14 @@ const CreateTrip = () => {
               {Object.entries(friends).map(([key, value]) => (
                 <div className="flex participants" key={key}>
                   {value}
-                  <label className="flex button"
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                  onClick={() => removeParticipant(parseInt(key))}
-                  >X</label>
+                  <label
+                    className="flex button"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={() => removeParticipant(parseInt(key))}
+                  >
+                    X
+                  </label>
                 </div>
               ))}
             </div>

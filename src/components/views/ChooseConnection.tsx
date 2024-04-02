@@ -9,6 +9,7 @@ import "styles/views/Connections.scss";
 
 const ChooseConnection = () => {
   const navigate = useNavigate();
+  const [tripDescription, setTripDescription] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {};
@@ -26,7 +27,11 @@ const ChooseConnection = () => {
           <h1 className="text-3xl mb-5 font-bold"> Choose Connection</h1>
           <div className="connection inner-form">
             <h2 className="text-2xl mb-5">Starting Location:</h2>
-
+            <textarea
+              className="flex input-large"
+              placeholder="Select starting location..."
+              onChange={(e) => setTr(e.target.value)}
+            ></textarea>
           </div>
         </div>
       </div>
