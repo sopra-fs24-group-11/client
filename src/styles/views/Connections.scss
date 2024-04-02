@@ -161,22 +161,15 @@
     }
   }
 
-  .locations-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .locations-container::after {
-    content: '';
+  #startLocation :after {
+    content: "";
+    background-color: #000;
     position: absolute;
+    width: 5px;
+    height: 100px;
+    top: 10px;
     left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 20px; /* Width of the line */
-    background-color: #000; /* Color of the line */
-    z-index: -1;
+    display: block;
   }
 
 }

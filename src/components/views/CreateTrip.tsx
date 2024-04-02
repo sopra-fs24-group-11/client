@@ -76,8 +76,7 @@ const CreateTrip = () => {
   }
 
   const fetchAdmin = async () => {
-    
-    
+    fetchLocation();
     try {
       const token = localStorage.getItem("token");
       const adminData = await api.get("/users", {
