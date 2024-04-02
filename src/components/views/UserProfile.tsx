@@ -79,9 +79,10 @@ const ProfilePage: React.FC = () => {
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      if (event.target.files[0].type.match('image.*')) { // checks if image is of MIME image type 
+      if (event.target.files[0].type.match("image.*")) {
+        // checks if image is of MIME image type
         setAvatar(event.target.files[0]);
-        setSelectedFileName(event.target.files[0].name); 
+        setSelectedFileName(event.target.files[0].name);
       } else {
         alert("File is not an image");
       }
@@ -134,7 +135,6 @@ const ProfilePage: React.FC = () => {
         headers: { Authorization: token },
       });
       if (response.status === 204) {
-        
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
       }
@@ -164,12 +164,13 @@ const ProfilePage: React.FC = () => {
     } catch (error) {
       console.log(error);
       if (error.response.data.status === 409) {
-        alert("Username can't be changed as selected username is already taken");
+        alert(
+          "Username can't be changed as selected username is already taken"
+        );
       } else {
         handleError(error);
         alert("There was an error: " + error);
       }
-      
     }
   };
 
@@ -300,11 +301,11 @@ const ProfilePage: React.FC = () => {
                   Edit Profile
                 </Button>
                 <Button
-                    backgroundColor={"#FF0006FF"}
-                    onClick={() => {
-                      // opens popup for confirmation of deletion
-                      setPopupOpen(true);
-                    }}
+                  backgroundColor={"#FF0006FF"}
+                  onClick={() => {
+                    // opens popup for confirmation of deletion
+                    setPopupOpen(true);
+                  }}
                 >
                   Delete Profile
                 </Button>
@@ -315,11 +316,21 @@ const ProfilePage: React.FC = () => {
                   info="You won't be able to recover your account"
                   className="popup"
                   isOpen={isPopupOpen}
-                  >
-                    <div>
-                      <button className="left confirm-button" onClick={handleProfileDelete}>Yes</button>
-                      <button className="right confirm-button" onClick={() => setPopupOpen(false)}>No</button>
-                    </div>
+                >
+                  <div>
+                    <button
+                      className="left confirm-button"
+                      onClick={handleProfileDelete}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      className="right confirm-button"
+                      onClick={() => setPopupOpen(false)}
+                    >
+                      No
+                    </button>
+                  </div>
                 </ConfirmPopup>
                 <ConfirmPopup
                   // popup tells the user when profile was deleted
@@ -327,8 +338,13 @@ const ProfilePage: React.FC = () => {
                   className="popup"
                   info=""
                   isOpen={isDeleted}
+                >
+                  <button
+                    className="confirm-button"
+                    onClick={() => navigate("/login")}
                   >
-                    <button className="confirm-button" onClick={() => navigate("/login")}>Return to Login</button>
+                    Return to Login
+                  </button>
                 </ConfirmPopup>
                 <Button
                   backgroundColor={"#FB8500"}

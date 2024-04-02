@@ -145,10 +145,14 @@ const WelcomeMessage: React.FC = () => {
 
   return (
     <div className="welcome component">
-      <h1 className="welcome-title">Welcome back, {currentUser ? currentUser.username : 'loading...'}!</h1>
+      <h1 className="welcome-title">
+        Welcome back, {currentUser ? currentUser.username : "loading..."}!
+      </h1>
       <p className="font-bold text-lg">Your progress</p>
       <div className="mb-8">
-        <Progress value={currentUser ? currentUser.level * 100 : "loading..."} />
+        <Progress
+          value={currentUser ? currentUser.level * 100 : "loading..."}
+        />
         <p>Level: {currentUser ? currentUser.level : "loading..."}</p>
       </div>
 
