@@ -1,0 +1,41 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Darkens the background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+.popup h2 {
+    margin-top: 0;
+}
+
+.popup-content {
+    margin-top: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.confirm-button {
+    background-color: grey;
+    border-radius: 5px;
+    font-size: large;
+    margin: 0 100px; /* Adds 10px margin to left and right of each button */
+    padding: 10px 20px;
+}
