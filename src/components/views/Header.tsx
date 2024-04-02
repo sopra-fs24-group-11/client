@@ -40,7 +40,7 @@ const Header = () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        // await api.put("/auth/logout", { token });
+        // await api.put("/users/logout", { token });
 
         localStorage.removeItem("token");
         handleClose();
