@@ -30,7 +30,7 @@
     background-color: #597487;
     border-radius: 0.75em;
     padding: 30px;
-    min-height: 800px;
+    min-height: 900px;
     position: relative;
   }
 
@@ -60,6 +60,8 @@
     //padding: 20px;
     flex-basis: 280px;
     //background-color: bisque;
+    position: relative;
+    top: 0;
   }
 
   .box-line {
@@ -177,7 +179,7 @@
 
   .locations_container {
     align-self: center;
-    height: 400px;
+    height: 200px;
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -197,7 +199,7 @@
     position: absolute;
     left: 9px;
   }
-  
+
   #first.black-circle {
     top: 60px;
   }
@@ -214,5 +216,30 @@
 
   #destinationBlock::placeholder {
     color: #28344c;
+  }
+
+  #lastBox {
+    position: absolute;
+    top: 30%;
+    width: 90%;
+  }
+
+  .spinner {
+    border: 7px solid rgba(0, 0, 0, 0.1);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border-left-color: #09f;
+    animation: spin 1s ease infinite;
+    align-self: center;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 }
