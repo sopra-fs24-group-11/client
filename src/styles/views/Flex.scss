@@ -112,9 +112,10 @@
 
   .horizontal-line {
     border: none;
-    border-top: 10px solid white; /* Weiß als Linienfarbe */
+    border-top: 5px solid white; /* Weiß als Linienfarbe */
     //margin: 5px 0; /* Anpassen des Abstands oberhalb und unterhalb der Linie */
     width: 80%;
+    margin-top: 5px;
   }
 
   .names {

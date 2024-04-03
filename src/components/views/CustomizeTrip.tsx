@@ -29,7 +29,7 @@ const CustomizeTrip = () => {
 
   // used to manage trip
   const [allFriends, setAllFriends] = useState<User[]>([]);
-  const [tripId, setTripId] = useState<number>(null);
+  const { tripId } = useParams();
 
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
@@ -48,11 +48,10 @@ const CustomizeTrip = () => {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [tempLocation, setTempLocation] = useState<string>("")
+  const [tempLocation, setTempLocation] = useState<string>("");
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
-
 
   //-------- FETCH INFORMATION -------- //
 
@@ -88,56 +87,56 @@ const CustomizeTrip = () => {
   };
 
   const fetchFriends = async () => {
-    const token = localStorage.getItem("token");
     try {
-      const response = await api.get("/users/friends ",
-        {
-          headers: { Authorization: token },
-        }
-      );
+      const token = localStorage.getItem("token");
+      const response = await api.get("/users/friends ", {
+        headers: { Authorization: token },
+      });
       setAllFriends(response.data);
-
-      } catch (error) {
-        handleError(error);
-      }
-  }
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
   const fetchTrip = async () => {
-    const tripId = 3; // wird dann aus URL gezogen
     try {
       const token = localStorage.getItem("token");
       const response = await api.get(`/trips/${tripId}`, {
         headers: { Authorization: token },
       });
+
       setTripName(response.data.tripName);
-      setTripDescription(response.data.tripDescription); // wie teilnehmer finden
+      setTripDescription(response.data.tripDescription);
+      setMeetUpTime(response.data.meetUpTime);
       setTemporaryMeetUpCode(response.data.meetUpPlace.stationCode);
       setTemporaryMeetUpPlace(response.data.meetUpPlace.stationName);
-
+      setTempLocation(response.data.meetUpPlace.stationName);
     } catch (error) {
       handleError(error);
     }
-  }
+  };
 
   const fetchParticipants = async () => {
-    const tripId = 3 // wird dann aus URL gezogen
     try {
       const token = localStorage.getItem("token");
       const response = await api.get(`/trips/${tripId}/participants`, {
         headers: { Authorization: token },
       });
-      const administarator = await api.get("/users", {
+      const administrator = await api.get("/users", {
         headers: { Authorization: token },
-      })
-      const adminId = administarator.data.id;
-      const withoutAdmin = r
-      console.log(administarator.data);
-      console.log(response.data);
+      });
+      const adminId = administrator.data.id;
+      const withoutAdmin = response.data.filter((item) => item.id !== adminId);
 
+      const tempObject = {};
+      withoutAdmin.forEach((item) => {
+        tempObject[item.id] = item.username;
+      });
+      setFriends(tempObject);
     } catch (error) {
       handleError(error);
     }
-  }
+  };
 
   //-------- HANDLE CREATION OR CANCELATION -------- //
 
@@ -153,11 +152,11 @@ const CustomizeTrip = () => {
     setFriends(rest);
   };
 
-  const cancelTrip = () => {
-    navigate("/Dashboard");
+  const discardChanges = () => {
+    navigate(`/tripOverview/${tripId}`);
   };
 
-  const createNewTrip = async () => {
+  const saveChanges = async () => {
     try {
       const participants: number[] = Object.keys(friends).map(Number);
       const requestBody = JSON.stringify({
@@ -168,13 +167,15 @@ const CustomizeTrip = () => {
         temporaryMeetUpCode,
         meetUpTime,
       });
-      
+
       const token = localStorage.getItem("token");
-      const response = await api.post("/trips/new", requestBody, {
+      const response = await api.put(`/trips/${tripId}`, requestBody, {
         headers: { Authorization: token },
       });
 
-      navigate("/chooseConnection/" + response.data);
+      console.log(requestBody);
+
+      navigate(`/tripOverview/${tripId}`);
     } catch (error) {
       handleError(error);
     }
@@ -227,9 +228,11 @@ const CustomizeTrip = () => {
     if (event.target.value.trim() === "") {
       setSuggestions([]);
     } else {
-      const filtered = allFriends.filter(friend => friend.username.startsWith(event.target.value));
+      const filtered = allFriends.filter((friend) =>
+        friend.username.startsWith(event.target.value)
+      );
       setSuggestions(filtered);
-      }
+    }
   };
 
   const handleSuggestionSelect = (friend) => {
@@ -286,20 +289,21 @@ const CustomizeTrip = () => {
                 <label>Trip Name:</label>
                 <input
                   className="input"
-                  placeholder="enter..."
+                  value={tripName}
                   onChange={(e) => setTripName(e.target.value)}
                 ></input>
                 <br></br>
-                
+
                 <Dialog>
                   <DialogTrigger asChild>
                     <div>
                       <label>Target Location:</label>
                       <input
                         className="flex input"
-                        placeholder="enter..."
                         value={tempLocation === "" ? undefined : tempLocation}
-                        onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
+                        onChange={(e) =>
+                          setTemporaryMeetUpPlace(e.target.value)
+                        }
                       ></input>
                     </div>
                   </DialogTrigger>
@@ -321,12 +325,19 @@ const CustomizeTrip = () => {
                         {locationSuggestions.map((suggestion) => (
                           <li
                             key={suggestion.stationCode}
-                            onClick={() => handleLocationSuggestionSelect(suggestion)}
-                            onMouseEnter={() => setIsHovered(suggestion.stationCode)}
+                            onClick={() =>
+                              handleLocationSuggestionSelect(suggestion)
+                            }
+                            onMouseEnter={() =>
+                              setIsHovered(suggestion.stationCode)
+                            }
                             onMouseLeave={() => setIsHovered(null)}
                             style={{
-                              cursor: 'pointer', 
-                              textShadow: isHovered === suggestion.stationCode ? '2px 2px 4px #000' : 'none'
+                              cursor: "pointer",
+                              textShadow:
+                                isHovered === suggestion.stationCode
+                                  ? "2px 2px 4px #000"
+                                  : "none",
                             }}
                           >
                             {suggestion.stationName}
@@ -350,14 +361,14 @@ const CustomizeTrip = () => {
                 <label>Trip Description:</label>
                 <textarea
                   className="flex input-large"
-                  placeholder="enter..."
+                  value={tripDescription}
                   onChange={(e) => setTripDescription(e.target.value)}
                 ></textarea>
               </div>
             </div>
             <div className="flex row-form">
-              <div className="flex box">
-                <label>Select Time & Date of Arrival:</label>
+              <div className="flex box-line">
+                <label>Date & Time of Arrival:</label>
                 <input
                   className="flex date"
                   type="datetime-local"
@@ -369,7 +380,9 @@ const CustomizeTrip = () => {
             <Dialog>
               <DialogTrigger asChild>
                 <button className="flex bar">
-                  <label className="add-friends-label" >Add Friends to current Trip</label>
+                  <label className="add-friends-label">
+                    Add Friends to current Trip
+                  </label>
                   <img className="flex image" src={image} />
                 </button>
               </DialogTrigger>
@@ -395,8 +408,11 @@ const CustomizeTrip = () => {
                         onMouseEnter={() => setIsHovered(suggestion.username)}
                         onMouseLeave={() => setIsHovered(null)}
                         style={{
-                          cursor: 'pointer', 
-                          textShadow: isHovered === suggestion.username ? '2px 2px 4px #000' : 'none'
+                          cursor: "pointer",
+                          textShadow:
+                            isHovered === suggestion.username
+                              ? "2px 2px 4px #000"
+                              : "none",
                         }}
                       >
                         {suggestion.username}
@@ -442,7 +458,7 @@ const CustomizeTrip = () => {
                 width="200px"
                 backgroundColor="#BF3132"
                 color="#FFFFFF"
-                onClick={cancelTrip}
+                onClick={discardChanges}
               >
                 DISCARD CHANGES
               </Button>
@@ -450,7 +466,7 @@ const CustomizeTrip = () => {
                 width="200px"
                 backgroundColor="#1A9554"
                 color="#FFFFFF"
-                onClick={createNewTrip}
+                onClick={saveChanges}
               >
                 SAVE CHANGES
               </Button>

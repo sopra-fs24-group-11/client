@@ -167,8 +167,10 @@ const WelcomeMessage: React.FC = () => {
       </h1>
       <p className="font-bold text-lg ">Your progress</p>
       <div className="mb-8">
-        <Progress value={currentUser ? currentUser.level * 100 : 0} />
-        <p className="mt-2">Level: {currentUser ? currentUser.level : "loading..."}</p>
+        <Progress style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.6)" }} value={currentUser ? currentUser.level * 100 : 0} />
+        <p className="mt-2">
+          Level: {currentUser ? currentUser.level : "loading..."}
+        </p>
       </div>
 
       <div className="current-trips component">
@@ -176,13 +178,21 @@ const WelcomeMessage: React.FC = () => {
         <div className="trip-container">
           {currentTrips.length > 0 ? (
             currentTrips.map((trip, index) => (
-              <div key={index} className="trip-info">
+              <div
+                key={index}
+                className="trip-info"
+                onClick={() => navigate(`/tripOverview/${trip.id}`)}
+                style={{ cursor: "pointer" }}
+              >
                 <div>{`"${trip.tripName}" to "${trip.meetUpPlace.stationName}"`}</div>
                 <Button
                   width="80px"
                   height="35px"
                   backgroundColor="#FFB703"
-                  onClick={() => navigate(`/trip/${trip.id}`)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevents the navigation from firing when the Info button is clicked
+                    navigate(`/trip/${trip.id}`);
+                  }}
                 >
                   Info
                 </Button>
@@ -195,6 +205,7 @@ const WelcomeMessage: React.FC = () => {
           )}
         </div>
       </div>
+
       <div className="create-button-container">
         <Button
           width="150px"
@@ -286,7 +297,10 @@ const TripInvitations = () => {
             </div>
           ))
         ) : (
-          <div className="no-current-trip-invitations">No current trip invitations: create one or let your friends invite you!</div>
+          <div className="no-current-trip-invitations">
+            No current trip invitations: create one or let your friends invite
+            you!
+          </div>
         )}
       </div>
     </div>
@@ -334,7 +348,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Show loader for x seconds
+    }, 1000); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);

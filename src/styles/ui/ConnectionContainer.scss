@@ -1,20 +1,23 @@
-
 .connectionContainer {
-  .box {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 300px;
-    position: absolute;
-  }
 
   .presentation {
     background-color: whitesmoke;
     border-radius: 0.5em;
     width: 100%;
-    height: 30%;
+    height: 100%;
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3); /* Shadow on the right side */
     position: relative;
+  }
+
+  .box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    margin: 10px;
+    margin-bottom: 20px;
+    height: 85px;
+    width: 100%;
   }
 
   .black-circle {
@@ -34,7 +37,7 @@
   }
 
   #endCircle {
-    left: 75%;
+    left: 77%;
   }
 
   .tripLine {
@@ -64,7 +67,7 @@
     top: 50%;
     transform: translate(0, -50%);
   }
-  
+
   .time {
     color: black;
     position: absolute;

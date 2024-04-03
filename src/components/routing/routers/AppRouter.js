@@ -55,11 +55,11 @@ const AppRouter = () => {
           <Route path=":id" element={<ChooseConnection />} />
         </Route>
 
-        <Route path="/tripOverview" element={<GameGuard />}>
+        <Route path="/tripOverview/:tripId" element={<GameGuard />}>
           <Route path="" element={<TripOverview />} />
         </Route>
 
-        <Route path="/customizeTrip" element={<GameGuard />}>
+        <Route path="/customizeTrip/:tripId" element={<GameGuard />}>
           <Route path="" element={<CustomizeTrip />} />
         </Route>
 
