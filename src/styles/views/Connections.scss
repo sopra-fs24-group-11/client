@@ -61,7 +61,6 @@
     flex-basis: 280px;
     //background-color: bisque;
     position: relative;
-    top: 0;
   }
 
   .box-line {
@@ -161,11 +160,28 @@
 
   .button {
     cursor: pointer; // change to finger pointer
+    width: 150px;
+    height:75px;
+    color:white;
+    bottom: 0;
+    right: 50%;
+    transform: translate(0, 50%);
+    position: absolute;
+    margin: 20px;
 
     &:hover {
       //color: red;
       text-shadow: 0 0 10px black;
     }
+
+    &#cancelButton {
+      background-color: red;
+    }
+
+    &#confirmButton {
+      background-color: green;
+    }
+
   }
 
   .connector {
@@ -179,12 +195,12 @@
 
   .locations_container {
     align-self: center;
-    height: 200px;
+    height: 10%;
     width: 50%;
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 50px;
+    position: relative;
+    top: 0;
     align-items: center;
   }
 

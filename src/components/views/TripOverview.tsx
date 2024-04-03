@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
-import User from "models/User";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
-import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
 
 import Dialog from "@mui/material/Dialog";
@@ -20,59 +18,41 @@ import "../../styles/views/TripOverview.scss";
 import LinearIndeterminate from "components/ui/loader";
 
 // ============== HELPER FUNCTIONS ==============
-const mockConnections = [
-  {
-    name: "You",
-    startTime: "12:16",
-    expectedArrival: "14:04",
-    progress: 80, // This is a percentage of the progress bar.
-    transportType: "car", // This could be 'train', 'bus', 'car', etc.
-  },
-  {
-    name: "Ulf Z.",
-    startTime: "12:01",
-    expectedArrival: "14:08",
-    progress: 60,
-    transportType: "train",
-  },
-  {
-    name: "Beni W.",
-    startTime: "12:34",
-    expectedArrival: "14:05",
-    progress: 50,
-    transportType: "bus",
-  },
-  {
-    name: "Christiane B.",
-    startTime: "12:11",
-    expectedArrival: "14:10",
-    progress: 75,
-    transportType: "car",
-  },
-  {
-    name: "Thomas F.",
-    startTime: "12:11",
-    expectedArrival: "14:10",
-    progress: 90,
-    transportType: "train",
-  },
-];
 
 const ConnectionItem = ({ connection }) => {
+
   return (
     <div className="connection-item">
-      <h3 className="connection-name">{connection.name}</h3>
-      <p className="start-text">start time: {connection.startTime}</p>
-      <span className={`icon ${connection.transportType}`}></span>
+      <h3 className="connection-name">{connection.username}</h3>
+      <p className="start-text">Start time: {connection.startTime}</p>
       <Progress className="progress-bar" value={connection.progress} />
       <p className="arrival-text">
-        expected arrival: {connection.expectedArrival}
+        Expected arrival: {connection.endTime}
       </p>
     </div>
   );
+
 };
+
 ConnectionItem.propTypes = {
-  connection: PropTypes.object.isRequired,
+  connection: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    startStation: PropTypes.string.isRequired,
+    endStation: PropTypes.string.isRequired,
+    progress: PropTypes.number.isRequired,
+    startTime: PropTypes.string.isRequired,
+    endTime: PropTypes.string.isRequired,
+  }),
+};
+
+const calculateProgress = (departureTime, arrivalTime) => {
+  if (!departureTime || !arrivalTime) return 0;
+  const departure = new Date(departureTime).getTime();
+  const arrival = new Date(arrivalTime).getTime();
+  const now = new Date().getTime();
+  if (now < departure) return 0;
+  if (now > arrival) return 100;
+  return ((now - departure) / (arrival - departure)) * 100;
 };
 
 // ============== MAIN FUNCTION ==============
@@ -199,14 +179,36 @@ const TripOverview = () => {
   useEffect(() => {
     const fetchConnections = async () => {
       try {
-        const response = await api.get(`/trips/${tripId}/connections`);
-        setConnections(response.data);
+        const response = await api.get(`/trips/${tripId}/connections`, {
+          headers: { Authorization: token },
+        });
+        console.log("CONNECTIONS:", response.data);
+        const processedConnections = response.data.map((participant) => {
+          const { connectionDTO } = participant;
+          const firstConnection = connectionDTO[0];
+          const lastConnection = connectionDTO[connectionDTO.length - 1];
+
+          return {
+            username: participant.username,
+            startTime: firstConnection?.departureTime
+              ? new Date(firstConnection.departureTime).toLocaleTimeString()
+              : "N/A",
+            endTime: lastConnection?.arrivalTime
+              ? new Date(lastConnection.arrivalTime).toLocaleTimeString()
+              : "N/A",
+            progress: calculateProgress(
+              firstConnection?.departureTime,
+              lastConnection?.arrivalTime
+            ),
+          };
+        });
+        setConnections(processedConnections);
       } catch (error) {
         handleError(error);
       }
     };
 
-    //fetchConnections();
+    fetchConnections();
   }, []);
 
   if (isLoading) {
@@ -221,7 +223,7 @@ const TripOverview = () => {
           Current location of trip participants
         </h1>
         <div className="connections-list">
-          {mockConnections.map((connection, index) => (
+          {connections.map((connection, index) => (
             <ConnectionItem key={index} connection={connection} />
           ))}
         </div>

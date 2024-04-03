@@ -23,7 +23,9 @@ const ChooseConnection = () => {
   const navigate = useNavigate();
   const [tripDescription, setTripDescription] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
-  const [temporaryMeetUpPlace, setTemporaryMeetUpPlace] = useState<string>("");
+  const [tripId, setTripId] = useState<string>("");
+  const [showSpinner, setShowSpinner] = useState<boolean>(false);
+
   const [departureTime, setDepartureTime] = useState<string>("");
   const [arrivalTime, setArrivalTime] = useState<string>("");
   const [travelTime, setTravelTime] = useState<string>("");
@@ -32,18 +34,15 @@ const ChooseConnection = () => {
 
   // used for Location Pop-Up
   const [locationSuggestions, setLocationSuggestions] = useState([]);
-  const [locationSearchTerm, setLocationSearchTerm] = useState<string>("");
-  const [selectedLocation, setSelectedLocation] = useState<string>(null);
-  const [tempLocation, setTempLocation] = useState<string>("");
+  const [locationSearchTerm, setLocationSearchTerm] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
 
   // used to send to backend
-  const [tripName, setTripName] = useState<string>("");
   const [temporaryMeetUpCode, setTemporaryMeetUpCode] = useState<string>("");
-  const [friends, setFriends] = useState<Record<number, string>>({});
-  const [meetUpTime, setMeetUpTime] = useState<string>("");
+  const [tempLocation, setTempLocation] = useState("");
 
   // used for displaying UI
   const [isHovered, setIsHovered] = useState(false);
@@ -74,65 +73,81 @@ const ChooseConnection = () => {
     setLocationSuggestions([]);
   };
 
+  const renderConnectionContainers = async (locationCode) => {
+    try {
+      setShowConnections(false); //
+      setShowSpinner(true);
+      
+      const possibleConnections = await api.get(
+        "/trips/" + tripId + "/startPoint?start=" + locationCode,
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+
+      console.log("request: " + possibleConnections);
+
+      let l = [];
+      let counter = 0;
+
+      for (const connection of possibleConnections.data) {
+        let con = (
+          <ConnectionContainer
+            departureTime={connection[0].departureTime}
+            arrivalTime={connection[connection.length - 1].arrivalTime}
+            key={counter}
+            wholeTrip={connection}
+          />
+        );
+        l.push(con);
+        counter += 1;
+        setShowConnections(true);
+        setConnections(l);
+      }
+    } catch (e) {
+      handleError(e);
+    }
+  };
+
   const handleLocationSubmit = () => {
     if (selectedLocation) {
-      setTemporaryMeetUpPlace(selectedLocation.stationName);
       setTemporaryMeetUpCode(selectedLocation.stationCode);
       setTempLocation(selectedLocation.stationName);
       setLocationSearchTerm("");
+      renderConnectionContainers(selectedLocation.stationCode);
     }
     if (closeDialogRef.current) {
       closeDialogRef.current.click();
     }
   };
 
+  const moveBack = () => {
+    navigate("/createTrip");
+  };
+
+  const handleConnectionSubmit = async () => {
+    const response = await api.post("/trips/" + tripId + "/connection", {
+      body: {},
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const tripId =
+      const id =
         window.location.href.split("/")[
           window.location.href.split("/").length - 1
         ];
 
+      setTripId(id);
+
       try {
         const token = localStorage.getItem("token");
-        const response = await api.get("/trips/" + tripId, {
+        const response = await api.get("/trips/" + id, {
           headers: { Authorization: token },
         });
 
-        console.log("data: " + response.data[0]);
         console.log(Object.keys(response.data));
         console.log(response.data.meetUpPlace);
 
         setDestination(response.data.meetUpPlace.stationName);
-
-        const possibleConnections = await api.get(
-          "/trips/" + tripId + "/startPoint?start=" + "8591046",
-          { headers: { Authorization: token } }
-        );
-
-        console.log(Object.keys(possibleConnections.data[0][0]));
-        console.log(Object.keys(possibleConnections.data[0][1]));
-        console.log(possibleConnections.data[0][0]);
-
-        let el = document.getElementById("results");
-        let l = [];
-        let counter = 0;
-
-        for (const connection of possibleConnections.data) {
-          let con = (
-            <ConnectionContainer
-              departureTime={connection[0].departureTime}
-              arrivalTime={connection[connection.length - 1].arrivalTime}
-              key={counter}
-              wholeTrip={connection}
-            />
-          );
-          l.push(con);
-          counter += 1;
-        }
-
-        setShowConnections(true);
-        setConnections(l);
       } catch (e) {
         handleError(e);
       }
@@ -153,22 +168,22 @@ const ChooseConnection = () => {
             <div className="connection locations_container">
               <Dialog>
                 <DialogTrigger asChild>
-                  <div>
+                  <div style={{ width: "100%" }}>
                     <h2 className="text-2xl mb-5">Starting Location:</h2>
                     <textarea
                       id="startLocation"
                       className="connection input"
                       placeholder="Select start location..."
                       value={tempLocation === "" ? undefined : tempLocation}
-                      onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
+                      //onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
                     ></textarea>
                   </div>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Select Target Location</DialogTitle>
+                    <DialogTitle>Select Starting Location</DialogTitle>
                     <DialogDescription>
-                      Enter the Location where you want to get together:
+                      Enter the Location where you want to start your Trip:
                     </DialogDescription>
                   </DialogHeader>
                   <input
@@ -207,7 +222,7 @@ const ChooseConnection = () => {
                       onClick={handleLocationSubmit}
                       backgroundColor="#14AE5C"
                     >
-                      Select Target Location
+                      Select Starting Location
                     </Button>
                   </DialogFooter>
                   <DialogClose ref={closeDialogRef} className="hidden" />
@@ -218,13 +233,14 @@ const ChooseConnection = () => {
                 className="connection input"
                 placeholder={destination}
                 onChange={(e) => setTripDescription(e.target.value)}
+                readOnly
               ></textarea>
               <div className="connection connector"></div>
               <div id="first" className="black-circle"></div>
               <div id="second" className="black-circle"></div>
             </div>
             {!showConnections ? (
-              <div className="spinner"></div>
+              showSpinner ? <div className="spinner"></div> : <div></div>
             ) : (
               <div id="results" className="connection box">
                 <h2 className="text-2xl mb-2">Select Your Connection:</h2>
@@ -234,22 +250,13 @@ const ChooseConnection = () => {
               </div>
             )}
             <div className="box">
-              <Button
-                width="100px"
-                height="50px"
-                backgroundColor="red"
-                color="white"
-                className="button"
-              >
+              <Button className="button" id="cancelButton" onClick={moveBack}>
                 BACK
               </Button>
               <Button
-                width="100px"
-                height="50px"
-                backgroundColor="green"
-                color="white"
+                id="confirmButton"
                 className="button"
-                style={{}}
+                onClick={handleConnectionSubmit}
               >
                 CONFIRM
               </Button>
