@@ -49,31 +49,45 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
   wholeTrip,
 }) => {
   const [changePoints, setChangePoints] = useState([]);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+
+  const changeClickStatus = () => {
+    setIsClicked(!isClicked);
+  };
 
   useEffect(() => {
     const placeChangePoints = () => {
-
       let minuteCounter = 0;
       const minutesWholeTrip = timeDiffInMinutes(arrivalTime, departureTime);
       let pointList = [];
 
       for (let i = 0; i < wholeTrip.length - 1; i++) {
-        
         let timeToStop = 0;
 
         if (i !== 0) {
-          timeToStop = timeDiffInMinutes(wholeTrip[i].arrivalTime, wholeTrip[i-1].arrivalTime);
+          timeToStop = timeDiffInMinutes(
+            wholeTrip[i].arrivalTime,
+            wholeTrip[i - 1].arrivalTime
+          );
         } else {
-          timeToStop = timeDiffInMinutes(wholeTrip[i].arrivalTime, wholeTrip[i].departureTime);
+          timeToStop = timeDiffInMinutes(
+            wholeTrip[i].arrivalTime,
+            wholeTrip[i].departureTime
+          );
         }
         minuteCounter += timeToStop;
 
         let relativeProgress = minuteCounter / minutesWholeTrip;
-        
-        // as the distance between the start- and endPoint is 59% we take this value and multiply it by our 
+
+        // as the distance between the start- and endPoint is 59% we take this value and multiply it by our
         // relativeProgression (+18% to get at least the startPoint)
-        let relativeAlignment = 59 * relativeProgress + 18; 
-        let changePoint = <div className="black-circle" style={{left: `${relativeAlignment}%`}}></div>
+        let relativeAlignment = 59 * relativeProgress + 18;
+        let changePoint = (
+          <div
+            className="black-circle"
+            style={{ left: `${relativeAlignment}%` }}
+          ></div>
+        );
         pointList.push(changePoint);
       }
 
@@ -83,7 +97,10 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
   }, []);
 
   return (
-    <div className="box">
+    <div
+      className={!isClicked ? "box" : "clickedBox"}
+      onClick={changeClickStatus}
+    >
       <div className="presentation">
         <div
           id="startCircle"
@@ -91,7 +108,17 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
         ></div>
         <div id="endCircle" className="connectionContainer black-circle"></div>
         <div className="tripLine"></div>
-        <p style={{position: "absolute", top: 2, left: 5, color: "black", fontSize: "10pt"}}>{wholeTrip[0].connectionName}</p>
+        <p
+          style={{
+            position: "absolute",
+            top: 2,
+            left: 5,
+            color: "black",
+            fontSize: "10pt",
+          }}
+        >
+          {wholeTrip[0].connectionName}
+        </p>
         {changePoints}
         <p id="travelTime" className="time">
           {timeDifference(arrivalTime, departureTime)}
@@ -103,7 +130,7 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
           {slicer(departureTime)}
         </p>
         <img
-          style={{ width: 100, position: "absolute", right: 0}}
+          style={{ width: 100, position: "absolute", right: 0 }}
           src={"../../graphics/infoIcon.jpeg"}
           alt="Information Icon"
         />

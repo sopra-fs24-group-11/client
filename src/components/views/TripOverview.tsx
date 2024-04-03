@@ -58,6 +58,7 @@ const calculateProgress = (departureTime, arrivalTime) => {
 // ============== MAIN FUNCTION ==============
 const TripOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [currentTrip, setCurrentTrip] = useState({});
   const [connections, setConnections] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -95,6 +96,19 @@ const TripOverview = () => {
       handleError(error);
     }
   };
+
+  const fetchTripInformation = async () => {
+    try {
+      const response = await api.get(`/trips/${tripId}`, {
+        headers: { Authorization: token },
+      });
+      console.log("CURRENT TRIP INFORMATION:", response.data);
+      setCurrentTrip(response.data);
+
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
   const handleOpenLeaveDialog = () => {
     if (isAdmin) {
@@ -173,6 +187,7 @@ const TripOverview = () => {
   }, []);
 
   useEffect(() => {
+    fetchTripInformation();
     fetchAdminStatus();
   }, []);
 
@@ -217,7 +232,8 @@ const TripOverview = () => {
 
   return (
     <div className="main-container">
-      <h1 className="main-title">Trip Overview</h1>
+      <h1 className="main-title">{currentTrip.tripName}</h1>
+      <h3 className="trip-description">Trip Description: {currentTrip.tripDescription}</h3>
       <div className="current-locations-container">
         <h1 className="current-locations-title">
           Current location of trip participants
