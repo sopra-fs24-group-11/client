@@ -20,6 +20,18 @@
     width: 100%;
   }
 
+  .clickedBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    margin: 10px;
+    margin-bottom: 20px;
+    height: 85px;
+    width: 100%;
+    border: green solid 5px;
+  }
+
   .black-circle {
     width: 15px; /* size of the circle - width */
     height: 15px; /* size of the circle - height */

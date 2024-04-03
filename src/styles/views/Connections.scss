@@ -164,7 +164,6 @@
     height:75px;
     color:white;
     bottom: 0;
-    right: 50%;
     transform: translate(0, 50%);
     position: absolute;
     margin: 20px;
@@ -176,10 +175,13 @@
 
     &#cancelButton {
       background-color: red;
+      right: 50%;
+
     }
 
     &#confirmButton {
       background-color: green;
+      left: 50%;
     }
 
   }
