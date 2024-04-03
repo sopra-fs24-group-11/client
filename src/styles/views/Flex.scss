@@ -74,12 +74,16 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 10px;
     width: 65%;
     border-radius: 3em;
     padding: 10px;
     flex-wrap: wrap;
     background-color: white;
     color: black;
+  }
+  .add-friends-label {
+    cursor: pointer;
   }
 
   .date {

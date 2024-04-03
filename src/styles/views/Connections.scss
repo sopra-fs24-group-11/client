@@ -26,12 +26,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
     width: 100%;
     background-color: #597487;
     border-radius: 0.75em;
     padding: 30px;
     min-height: 800px;
+    position: relative;
   }
 
   .row-form {
@@ -93,14 +93,18 @@
 
   .input {
     display: flex;
-    height: 40px;
+    height: 35px;
     width: 100%;
     border-radius: 2em;
-    padding-left: 20px;
-    padding: 5px;
+    padding-left: 40px;
+    padding-top: 3px;
     color: black;
     position: relative;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
+    font-size: 13pt;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3); /* Shadow on the right side */
+    resize: none;
+    overflow: hidden;
   }
 
   .input-large {
@@ -163,40 +167,52 @@
   }
 
   .connector {
-    border-right: 8px solid #000000;
+    border-right: 5px solid #28344c;
     position: absolute;
-    top: 25px;
+    top: 65px;
     width: 10px;
-    height: 100px;
-    left: 21px;
+    height: 70px;
+    left: 11.4px;
   }
 
   .locations_container {
+    align-self: center;
     height: 400px;
-    width: auto;
+    width: 50%;
     display: flex;
     flex-direction: column;
-    position:relative
+    position: absolute;
+    top: 50px;
+    align-items: center;
   }
 
   .black-circle {
-    width: 35px; /* size of the circle - width */
-    height: 35px; /* size of the circle - height */
-    background-color: #000000; /* black color */
+    width: 20px; /* size of the circle - width */
+    height: 20px; /* size of the circle - height */
+    background-color: #28344c; /* black color */
     border-radius: 50%; /* rounded edges to form a circle */
     display: flex; /* to enable centering of content (if any) */
     justify-content: center; /* horizontal centering of content (if any) */
     align-items: center; /* vertical centering of content (if any) */
     position: absolute;
+    left: 9px;
   }
+  
   #first.black-circle {
-    top: 10px;
-    left: 10px;
+    top: 60px;
   }
 
   #second.black-circle {
-    top: 100px;
-    left: 10px;
+    top: 130px;
   }
 
+  #results {
+    position: relative;
+    left: 10%;
+    width: 80%;
+  }
+
+  #destinationBlock::placeholder {
+    color: #28344c;
+  }
 }
