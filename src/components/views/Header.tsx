@@ -40,9 +40,10 @@ const Header = () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        // await api.put("/users/logout", { token });
-
         localStorage.removeItem("token");
+        await api.put("/users/logout", {},{
+          headers: { Authorization: token },
+        });
         handleClose();
         navigate("/login");
       } catch (error) {
@@ -90,7 +91,7 @@ const Header = () => {
         onClose={handleClose}
       >
         <MenuItem onClick={goToDashboard}>Dashboard</MenuItem>
-        <MenuItem onClick={goToProfile}>Profile</MenuItem>
+        <MenuItem onClick={goToProfile}>Your Profile</MenuItem>
         <MenuItem onClick={goToFriends}>Your Friends</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>

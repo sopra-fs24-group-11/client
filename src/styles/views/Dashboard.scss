@@ -2,8 +2,8 @@
 
 .dashboard {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr; /* Adjust the ratios according to your design */
-  gap: 30px; /* Spacing between columns */
+  grid-template-columns: 1fr 2fr 1fr; 
+  gap: 30px; 
   padding-top: 20px;
   padding-bottom: 60px;
   padding-right: 50px;
@@ -19,7 +19,7 @@
 }
 
 .component {
-  background: rgba(216, 216, 216, 0.7);
+  background: rgba(216, 216, 216, 0.85);
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
@@ -36,7 +36,7 @@
 
 /* Styling for the welcome message */
 .welcome {
-  background: #3a4a58;
+  background: rgb(58, 74, 88, 0.9);
   .welcome-title {
     color: #ffffff;
     border-bottom: 2px solid #ffffff;
@@ -60,6 +60,15 @@
     flex-direction: column;
     overflow-y: auto;
     max-height: 200px;
+    min-height: 200px;
+
+    .no-trips-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: #fff; // choose a color that fits your design
+      font-style: italic;
+    }
   }
 
   .trip-info {
@@ -74,6 +83,7 @@
     padding: 5px 15px 5px 15px; /* Padding inside trip items */
     border-radius: 4px; /* Rounded corners for trip items */
     box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.3);
+    cursor: pointer;
   }
 }
 
@@ -91,7 +101,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px; /* Adjust as needed */
+  margin-bottom: 10px; 
 }
 
 .name {
@@ -155,13 +165,13 @@
 
 .notifications-log-list {
   overflow-y: auto;
-  min-height: 400px;
-  max-height: 400px;
+  min-height: 453px;
+  max-height: 453px;
 }
 
 /* Styling for the current trips component */
 .current-trips {
-  background: #21689e;
+  background: rgb(33, 104, 158, 0.7);
   padding: 10px; /* Smaller padding to make the component a bit smaller */
   max-height: 300px;
   margin-bottom: 25px;
@@ -197,6 +207,16 @@
         margin-top: 10px;
         margin-bottom: 10px;
       }
+
+    }
+    .no-current-trip-invitations{
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: rgb(0, 0, 0); // choose a color that fits your design
+      font-style: italic;
+    
     }
   }
 }

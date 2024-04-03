@@ -14,6 +14,7 @@ import FriendListPage from "../../views/FriendListPage";
 import ChooseConnection from "../../views/ChooseConnection";
 import TestPage from "../../views/TestPage";
 import TripOverview from "../../views/TripOverview";
+import CustomizeTrip from "../../views/CustomizeTrip";
 
 const AppRouter = () => {
   return (
@@ -51,11 +52,15 @@ const AppRouter = () => {
         </Route>
 
         <Route path="/chooseConnection" element={<GameGuard />}>
-          <Route path="" element={<ChooseConnection />} />
+          <Route path=":id" element={<ChooseConnection />} />
         </Route>
 
         <Route path="/tripOverview" element={<GameGuard />}>
           <Route path="" element={<TripOverview />} />
+        </Route>
+
+        <Route path="/customizeTrip" element={<GameGuard />}>
+          <Route path="" element={<CustomizeTrip />} />
         </Route>
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />

@@ -35,7 +35,7 @@ const FriendList = () => {
         const response = await api.get("/users/friends", {
           headers: { Authorization: token },
         });
-        console.log("FRIENDS: ", response.data)
+        console.log("FRIENDS: ", response.data);
         setFriendList(response.data);
       } catch (error) {
         handleError(error);
@@ -123,6 +123,7 @@ const FriendList = () => {
 const WelcomeMessage: React.FC = () => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentTrips, setCurrentTrips] = useState([]);
 
   const handleCreateTrip = () => {
     navigate("/createTrip");
@@ -142,6 +143,20 @@ const WelcomeMessage: React.FC = () => {
         handleError(error);
       }
     };
+
+    const fetchCurrentTrips = async () => {
+      try {
+        const response = await api.get("/trips/current", {
+          headers: { Authorization: localStorage.getItem("token") },
+        });
+        console.log("FETCHING CURRENT TRIPS:", response.data);
+        setCurrentTrips(response.data);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchCurrentTrips();
     fetchUsername();
   }, []);
 
@@ -150,45 +165,34 @@ const WelcomeMessage: React.FC = () => {
       <h1 className="welcome-title">
         Welcome back, {currentUser ? currentUser.username : "loading..."}!
       </h1>
-      <p className="font-bold text-lg">Your progress</p>
+      <p className="font-bold text-lg ">Your progress</p>
       <div className="mb-8">
         <Progress value={currentUser ? currentUser.level * 100 : 0} />
-        <p>Level: {currentUser ? currentUser.level : "loading..."}</p>
+        <p className="mt-2">Level: {currentUser ? currentUser.level : "loading..."}</p>
       </div>
 
       <div className="current-trips component">
         <h2>Current Trips</h2>
         <div className="trip-container">
-          <div className="trip-info">
-            <div>Trip01 to Zürich, Platte</div>
-            <Button width="80px" height="35px" backgroundColor="#FFB703">
-              Info
-            </Button>
-          </div>
-          <div className="trip-info">
-            <div>Trip02 to Zürich, HB</div>
-            <Button width="80px" height="35px" backgroundColor="#FFB703">
-              Info
-            </Button>
-          </div>
-          <div className="trip-info">
-            <div>Trip04 to Zürich, ETH Universitätsspital</div>
-            <Button width="80px" height="35px" backgroundColor="#FFB703">
-              Info
-            </Button>
-          </div>
-          <div className="trip-info">
-            <div>Trip05 to Zürich, ETH Universitätsspital</div>
-            <Button width="80px" height="35px" backgroundColor="#FFB703">
-              Info
-            </Button>
-          </div>
-          <div className="trip-info">
-            <div>Trip06 to Zürich, ETH Universitätsspital</div>
-            <Button width="80px" height="35px" backgroundColor="#FFB703">
-              Info
-            </Button>
-          </div>
+          {currentTrips.length > 0 ? (
+            currentTrips.map((trip, index) => (
+              <div key={index} className="trip-info">
+                <div>{`"${trip.tripName}" to "${trip.meetUpPlace.stationName}"`}</div>
+                <Button
+                  width="80px"
+                  height="35px"
+                  backgroundColor="#FFB703"
+                  onClick={() => navigate(`/trip/${trip.id}`)}
+                >
+                  Info
+                </Button>
+              </div>
+            ))
+          ) : (
+            <div className="no-trips-message">
+              No current trips: create one or let your friends invite you!
+            </div>
+          )}
         </div>
       </div>
       <div className="create-button-container">
@@ -224,55 +228,66 @@ const NotificationsLog: React.FC = () => {
   );
 };
 
-const TripInvitations: React.FC = () => {
+const TripInvitations = () => {
+  const [tripInvitations, setTripInvitations] = useState([]);
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTripInvitations = async () => {
+      try {
+        const response = await api.get("/trips/invitations", {
+          headers: { Authorization: token },
+        });
+        setTripInvitations(response.data);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchTripInvitations();
+  }, []);
+
+  const handleAcceptInvitation = async (tripId) => {
+    try {
+      await api.put(
+        `/trips/${tripId}/invitation`,
+        {},
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setTripInvitations(
+        tripInvitations.filter((invitation) => invitation.id !== tripId)
+      );
+      window.location.reload();
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   return (
     <div className="trip-invitations component">
       <h2>Trip Invitations</h2>
       <div className="trip-invitation-list">
-        <div className="trip-invitation">
-          <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button
-            className="accept-button"
-            width="80px"
-            height="35px"
-            backgroundColor="#82FF6D"
-          >
-            Accept
-          </Button>
-        </div>
-        <div className="trip-invitation">
-          <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button
-            className="accept-button"
-            width="80px"
-            height="35px"
-            backgroundColor="#82FF6D"
-          >
-            Accept
-          </Button>
-        </div>
-        <div className="trip-invitation">
-          <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button
-            className="accept-button"
-            width="80px"
-            height="35px"
-            backgroundColor="#82FF6D"
-          >
-            Accept
-          </Button>
-        </div>
-        <div className="trip-invitation">
-          <div>Invitation to Binzmühlestrasse, Zürich</div>
-          <Button
-            className="accept-button"
-            width="80px"
-            height="35px"
-            backgroundColor="#82FF6D"
-          >
-            Accept
-          </Button>
-        </div>
+        {tripInvitations.length > 0 ? (
+          tripInvitations.map((invitation) => (
+            <div key={invitation.id} className="trip-invitation">
+              <div>Invitation to &quot;{invitation.tripName}&quot;</div>
+              <Button
+                className="accept-button"
+                width="80px"
+                height="35px"
+                backgroundColor="#82FF6D"
+                onClick={() => handleAcceptInvitation(invitation.id)}
+              >
+                Accept
+              </Button>
+            </div>
+          ))
+        ) : (
+          <div className="no-current-trip-invitations">No current trip invitations: create one or let your friends invite you!</div>
+        )}
       </div>
     </div>
   );

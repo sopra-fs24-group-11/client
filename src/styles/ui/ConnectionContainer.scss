@@ -1,0 +1,72 @@
+
+.connectionContainer {
+  .box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 300px;
+    position: absolute;
+  }
+
+  .presentation {
+    background-color: whitesmoke;
+    border-radius: 0.5em;
+    width: 100%;
+    height: 30%;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3); /* Shadow on the right side */
+    position: relative;
+  }
+
+  .black-circle {
+    width: 15px; /* size of the circle - width */
+    height: 15px; /* size of the circle - height */
+    background-color: #28344c; /* black color */
+    border-radius: 50%; /* rounded edges to form a circle */
+    display: flex; /* to enable centering of content (if any) */
+    align-items: center; /* vertical centering of content (if any) */
+    position: absolute;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2); /* Shadow on the right side */
+    top: 37px;
+  }
+
+  #startCircle {
+    left: 18%;
+  }
+
+  #endCircle {
+    left: 75%;
+  }
+
+  .tripLine {
+    border: none;
+    border-top: 5px solid #28344c;
+    //margin: 5px 0; /* Anpassen des Abstands oberhalb und unterhalb der Linie */
+    width: 58%;
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2); /* Shadow on the right side */
+  }
+
+  #travelTime {
+    bottom: 5px;
+    right: 30%;
+  }
+
+  #departureTime {
+    left: 3%;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+
+  #arrivalTime {
+    right: 5%;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+  
+  .time {
+    color: black;
+    position: absolute;
+  }
+}

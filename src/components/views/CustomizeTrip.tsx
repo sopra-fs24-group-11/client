@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import image from "../../graphics/add.png";
 import { Button } from "components/ui/Button";
 import "styles/views/Flex.scss";
@@ -19,7 +19,7 @@ import {
   DialogTrigger,
 } from "components/ui/dialog";
 
-const CreateTrip = () => {
+const CustomizeTrip = () => {
   // used to navigate
   const navigate = useNavigate();
 
@@ -29,6 +29,7 @@ const CreateTrip = () => {
 
   // used to manage trip
   const [allFriends, setAllFriends] = useState<User[]>([]);
+  const [tripId, setTripId] = useState<number>(null);
 
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
@@ -99,6 +100,43 @@ const CreateTrip = () => {
       } catch (error) {
         handleError(error);
       }
+  }
+
+  const fetchTrip = async () => {
+    const tripId = 3; // wird dann aus URL gezogen
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get(`/trips/${tripId}`, {
+        headers: { Authorization: token },
+      });
+      setTripName(response.data.tripName);
+      setTripDescription(response.data.tripDescription); // wie teilnehmer finden
+      setTemporaryMeetUpCode(response.data.meetUpPlace.stationCode);
+      setTemporaryMeetUpPlace(response.data.meetUpPlace.stationName);
+
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  const fetchParticipants = async () => {
+    const tripId = 3 // wird dann aus URL gezogen
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get(`/trips/${tripId}/participants`, {
+        headers: { Authorization: token },
+      });
+      const administarator = await api.get("/users", {
+        headers: { Authorization: token },
+      })
+      const adminId = administarator.data.id;
+      const withoutAdmin = r
+      console.log(administarator.data);
+      console.log(response.data);
+
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   //-------- HANDLE CREATION OR CANCELATION -------- //
@@ -228,6 +266,8 @@ const CreateTrip = () => {
   }, []);
 
   useEffect(() => {
+    fetchTrip();
+    fetchParticipants();
     fetchFriends();
     fetchLocation();
   }, []);
@@ -239,7 +279,7 @@ const CreateTrip = () => {
     <BaseContainer>
       <div className="flex container">
         <div className="flex outer-form">
-          <h1 className="text-3xl mb-5 font-bold"> Create New Trip</h1>
+          <h1 className="text-3xl mb-5 font-bold"> Customize Trip</h1>
           <div className="flex inner-form">
             <div className="flex row-form">
               <div className="flex box">
@@ -404,7 +444,7 @@ const CreateTrip = () => {
                 color="#FFFFFF"
                 onClick={cancelTrip}
               >
-                CANCEL TRIP
+                DISCARD CHANGES
               </Button>
               <Button
                 width="200px"
@@ -412,7 +452,7 @@ const CreateTrip = () => {
                 color="#FFFFFF"
                 onClick={createNewTrip}
               >
-                CREATE TRIP
+                SAVE CHANGES
               </Button>
             </div>
           </div>
@@ -422,4 +462,4 @@ const CreateTrip = () => {
   );
 };
 
-export default CreateTrip;
+export default CustomizeTrip;

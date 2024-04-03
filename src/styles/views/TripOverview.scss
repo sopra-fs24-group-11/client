@@ -5,21 +5,160 @@
   flex-direction: column;
   align-items: center;
   margin-top: 5%;
-  margin-left: auto;
+  margin-bottom: 10%;
+  margin-left: 10%;
   padding-left: 15px;
-  margin-right: auto;
+  margin-right: 10%;
   padding-right: 15px;
   max-width: $DESKTOP_WIDTH;
   min-height: 800px;
-  background-color: rgb(25, 101, 25, 0.8);
+  background-color: rgba(18, 55, 42, 0.8);
   border-radius: 20px;
 
+  .main-title {
+    font-size: 2.1rem;
+    font-weight: 500;
+    color: #fbfada;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
   .current-locations-container {
+    min-height: 300px;
     display: flex;
-    justify-content: center;
-    background-color: rgba(201, 14, 214, 0.9);
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(68, 106, 81, 0.8);
     border-radius: 20px;
     width: 70%;
     margin: 30px 50px 30px 50px;
+    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+
+    .current-locations-title {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #fbfada;
+      padding-bottom: 3px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .connections-list {
+      width: 100%;
+      overflow-y: auto;
+      max-height: 200px;
+      padding-left: 30px;
+      padding-right: 30px;
+      margin-bottom: 30px;
+
+      .connection-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(129, 129, 129, 0.619);
+        border-radius: 10px;
+        margin-bottom: 20px; // spacing between items
+
+        .connection-name {
+          min-width: 100px;
+          color: #fbfada;
+          font-size: 1.1rem;
+          font-weight: 500;
+        }
+  
+        .connection-progress {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+  
+          .icon {
+            // Add your icon styles here. For example:
+            &.train { 
+              background-image: url("../../graphics/train.png");
+             }
+            &.bus { 
+              background-image: url("../../graphics/train.png");
+             }
+
+          }
+
+          .progress-bar {
+            max-width: 150px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+          }
+
+        }
+      }
+    }
+
+    .trip-buttons{
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 20px;
+    }
   }
+
+  .admin-container {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #436850e6;
+    border-radius: 20px;
+    width: 70%;
+    margin: 30px 50px 30px 50px;
+    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+
+    .admin-buttons{
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+
+  .ul_title {
+    width: 85%;
+    align-items: left;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #fbfada;
+    border-bottom: 1px solid #fbfada;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .lists-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start; // align items to the start of the container
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0; // Remove margin to fit both lists side by side
+  
+    .todo-list-container,
+    .packing-lists-container {
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #436850e6;
+      border-radius: 20px;
+      width: calc(50% - 60px); // Adjust width here
+      margin: 30px; // Adjust margin if necessary
+      box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+    }
+  
+    // Update the background color for .packing-lists-container if needed
+    .packing-lists-container {
+      background-color: #436850e6;
+    }
+  }
+  
 }
