@@ -209,7 +209,7 @@ const ProfilePage: React.FC = () => {
 
   return (
     <div className="profile-page-container">
-      <div className="avatar-and-text pt-10 pb-10">
+      <div className="avatar-and-text">
         {user && (
           <div className="avatar-and-buttons">
             <img className="avatar" src={user.avatar} alt="User Avatar" />
@@ -251,6 +251,7 @@ const ProfilePage: React.FC = () => {
             <>
               <Label className="label">Username</Label>
               <input
+              className="input-username"
                 type="text"
                 value={editedUser.username}
                 name="username"
@@ -258,6 +259,7 @@ const ProfilePage: React.FC = () => {
               />
               <Label className="label">Email</Label>
               <input
+              className="input-email"
                 type="email"
                 value={editedUser.email}
                 name="email"
@@ -265,6 +267,7 @@ const ProfilePage: React.FC = () => {
               />
               <Label className="label">Birthday</Label>
               <input
+              className="input-birthday"
                 type="date"
                 value={editedUser.birthday}
                 name="birthday"
@@ -295,6 +298,12 @@ const ProfilePage: React.FC = () => {
               </>
             ) : (
               <>
+              <Button
+                  backgroundColor={"#FB8500"}
+                  onClick={() => navigate("/Dashboard")}
+                >
+                  Back to Dashboard
+                </Button>
                 <Button
                   backgroundColor={"#FFB703"}
                   onClick={() => setEditMode(true)}
@@ -347,12 +356,7 @@ const ProfilePage: React.FC = () => {
                     Return to Login
                   </button>
                 </ConfirmPopup>
-                <Button
-                  backgroundColor={"#FB8500"}
-                  onClick={() => navigate("/Dashboard")}
-                >
-                  Back to Dashboard
-                </Button>
+                
               </>
             )}
           </div>

@@ -14,6 +14,7 @@ import LinearIndeterminate from "components/ui/loader";
 const FriendList = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
+
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -77,35 +78,47 @@ const FriendList = () => {
 
   return (
     <div className="friends component">
-      <h2>Friend List</h2>
-      <ul className="friend-list">
-        {friendList.map((friend, index) => (
-          <li key={index} className="friend">
-            <span className="name">{friend.username}</span>
-            <span className={getStatusClass(friend.status)}>
-              {friend.status}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <div className="requests">
-        <h2>New requests</h2>
-        <div className="request-list">
-          {friendRequests.map((request, index) => (
-            <div key={index} className="request">
-              <span className="name">{request.username}</span>
-              <Button
-                className="accept-button"
-                width="80px"
-                height="35px"
-                backgroundColor="#82FF6D"
-                onClick={() => handleAcceptFriendRequest(request.friendId)}
-              >
-                Accept
-              </Button>
-            </div>
+      <h2>Friend list</h2>
+      {friendList.length > 0 ? (
+        <ul className="friend-list">
+          {friendList.map((friend, index) => (
+            <li key={index} className="friend">
+              <span className="name">{friend.username}</span>
+              <span className={getStatusClass(friend.status)}>
+                {friend.status}
+              </span>
+            </li>
           ))}
+        </ul>
+      ) : (
+        <div className="no-friends-message">
+          No friends yet. Click on show details to invite some friends!
         </div>
+      )}
+
+      <div className="requests">
+        <h2>New friend requests</h2>
+        {friendRequests.length > 0 ? (
+          <div className="request-list">
+            {friendRequests.map((request, index) => (
+              <div key={index} className="request">
+                <span className="name">{request.username}</span>
+                <Button
+                  className="accept-button"
+                  width="80px"
+                  height="35px"
+                  backgroundColor="#82FF6D"
+                  onClick={() => handleAcceptFriendRequest(request.friendId)}
+                >
+                  Accept
+                </Button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-requests-message">No new requests.</div>
+        )}
+
         <div className="show-details-button-container">
           <Button
             onClick={handleShowDetails}
@@ -167,7 +180,10 @@ const WelcomeMessage: React.FC = () => {
       </h1>
       <p className="font-bold text-lg ">Your progress</p>
       <div className="mb-8">
-        <Progress style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.6)" }} value={currentUser ? currentUser.level * 100 : 0} />
+        <Progress
+          style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.6)" }}
+          value={currentUser ? currentUser.level * 100 : 0}
+        />
         <p className="mt-2">
           Level: {currentUser ? currentUser.level : "loading..."}
         </p>
@@ -200,7 +216,7 @@ const WelcomeMessage: React.FC = () => {
             ))
           ) : (
             <div className="no-trips-message">
-              No current trips: create one or let your friends invite you!
+              No current trips. Create one or let your friends invite you!
             </div>
           )}
         </div>
@@ -220,19 +236,47 @@ const WelcomeMessage: React.FC = () => {
 };
 
 const NotificationsLog: React.FC = () => {
+  const [notifications, setNotifications] = useState([]);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await api.get("/users/notifications", {
+          headers: { Authorization: localStorage.getItem("token") },
+        });
+        // Sort notifications by timeStamp in ascending order
+        const sortedNotifications = response.data.sort(
+          (a, b) =>
+            new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
+        );
+        console.log("NOTIFICATIONS:", sortedNotifications);
+        setNotifications(sortedNotifications);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
   return (
     <div className="notifications-log component">
-      <h2>Notifications Log</h2>
+      <h2>Notifications</h2>
       <div className="notifications-log-list">
         <ol>
-          <li>11:34 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:37 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
-          <li>11:39 - Michael updated trip members XXXXXX XXXXXX XXX</li>
+          {notifications.map((notification, index) => (
+            <li key={index}>
+              {formatDateTime(notification.timeStamp)} - {notification.message}
+            </li>
+          ))}
         </ol>
       </div>
     </div>

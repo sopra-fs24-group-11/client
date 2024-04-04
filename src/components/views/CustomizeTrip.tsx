@@ -33,11 +33,13 @@ const CustomizeTrip = () => {
 
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
-  const [temporaryMeetUpPlace, setTemporaryMeetUpPlace] = useState<string>("");
-  const [temporaryMeetUpCode, setTemporaryMeetUpCode] = useState<string>("");
   const [tripDescription, setTripDescription] = useState<string>("");
   const [friends, setFriends] = useState<Record<number, string>>({});
   const [meetUpTime, setMeetUpTime] = useState<string>("");
+  const [meetUpPlace, setMeetUpPlace] = useState({
+    stationName: "",
+    stationCode: ""
+  });
 
   // used for Friend Pop-Up
   const [suggestions, setSuggestions] = useState([]);
@@ -48,7 +50,6 @@ const CustomizeTrip = () => {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [tempLocation, setTempLocation] = useState<string>("");
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
@@ -104,13 +105,15 @@ const CustomizeTrip = () => {
       const response = await api.get(`/trips/${tripId}`, {
         headers: { Authorization: token },
       });
-
       setTripName(response.data.tripName);
       setTripDescription(response.data.tripDescription);
       setMeetUpTime(response.data.meetUpTime);
-      setTemporaryMeetUpCode(response.data.meetUpPlace.stationCode);
-      setTemporaryMeetUpPlace(response.data.meetUpPlace.stationName);
-      setTempLocation(response.data.meetUpPlace.stationName);
+      setMeetUpPlace((prevState) => ({
+        ...prevState,
+        stationName: response.data.meetUpPlace.stationName,
+        stationCode: response.data.meetUpPlace.stationCode
+      }));
+
     } catch (error) {
       handleError(error);
     }
@@ -122,14 +125,8 @@ const CustomizeTrip = () => {
       const response = await api.get(`/trips/${tripId}/participants`, {
         headers: { Authorization: token },
       });
-      const administrator = await api.get("/users", {
-        headers: { Authorization: token },
-      });
-      const adminId = administrator.data.id;
-      const withoutAdmin = response.data.filter((item) => item.id !== adminId);
-
       const tempObject = {};
-      withoutAdmin.forEach((item) => {
+      response.data.forEach((item) => {
         tempObject[item.id] = item.username;
       });
       setFriends(tempObject);
@@ -162,19 +159,15 @@ const CustomizeTrip = () => {
       const requestBody = JSON.stringify({
         tripName,
         tripDescription,
-        participants,
-        temporaryMeetUpPlace,
-        temporaryMeetUpCode,
+        meetUpPlace,
         meetUpTime,
+        participants
       });
 
       const token = localStorage.getItem("token");
       const response = await api.put(`/trips/${tripId}`, requestBody, {
         headers: { Authorization: token },
       });
-
-      console.log(requestBody);
-
       navigate(`/tripOverview/${tripId}`);
     } catch (error) {
       handleError(error);
@@ -211,10 +204,11 @@ const CustomizeTrip = () => {
 
   const handleLocationSubmit = () => {
     if (selectedLocation) {
-      setTemporaryMeetUpPlace(selectedLocation.stationName);
-      setTemporaryMeetUpCode(selectedLocation.stationCode);
-      setTempLocation(selectedLocation.stationName);
-      setLocationSearchTerm(""); // eventuell braucht es das nicht
+      setMeetUpPlace({
+        stationName: selectedLocation.stationName,
+        stationCode: selectedLocation.stationCode
+      });
+      setLocationSearchTerm(""); 
     }
     if (closeDialogRef.current) {
       closeDialogRef.current.click();
@@ -264,7 +258,7 @@ const CustomizeTrip = () => {
   //-------- What is actually being executed -------- //
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 3000);
+    const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -293,17 +287,15 @@ const CustomizeTrip = () => {
                   onChange={(e) => setTripName(e.target.value)}
                 ></input>
                 <br></br>
-
+                
                 <Dialog>
                   <DialogTrigger asChild>
                     <div>
                       <label>Target Location:</label>
                       <input
                         className="flex input"
-                        value={tempLocation === "" ? undefined : tempLocation}
-                        onChange={(e) =>
-                          setTemporaryMeetUpPlace(e.target.value)
-                        }
+                        placeholder="enter..."
+                        value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
                       ></input>
                     </div>
                   </DialogTrigger>
@@ -354,7 +346,7 @@ const CustomizeTrip = () => {
                       </Button>
                     </DialogFooter>
                     <DialogClose ref={closeDialogRef} className="hidden" />
-                  </DialogContent>
+                                      </DialogContent>
                 </Dialog>
               </div>
               <div className="flex box">

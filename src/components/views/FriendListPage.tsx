@@ -187,6 +187,7 @@ const FriendListPage = () => {
     <>
       <div className="friend-list-page">
         <h1>Your Friend List</h1>
+        {friendList.length > 0 ? (
         <ul className="friend-list">
           {friendList.map((friend) => (
             <li key={friend.friendId} className="friend">
@@ -202,7 +203,12 @@ const FriendListPage = () => {
             </li>
           ))}
         </ul>
+      ) : (
+        <div className="no-friends-message">No friends yet. Click on add new friend to send a request!</div>
+      )}
+
         <h1>Friend Requests</h1>
+        {friendRequests.length > 0 ? (
         <ul className="friend-requests">
           {friendRequests.map((request) => (
             <li key={request.id} className="friend-request">
@@ -226,6 +232,10 @@ const FriendListPage = () => {
             </li>
           ))}
         </ul>
+      ) : (
+        <div className="no-requests-message">No friend requests. Check back later or send your own requests!</div>
+      )}
+
         <div className="action-buttons">
           <Button
             className="back-button"

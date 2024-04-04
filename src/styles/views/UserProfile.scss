@@ -1,9 +1,17 @@
 @import "../theme";
 
 .profile-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  margin-left: auto;
+  margin-right: auto;
   overflow: hidden;
-  padding: 10% 20% 20% 20%; // use relative padding
-  box-sizing: border-box; // make sure padding doesn't affect the total width
+  padding: 50px 50px 50px 50px;
+  max-width: $DESKTOP_WIDTH;
+  
 
   @media (max-width: 768px) {
     padding: 10%; // less padding on smaller screens
@@ -12,23 +20,26 @@
   .avatar-and-text {
     display: flex;
     max-width: 800px; // limit the width of the container
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.6);
-    border-radius: 50px;
-    background-image: linear-gradient(
-      0deg,
-      rgb(120, 120, 120) 0%,
-      rgb(235, 235, 235) 90%
-    );
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+    border-radius: 30px;
+    width: 100%;
+    //animation: gradientAnimation 10s ease infinite;
+    background: linear-gradient(-45deg, #e7e7e7, #c4c4c4, #3d3d3d, #929292);
+    background-size: 400% 400%;
+    color: rgb(255, 255, 255);
+    border-radius: 20px; /* Adjust as necessary */
 
     @media (max-width: 768px) {
       flex-direction: column; // stack elements vertically on smaller screens
       align-items: center; // center items when stacked
+      width: 100%;
     }
     .avatar-and-buttons {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 5px; // Space between avatar and buttons
+      padding: 30px 30px 30px 30px;
     }
 
     .avatar-buttons {
@@ -61,7 +72,7 @@
 
           &:hover {
             background-color: darken(#007bff, 90%);
-            transform: translateY(-3px);
+            transform: translateY(-10px);
           }
         }
 
@@ -74,10 +85,11 @@
     .avatar {
       width: 200px;
       height: 200px;
-      margin: 30px 30px 30px 30px; // shorthand for margin values
+      margin: 30px; // shorthand for margin values
       border-radius: 50%;
       object-fit: cover;
-
+      animation: float 4s ease-in-out infinite;
+      
       @media (max-width: 768px) {
         width: 40vw; // make the avatar width responsive
         height: 40vw; // maintain aspect ratio
@@ -94,10 +106,18 @@
       align-items: stretch;
       flex-direction: column;
       gap: 10px;
+      padding: 30px;
 
       @media (max-width: 768px) {
         align-items: center; // center text on smaller screens
         text-align: center; // ensure text is centered
+      }
+
+      .input-username,
+      .input-email,
+      .input-birthday{
+        color: black;
+        border-radius: 5px;
       }
     }
 
@@ -112,4 +132,45 @@
       }
     }
   }
+
+// KEYFRAMES
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes pulseShadow {
+    0% {
+      box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 0 15px rgba(0, 0, 0, 0);
+      transform: scale(1.05);
+    }
+    100% {
+      box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+      transform: scale(1);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    50% {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 15px rgba(0,0,0,0.2);
+    }
+  }
+  
 }

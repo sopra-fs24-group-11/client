@@ -101,8 +101,6 @@ const CreateTrip = () => {
         headers: { Authorization: token },
       });
 
-      console.log(requestBody);
-
       navigate("/chooseConnection/" + response.data);
     } catch (error) {
       handleError(error);
@@ -145,8 +143,7 @@ const CreateTrip = () => {
         stationName: selectedLocation.stationName,
         stationCode: selectedLocation.stationCode
       }));
-
-      console.log("Hier", meetUpPlace);
+      
       setLocationSearchTerm(""); 
     }
     if (closeDialogRef.current) {
@@ -197,7 +194,7 @@ const CreateTrip = () => {
   //-------- What is actually being executed -------- //
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 3000);
+    const timer = setTimeout(() => setIsLoading(false), 1400);
     return () => clearTimeout(timer);
   }, []);
 
@@ -232,7 +229,6 @@ const CreateTrip = () => {
                         className="flex input"
                         placeholder="enter..."
                         value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
-                        onFocus={() => openDialog()} // Öffnet das Dialog-Pop-up, wenn das Eingabefeld fokussiert wird
                       ></input>
                     </div>
                   </DialogTrigger>
