@@ -102,8 +102,10 @@ const TripOverview = () => {
       setCurrentTrip(response.data);
     } catch (error) {
       if (error.response.status === 404) {
-          alert("You have been kicked from the trip or the trip has been deleted.");
-          navigate("/dashboard");
+        alert(
+          "You have been kicked from the trip or the trip has been deleted."
+        );
+        navigate("/dashboard");
       }
       handleError(error);
     }
@@ -139,7 +141,6 @@ const TripOverview = () => {
       handleError(error);
     }
   };
-  
 
   const handleOpenLeaveDialog = () => {
     if (isAdmin) {
@@ -223,17 +224,16 @@ const TripOverview = () => {
       await fetchAdminStatus();
       await fetchConnections();
     };
-  
+
     // Fetch immediately when the component mounts
     fetchPeriodically();
-  
+
     // Set up the interval for fetching data every 10 seconds
     const intervalId = setInterval(fetchPeriodically, 10000);
-  
+
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []);
-
 
   if (isLoading) {
     return <LinearIndeterminate />;
