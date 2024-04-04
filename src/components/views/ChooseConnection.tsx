@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useRef } from "react";
 import { api, handleError } from "helpers/api";
 import User from "models/User";
@@ -36,6 +38,8 @@ const ChooseConnection = () => {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const [activeConnection, setActiveConnection] = useState(null); // New state
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
@@ -85,23 +89,21 @@ const ChooseConnection = () => {
 
       console.log("request: " + possibleConnections);
 
-      let l = [];
-      let counter = 0;
-
-      for (const connection of possibleConnections.data) {
-        let con = (
+      let l = possibleConnections.data.map((connection, index) => {
+        console.log(index);
+        return (
           <ConnectionContainer
             departureTime={connection[0].departureTime}
             arrivalTime={connection[connection.length - 1].arrivalTime}
-            key={counter}
+            key={index}
             wholeTrip={connection}
+            isClicked={activeConnection === index} // Pass down whether this connection is active
+            onClick={() => {setActiveConnection(index); console.log(activeConnection);}} // Pass down function to set active connection
           />
         );
-        l.push(con);
-        counter += 1;
-        setShowConnections(true);
-        setConnections(l);
-      }
+      });
+      setConnections(l);
+      setShowConnections(true);
     } catch (e) {
       handleError(e);
     }
@@ -232,7 +234,6 @@ const ChooseConnection = () => {
                 id="destinationBlock"
                 className="connection input"
                 placeholder={destination}
-                onChange={(e) => setTripDescription(e.target.value)}
                 readOnly
               ></textarea>
               <div className="connection connector"></div>
@@ -249,7 +250,7 @@ const ChooseConnection = () => {
                 </div>
               </div>
             )}
-            <div className="box">
+            <div className="box-row">
               <Button className="button" id="cancelButton" onClick={moveBack}>
                 BACK
               </Button>

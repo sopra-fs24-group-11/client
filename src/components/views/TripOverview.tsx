@@ -20,18 +20,14 @@ import LinearIndeterminate from "components/ui/loader";
 // ============== HELPER FUNCTIONS ==============
 
 const ConnectionItem = ({ connection }) => {
-
   return (
     <div className="connection-item">
       <h3 className="connection-name">{connection.username}</h3>
       <p className="start-text">Start time: {connection.startTime}</p>
       <Progress className="progress-bar" value={connection.progress} />
-      <p className="arrival-text">
-        Expected arrival: {connection.endTime}
-      </p>
+      <p className="arrival-text">Expected arrival: {connection.endTime}</p>
     </div>
   );
-
 };
 
 ConnectionItem.propTypes = {
@@ -104,11 +100,46 @@ const TripOverview = () => {
       });
       console.log("CURRENT TRIP INFORMATION:", response.data);
       setCurrentTrip(response.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+          alert("You have been kicked from the trip or the trip has been deleted.");
+          navigate("/dashboard");
+      }
+      handleError(error);
+    }
+  };
 
+  const fetchConnections = async () => {
+    try {
+      const response = await api.get(`/trips/${tripId}/connections`, {
+        headers: { Authorization: token },
+      });
+      console.log("CONNECTIONS:", response.data);
+      const processedConnections = response.data.map((participant) => {
+        const { connectionDTO } = participant;
+        const firstConnection = connectionDTO[0];
+        const lastConnection = connectionDTO[connectionDTO.length - 1];
+
+        return {
+          username: participant.username,
+          startTime: firstConnection?.departureTime
+            ? new Date(firstConnection.departureTime).toLocaleTimeString()
+            : "N/A",
+          endTime: lastConnection?.arrivalTime
+            ? new Date(lastConnection.arrivalTime).toLocaleTimeString()
+            : "N/A",
+          progress: calculateProgress(
+            firstConnection?.departureTime,
+            lastConnection?.arrivalTime
+          ),
+        };
+      });
+      setConnections(processedConnections);
     } catch (error) {
       handleError(error);
     }
-  }
+  };
+  
 
   const handleOpenLeaveDialog = () => {
     if (isAdmin) {
@@ -181,50 +212,28 @@ const TripOverview = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1200); // Show loader for x seconds
+    }, 1300); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    fetchTripInformation();
-    fetchAdminStatus();
-  }, []);
-
-  useEffect(() => {
-    const fetchConnections = async () => {
-      try {
-        const response = await api.get(`/trips/${tripId}/connections`, {
-          headers: { Authorization: token },
-        });
-        console.log("CONNECTIONS:", response.data);
-        const processedConnections = response.data.map((participant) => {
-          const { connectionDTO } = participant;
-          const firstConnection = connectionDTO[0];
-          const lastConnection = connectionDTO[connectionDTO.length - 1];
-
-          return {
-            username: participant.username,
-            startTime: firstConnection?.departureTime
-              ? new Date(firstConnection.departureTime).toLocaleTimeString()
-              : "N/A",
-            endTime: lastConnection?.arrivalTime
-              ? new Date(lastConnection.arrivalTime).toLocaleTimeString()
-              : "N/A",
-            progress: calculateProgress(
-              firstConnection?.departureTime,
-              lastConnection?.arrivalTime
-            ),
-          };
-        });
-        setConnections(processedConnections);
-      } catch (error) {
-        handleError(error);
-      }
+    const fetchPeriodically = async () => {
+      await fetchTripInformation();
+      await fetchAdminStatus();
+      await fetchConnections();
     };
-
-    fetchConnections();
+  
+    // Fetch immediately when the component mounts
+    fetchPeriodically();
+  
+    // Set up the interval for fetching data every 10 seconds
+    const intervalId = setInterval(fetchPeriodically, 10000);
+  
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
   }, []);
+
 
   if (isLoading) {
     return <LinearIndeterminate />;
@@ -232,8 +241,28 @@ const TripOverview = () => {
 
   return (
     <div className="main-container">
-      <h1 className="main-title">{currentTrip.tripName}</h1>
-      <h3 className="trip-description">Trip Description: {currentTrip.tripDescription}</h3>
+      <h1 className="main-title">
+        &quot;{currentTrip.tripName}&quot; to &quot;
+        {currentTrip.meetUpPlace.stationName}&quot;
+      </h1>
+      <div className="trip-information-container">
+        <h3 className="trip-description">
+          Trip Description: {currentTrip.tripDescription}
+        </h3>
+        <div className="trip-arrival-participants">
+          <h3 className="trip-participants">
+            Current amount of trip participants:{" "}
+            {currentTrip.numberOfParticipants}
+          </h3>
+          <h3 className="trip-arrival">
+            Desired arrival time:{" "}
+            {new Date(currentTrip.meetUpTime).toLocaleTimeString("de-DE", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </h3>
+        </div>
+      </div>
       <div className="current-locations-container">
         <h1 className="current-locations-title">
           Current location of trip participants

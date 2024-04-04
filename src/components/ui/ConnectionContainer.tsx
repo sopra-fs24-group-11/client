@@ -47,13 +47,10 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
   departureTime,
   arrivalTime,
   wholeTrip,
+  isClicked,
+  onClick, // New prop for handling click
 }) => {
   const [changePoints, setChangePoints] = useState([]);
-  const [isClicked, setIsClicked] = useState<boolean>(false);
-
-  const changeClickStatus = () => {
-    setIsClicked(!isClicked);
-  };
 
   useEffect(() => {
     const placeChangePoints = () => {
@@ -97,11 +94,8 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
   }, []);
 
   return (
-    <div
-      className={!isClicked ? "box" : "clickedBox"}
-      onClick={changeClickStatus}
-    >
-      <div className="presentation">
+    <div className="box" onClick={onClick}>
+      <div className={!isClicked ? "presentation" : "clickedPresentation"}>
         <div
           id="startCircle"
           className="connectionContainer black-circle"
@@ -146,4 +140,6 @@ ConnectionContainer.propTypes = {
   arrivalTime: PropTypes.string.isRequired,
   children: PropTypes.node,
   wholeTrip: PropTypes.Array,
+  isClicked: PropTypes.bool,
+  onClick: PropTypes.func,
 };
