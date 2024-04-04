@@ -32,10 +32,12 @@ const CreateTrip = () => {
 
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
-  const [temporaryMeetUpPlace, setTemporaryMeetUpPlace] = useState<string>("");
-  const [temporaryMeetUpCode, setTemporaryMeetUpCode] = useState<string>("");
   const [tripDescription, setTripDescription] = useState<string>("");
   const [friends, setFriends] = useState<Record<number, string>>({});
+  const [meetUpPlace, setMeetUpPlace] = useState({
+    stationName: "",
+    stationCode: ""
+  });
   const [meetUpTime, setMeetUpTime] = useState<string>("");
 
   // used for Friend Pop-Up
@@ -47,43 +49,11 @@ const CreateTrip = () => {
   const [locationSuggestions, setLocationSuggestions] = useState([]);
   const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [tempLocation, setTempLocation] = useState<string>("");
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
 
   //-------- FETCH INFORMATION -------- //
-
-  const fetchLocation = async () => {
-    const options: any = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0,
-      accuracy: 50,
-    };
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Erfolgreich, die Position wurde abgerufen
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        const accuracy = position.coords.accuracy; // Genauigkeit in Metern
-        console.log("Latitude:", latitude);
-        console.log("Longitude:", longitude);
-        console.log("Accuracy:", accuracy, "meters");
-
-        if (accuracy < 100) {
-          // Die Genauigkeit ist ausreichend, um den Standort zu verwenden
-        } else {
-          // Die Genauigkeit ist nicht ausreichend, um den Standort zu verwenden
-        }
-      },
-      (error) => {
-        console.error("Error getting geolocation:", error);
-      },
-      options
-    );
-  };
 
   const fetchFriends = async () => {
     const token = localStorage.getItem("token");
@@ -121,16 +91,17 @@ const CreateTrip = () => {
       const requestBody = JSON.stringify({
         tripName,
         tripDescription,
-        participants,
-        temporaryMeetUpPlace,
-        temporaryMeetUpCode,
+        meetUpPlace,
         meetUpTime,
+        participants
       });
 
       const token = localStorage.getItem("token");
       const response = await api.post("/trips/new", requestBody, {
         headers: { Authorization: token },
       });
+
+      console.log(requestBody);
 
       navigate("/chooseConnection/" + response.data);
     } catch (error) {
@@ -168,10 +139,15 @@ const CreateTrip = () => {
 
   const handleLocationSubmit = () => {
     if (selectedLocation) {
-      setTemporaryMeetUpPlace(selectedLocation.stationName);
-      setTemporaryMeetUpCode(selectedLocation.stationCode);
-      setTempLocation(selectedLocation.stationName);
-      setLocationSearchTerm(""); // eventuell braucht es das nicht
+      
+      setMeetUpPlace(prevState => ({
+        ...prevState,
+        stationName: selectedLocation.stationName,
+        stationCode: selectedLocation.stationCode
+      }));
+
+      console.log("Hier", meetUpPlace);
+      setLocationSearchTerm(""); 
     }
     if (closeDialogRef.current) {
       closeDialogRef.current.click();
@@ -227,7 +203,6 @@ const CreateTrip = () => {
 
   useEffect(() => {
     fetchFriends();
-    fetchLocation();
   }, []);
 
   if (isLoading) {
@@ -256,10 +231,8 @@ const CreateTrip = () => {
                       <input
                         className="flex input"
                         placeholder="enter..."
-                        value={tempLocation === "" ? undefined : tempLocation}
-                        onChange={(e) =>
-                          setTemporaryMeetUpPlace(e.target.value)
-                        }
+                        value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
+                        onFocus={() => openDialog()} // Öffnet das Dialog-Pop-up, wenn das Eingabefeld fokussiert wird
                       ></input>
                     </div>
                   </DialogTrigger>
