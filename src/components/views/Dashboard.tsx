@@ -182,10 +182,10 @@ const WelcomeMessage: React.FC = () => {
       <div className="mb-8">
         <Progress
           style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.6)" }}
-          value={currentUser ? currentUser.level * 100 : 0}
+          value={currentUser ? (currentUser.level % 1) * 100 : 0}
         />
         <p className="mt-2">
-          Level: {currentUser ? currentUser.level : "loading..."}
+        Level: {currentUser ? Math.floor(currentUser.level) : "loading..."}, gain {currentUser ? Math.round((1 - (currentUser.level % 1)) * 100) : 0} points for the next level.
         </p>
       </div>
 
