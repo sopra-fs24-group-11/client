@@ -185,7 +185,10 @@ const WelcomeMessage: React.FC = () => {
           value={currentUser ? (currentUser.level % 1) * 100 : 0}
         />
         <p className="mt-2">
-        Level: {currentUser ? Math.floor(currentUser.level) : "loading..."}, gain {currentUser ? Math.round((1 - (currentUser.level % 1)) * 100) : 0} points for the next level.
+          Level: {currentUser ? Math.floor(currentUser.level) : "loading..."},
+          gain{" "}
+          {currentUser ? Math.round((1 - (currentUser.level % 1)) * 100) : 0}{" "}
+          points for the next level.
         </p>
       </div>
 
