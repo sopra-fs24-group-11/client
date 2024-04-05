@@ -330,7 +330,7 @@ const TripOverview = () => {
           </div>
         </div>
       )}
-      :
+      
       <div className="lists-container">
         <div className="todo-list-container">
           <h2 className="ul_title">To-Do List</h2>
