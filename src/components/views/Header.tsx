@@ -53,6 +53,7 @@ const Header = () => {
     } else {
       console.error("No token found in local storage.");
     }
+  navigate("/login")
   };
 
   return (
