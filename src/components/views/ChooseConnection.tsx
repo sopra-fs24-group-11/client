@@ -98,7 +98,7 @@ const ChooseConnection = () => {
             key={index}
             wholeTrip={connection}
             isClicked={activeConnection === index} // Pass down whether this connection is active
-            onClick={() => {setActiveConnection(index); console.log(activeConnection);}} // Pass down function to set active connection
+            onClick={() => setActiveConnection(index)} // Pass down function to set active connection
           />
         );
       });

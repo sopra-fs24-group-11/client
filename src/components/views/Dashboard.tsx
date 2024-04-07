@@ -210,7 +210,8 @@ const WelcomeMessage: React.FC = () => {
                   backgroundColor="#FFB703"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevents the navigation from firing when the Info button is clicked
-                    navigate(`/trip/${trip.id}`);
+                    //navigate(`/trip/${trip.id}`);
+                    navigate(`/tripOverview/${trip.id}`)
                   }}
                 >
                   Info
