@@ -128,7 +128,6 @@ const ProfilePage: React.FC = () => {
       handleError(error);
     }
   };
-  
 
   const handleAvatarDelete = async () => {
     try {
