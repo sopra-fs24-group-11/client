@@ -15,6 +15,7 @@ import ChooseConnection from "../../views/ChooseConnection";
 import TestPage from "../../views/TestPage";
 import TripOverview from "../../views/TripOverview";
 import CustomizeTrip from "../../views/CustomizeTrip";
+import ListTemplate from "../../views/ListTemplate";
 
 const AppRouter = () => {
   return (
@@ -41,6 +42,10 @@ const AppRouter = () => {
 
         <Route path="/profile" element={<GameGuard />}>
           <Route path="" element={<UserProfile />} />
+        </Route>
+
+        <Route path="/template" element={<GameGuard />}>
+          <Route path="" element={<ListTemplate />} />
         </Route>
 
         <Route path="/friends" element={<GameGuard />}>
