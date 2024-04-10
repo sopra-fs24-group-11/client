@@ -356,6 +356,12 @@ const ProfilePage: React.FC = () => {
                     Return to Login
                   </button>
                 </ConfirmPopup>
+                <Button
+                  backgroundColor={"green"}
+                  onClick={() => navigate("/template")}
+                >
+                  Go To List Template
+                </Button>
                 
               </>
             )}
