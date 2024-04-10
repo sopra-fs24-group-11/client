@@ -27,7 +27,9 @@
     "serve": "^14.2.1",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^3.2.1"
+    "typescript": "^3.2.1",
+    "@fortawesome/react-fontawesome": "",
+    "@fortawesome/free-solid-svg-icons": ""
   },
   "scripts": {
     "dev": "react-scripts start",
