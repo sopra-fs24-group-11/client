@@ -5,8 +5,8 @@ import { Button } from "components/ui/buttonshadcn";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/ListTemplate.scss"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPencilAlt , faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt , faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const ListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, newItemName}) => {
   const handleSubmit = (itemId, name, defaultvalue) => {
@@ -78,10 +78,6 @@ const ListTemplate = () => {
     setEditable({});
     setNewItemName({});
   };
-
-
-  
-
 
   useEffect(() => {
     const fetchData = async () => {
