@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencilAlt , faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const ListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, newItemName}) => {
-  const handleSubmit = (itemId, name, defaultvalue) => {
+  const handleSubmit = (event, itemId, name, defaultvalue) => {
+    event.preventDefault();
     if (!name) {
       name = defaultvalue;
     }
@@ -19,7 +20,7 @@ const ListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleE
   return(
     <div className="ListItem container">
       {editable[item.id] ? (
-        <form onSubmit={() => handleSubmit(item.id, newItemName[item.id], item.item)}>
+        <form onSubmit={(event) => handleSubmit(event, item.id, newItemName[item.id], item.item)}>
           <input
             type="text"
             value={newItemName[item.id]}
@@ -86,8 +87,6 @@ const ListTemplate = () => {
           headers: { Authorization: token },
         });
         
-        console.log("LIST FROM BACKEND:", response.data);
-        
         setList(response.data)
       } catch (error) {
         handleError(error);
@@ -105,7 +104,6 @@ const ListTemplate = () => {
       });
 
       setList((oldList) => ([...oldList, {item:response.data.item, id:response.data.id}]));
-      console.log(list);
     } catch (error) {
       alert(`Something went wrong during the login: \n${handleError(error)}`);
     }
