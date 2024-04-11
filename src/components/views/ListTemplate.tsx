@@ -187,7 +187,6 @@ const ListTemplate = () => {
           <Button
             backgroundColor={"green"}
             onClick={() => setPopupOpen(true)}
-            // onClick={() => addItem()}
           >
             Add item
           </Button>

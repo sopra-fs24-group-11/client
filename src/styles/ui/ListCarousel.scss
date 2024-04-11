@@ -1,0 +1,21 @@
+@import "../theme";
+
+.Carousel{
+  &.container {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #436850e6;
+    border-radius: 20px;
+    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+    margin-bottom: 30px;
+  }
+  &.title {
+    color: #fbfada;
+    border-bottom: 1px solid #fbfada;
+    padding-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}

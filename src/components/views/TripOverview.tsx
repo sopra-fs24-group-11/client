@@ -13,6 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import {ListCarousel} from "../ui/ListCarousel"
 
 import "../../styles/views/TripOverview.scss";
 import LinearIndeterminate from "components/ui/loader";
@@ -337,16 +338,17 @@ const TripOverview = () => {
           </div>
         </div>
       )}
+      <ListCarousel>
+      </ListCarousel>
+      {/* <div className="lists-container">
+          <div className="todo-list-container">
+            <h2 className="ul_title">To-Do List</h2>
+          </div>
 
-      <div className="lists-container">
-        <div className="todo-list-container">
-          <h2 className="ul_title">To-Do List</h2>
-        </div>
-
-        <div className="packing-lists-container">
-          <h2 className="ul_title">Group Packing List</h2>
-        </div>
-      </div>
+          <div className="packing-lists-container">
+            <h2 className="ul_title">Group Packing List</h2>
+          </div>
+        </div> */}
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
