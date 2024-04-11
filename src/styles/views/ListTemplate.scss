@@ -1,6 +1,9 @@
 @import "../theme";
 
 .ListTemplate{
+  &.template {
+    width:100%;
+  }
   &.container {
     border-radius: 10px;
     margin-top: 2em;
@@ -31,6 +34,19 @@
     min-height:30px;
     background: darkolivegreen;
   }
+  &.popup {
+    background:$background;
+  }
+  &.popup-content {
+    padding: 0 10px 10px 10px;
+  }
+  &.popup-input {
+    padding: 5px;
+    border-radius:10px;
+  }
+  &.popup-button-holder{
+    display: flex;
+  }
 }
 
 .ListItem {
@@ -54,5 +70,16 @@
         padding-left: 10px;
     }
     }
+  }
+  &.form {
+    width:100%;
+    display:flex;
+  }
+  &.form-input {
+    flex:1;
+  }
+  &.update-button {
+    margin-left:auto;
+    padding-left:5px;
   }
 }
