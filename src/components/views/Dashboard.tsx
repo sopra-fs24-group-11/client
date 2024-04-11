@@ -11,7 +11,7 @@ import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
 
 // Components
-const FriendList = () => {
+const FriendList = ({ setIsLoading }) => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
 
@@ -19,6 +19,8 @@ const FriendList = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    let isComponentMounted = true; // Track if the component is still mounted
+
     const fetchFriendData = async () => {
       try {
         const requestsResponse = await api.get("/users/friends/requests", {
@@ -34,14 +36,26 @@ const FriendList = () => {
         setFriendList(friendsResponse.data);
       } catch (error) {
         handleError(error);
+      } finally {
+        // Only set loading to false if the component is still mounted
+        if (isComponentMounted) {
+          console.log("---- FRIENDS LOADED ----");
+          setIsLoading(false);
+        }
       }
     };
 
-    fetchFriendData();
-    const intervalId = setInterval(fetchFriendData, 7000); // Fetch friend data every 7 seconds
+    fetchFriendData(); // Fetch immediately when the component mounts
 
-    return () => clearInterval(intervalId);
-  }, [token]);
+    // Set up the interval for fetching data every 7 seconds
+    const intervalId = setInterval(fetchFriendData, 7000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => {
+      isComponentMounted = false; // Indicate the component has been unmounted
+      clearInterval(intervalId);
+    };
+  }, [setIsLoading, token]);
 
   const handleAcceptFriendRequest = async (friendRequestId) => {
     try {
@@ -129,7 +143,7 @@ const FriendList = () => {
   );
 };
 
-const WelcomeMessage: React.FC = () => {
+const WelcomeMessage: React.FC = ({ setIsLoading }) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentTrips, setCurrentTrips] = useState([]);
@@ -139,9 +153,9 @@ const WelcomeMessage: React.FC = () => {
   };
 
   useEffect(() => {
+    let isComponentMounted = true;
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-
       try {
         const userdata = await api.get("/users", {
           headers: { Authorization: token },
@@ -160,14 +174,22 @@ const WelcomeMessage: React.FC = () => {
         console.log("CURRENT TRIPS:", response.data);
       } catch (error) {
         handleError(error);
+      } finally {
+        if (isComponentMounted) {
+          console.log("---- WELCOME MESSAGE LOADED ----");
+          setIsLoading(false);
+        }
       }
     };
 
     fetchData(); // Fetch immediately when the component mounts
     const intervalId = setInterval(fetchData, 7000); // Fetch data every 7 seconds
 
-    return () => clearInterval(intervalId); // Cleanup function
-  }, []);
+    return () => {
+      isComponentMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [setIsLoading]);
 
   return (
     <div className="welcome component">
@@ -202,13 +224,14 @@ const WelcomeMessage: React.FC = () => {
                 <div>
                   {`"${trip.tripName}" to "${
                     trip.meetUpPlace.stationName
-                  }" on ${
-                    new Date(trip.meetUpTime).toLocaleDateString("de-DE", {
+                  }" on ${new Date(trip.meetUpTime).toLocaleDateString(
+                    "de-DE",
+                    {
                       day: "2-digit",
                       month: "2-digit",
                       year: "numeric",
-                    })
-                  }`}
+                    }
+                  )}`}
                 </div>
                 <Button
                   width="80px"
@@ -245,10 +268,11 @@ const WelcomeMessage: React.FC = () => {
   );
 };
 
-const NotificationsLog: React.FC = () => {
+const NotificationsLog: React.FC = ({ setIsLoading }) => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
+    let isComponentMounted = true;
     const fetchNotifications = async () => {
       try {
         const response = await api.get("/users/notifications", {
@@ -263,6 +287,11 @@ const NotificationsLog: React.FC = () => {
         setNotifications(sortedNotifications);
       } catch (error) {
         handleError(error);
+      } finally {
+        if (isComponentMounted) {
+          console.log("---- NOTIFICATIONS LOADED ----");
+          setIsLoading(false);
+        }
       }
     };
 
@@ -270,8 +299,11 @@ const NotificationsLog: React.FC = () => {
 
     const intervalId = setInterval(fetchNotifications, 7000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => {
+      isComponentMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [setIsLoading]);
 
   const formatDateTime = (isoString) => {
     const date = new Date(isoString);
@@ -298,11 +330,13 @@ const NotificationsLog: React.FC = () => {
   );
 };
 
-const TripInvitations = () => {
+const TripInvitations = ({ setIsLoading }) => {
   const [tripInvitations, setTripInvitations] = useState([]);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
   useEffect(() => {
+    let isComponentMounted = true;
     const fetchTripInvitations = async () => {
       try {
         const response = await api.get("/trips/invitations", {
@@ -312,13 +346,21 @@ const TripInvitations = () => {
         console.log("TRIP INVITATIONS:", response.data);
       } catch (error) {
         handleError(error);
+      } finally {
+        if (isComponentMounted) {
+          console.log("---- TRIP INVITATIONS LOADED ----");
+          setIsLoading(false);
+        }
       }
     };
 
     const intervalId = setInterval(fetchTripInvitations, 7000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => {
+      isComponentMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [setIsLoading]);
 
   const handleAcceptInvitation = async (tripId) => {
     try {
@@ -394,36 +436,66 @@ const FriendLeaderboard: React.FC = () => {
 
 // Main Dashboard component
 const Dashboard: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingOld, setIsLoadingOld] = useState(true);
+  const [isFriendListLoading, setIsFriendListLoading] = useState(true);
+  const [isWelcomeMessageLoading, setIsWelcomeMessageLoading] = useState(true);
+  const [isNotificationsLogLoading, setIsNotificationsLogLoading] =
+    useState(true);
+  const [isTripInvitationsLoading, setIsTripInvitationsLoading] =
+    useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000); // Show loader for x seconds
+  const allLoaded =
+    !isFriendListLoading &&
+    !isWelcomeMessageLoading &&
+    !isNotificationsLogLoading &&
+    !isTripInvitationsLoading;
 
-    return () => clearTimeout(timer);
-  }, []);
+    useEffect(() => { //OLD LOADER
+      const timer = setTimeout(() => {
+        setIsLoadingOld(false);
+      }, 2000);
+  
+      return () => clearTimeout(timer);
+    }, []);
 
-  if (isLoading) {
-    return <LinearIndeterminate />;
-  }
+    if (isLoadingOld) {
+      return <LinearIndeterminate />;
+    }
 
-  return (
+  return true ? ( // REPLACE TRUE WITH allLoaded IF REAL LOADING IS IMPLEMENTED
     <div className="dashboard">
       <div className="column left">
-        <FriendList />
+        <FriendList setIsLoading={setIsFriendListLoading} />
         <FriendLeaderboard />
       </div>
       <div className="column middle">
-        <WelcomeMessage />
-        <TripInvitations />
+        <WelcomeMessage setIsLoading={setIsWelcomeMessageLoading} />
+        <TripInvitations setIsLoading={setIsTripInvitationsLoading} />
       </div>
       <div className="column right">
-        <NotificationsLog />
+        <NotificationsLog setIsLoading={setIsNotificationsLogLoading} />
         <YourFavorites />
       </div>
     </div>
+  ) : (
+    <LinearIndeterminate />
   );
+};
+
+FriendList.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
+WelcomeMessage.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
+NotificationsLog.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
+TripInvitations.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
 };
 
 export default Dashboard;
