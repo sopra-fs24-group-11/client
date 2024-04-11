@@ -122,7 +122,7 @@ const Register = () => {
               width="100%"
               onClick={() => navigate("/login")}
             >
-              Go to Login
+              go to login
             </Button>
           </div>
         </div>
