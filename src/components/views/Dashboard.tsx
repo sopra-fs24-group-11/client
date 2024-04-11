@@ -19,33 +19,29 @@ const FriendList = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchFriendRequests = async () => {
+    const fetchFriendData = async () => {
       try {
-        const response = await api.get("/users/friends/requests", {
+        const requestsResponse = await api.get("/users/friends/requests", {
           headers: { Authorization: token },
         });
-        setFriendRequests(response.data); // Assuming this is an array of friend requests
-        console.log("FRIEND REQUESTS INFO:", response.data);
+        setFriendRequests(requestsResponse.data);
+        console.log("FRIEND REQUESTS INFO:", requestsResponse.data);
+
+        const friendsResponse = await api.get("/users/friends", {
+          headers: { Authorization: token },
+        });
+        console.log("FRIENDS:", friendsResponse.data);
+        setFriendList(friendsResponse.data);
       } catch (error) {
         handleError(error);
       }
     };
 
-    const fetchFriends = async () => {
-      try {
-        const response = await api.get("/users/friends", {
-          headers: { Authorization: token },
-        });
-        console.log("FRIENDS: ", response.data);
-        setFriendList(response.data);
-      } catch (error) {
-        handleError(error);
-      }
-    };
+    fetchFriendData();
+    const intervalId = setInterval(fetchFriendData, 7000); // Fetch friend data every 7 seconds
 
-    fetchFriends();
-    fetchFriendRequests();
-  }, []);
+    return () => clearInterval(intervalId);
+  }, [token]);
 
   const handleAcceptFriendRequest = async (friendRequestId) => {
     try {
@@ -143,34 +139,34 @@ const WelcomeMessage: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
       try {
-        const token = localStorage.getItem("token");
         const userdata = await api.get("/users", {
           headers: { Authorization: token },
         });
-        const user: User = userdata.data;
-        console.log("CURRENT USER DATA:", user);
-        setCurrentUser(user);
+        setCurrentUser(userdata.data);
+        console.log("CURRENT USER DATA:", userdata.data);
       } catch (error) {
         handleError(error);
       }
-    };
 
-    const fetchCurrentTrips = async () => {
       try {
         const response = await api.get("/trips/current", {
-          headers: { Authorization: localStorage.getItem("token") },
+          headers: { Authorization: token },
         });
-        console.log("FETCHING CURRENT TRIPS:", response.data);
         setCurrentTrips(response.data);
+        console.log("CURRENT TRIPS:", response.data);
       } catch (error) {
         handleError(error);
       }
     };
 
-    fetchCurrentTrips();
-    fetchUsername();
+    fetchData(); // Fetch immediately when the component mounts
+    const intervalId = setInterval(fetchData, 7000); // Fetch data every 7 seconds
+
+    return () => clearInterval(intervalId); // Cleanup function
   }, []);
 
   return (
@@ -241,6 +237,7 @@ const WelcomeMessage: React.FC = () => {
 
 const NotificationsLog: React.FC = () => {
   const [notifications, setNotifications] = useState([]);
+  
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -260,6 +257,10 @@ const NotificationsLog: React.FC = () => {
     };
 
     fetchNotifications();
+
+    const intervalId = setInterval(fetchNotifications, 7000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const formatDateTime = (isoString) => {
@@ -291,7 +292,6 @@ const TripInvitations = () => {
   const [tripInvitations, setTripInvitations] = useState([]);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-
   useEffect(() => {
     const fetchTripInvitations = async () => {
       try {
@@ -299,12 +299,15 @@ const TripInvitations = () => {
           headers: { Authorization: token },
         });
         setTripInvitations(response.data);
+        console.log("TRIP INVITATIONS:", response.data);
       } catch (error) {
         handleError(error);
       }
     };
 
-    fetchTripInvitations();
+    const intervalId = setInterval(fetchTripInvitations, 7000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const handleAcceptInvitation = async (tripId) => {
@@ -360,8 +363,7 @@ const YourFavorites: React.FC = () => {
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
       <ol>
-        <li>Binzmühlestrasse</li>
-        <li>Universität Zürich</li>
+      <li>To be implemented...</li>
       </ol>
     </div>
   );
@@ -374,16 +376,7 @@ const FriendLeaderboard: React.FC = () => {
       <h2>Friend Leaderboard</h2>
       {/* Placeholder content */}
       <ol>
-        <li>Michael B.</li>
-        <li>Ulf Z.</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
-        <li>Michael Banane</li>
+        <li>To be implemented...</li>
       </ol>
     </div>
   );
