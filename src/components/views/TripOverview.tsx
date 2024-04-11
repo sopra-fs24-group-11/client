@@ -255,11 +255,18 @@ const TripOverview = () => {
             {currentTrip.numberOfParticipants}
           </h3>
           <h3 className="trip-arrival">
-            Desired arrival time:{" "}
-            {new Date(currentTrip.meetUpTime).toLocaleTimeString("de-DE", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            Desired arrival:{" "}
+            {new Date(currentTrip.meetUpTime).toLocaleDateString("de-DE", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            }) +
+              ", " +
+              new Date(currentTrip.meetUpTime).toLocaleTimeString("de-DE", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })}
           </h3>
         </div>
       </div>
@@ -330,7 +337,7 @@ const TripOverview = () => {
           </div>
         </div>
       )}
-      
+
       <div className="lists-container">
         <div className="todo-list-container">
           <h2 className="ul_title">To-Do List</h2>

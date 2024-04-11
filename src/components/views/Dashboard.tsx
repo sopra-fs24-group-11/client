@@ -199,7 +199,17 @@ const WelcomeMessage: React.FC = () => {
                 onClick={() => navigate(`/tripOverview/${trip.id}`)}
                 style={{ cursor: "pointer" }}
               >
-                <div>{`"${trip.tripName}" to "${trip.meetUpPlace.stationName}"`}</div>
+                <div>
+                  {`"${trip.tripName}" to "${
+                    trip.meetUpPlace.stationName
+                  }" on ${
+                    new Date(trip.meetUpTime).toLocaleDateString("de-DE", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                  }`}
+                </div>
                 <Button
                   width="80px"
                   height="35px"
@@ -207,7 +217,7 @@ const WelcomeMessage: React.FC = () => {
                   onClick={(e) => {
                     e.stopPropagation(); // Prevents the navigation from firing when the Info button is clicked
                     //navigate(`/trip/${trip.id}`);
-                    navigate(`/tripOverview/${trip.id}`)
+                    navigate(`/tripOverview/${trip.id}`);
                   }}
                 >
                   Info
@@ -237,7 +247,7 @@ const WelcomeMessage: React.FC = () => {
 
 const NotificationsLog: React.FC = () => {
   const [notifications, setNotifications] = useState([]);
-  
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -363,7 +373,7 @@ const YourFavorites: React.FC = () => {
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
       <ol>
-      <li>To be implemented...</li>
+        <li>To be implemented...</li>
       </ol>
     </div>
   );
