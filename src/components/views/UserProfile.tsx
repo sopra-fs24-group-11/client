@@ -151,7 +151,7 @@ const ProfilePage: React.FC = () => {
       username: editedUser.username,
       email: editedUser.email,
       birthday: editedUser.birthday,
-      password: "q", // Dummy password to pass validation
+      password: editedUser.password, // Dummy password to pass validation
     };
 
     try {
