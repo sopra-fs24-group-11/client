@@ -77,7 +77,7 @@ const Login = () => {
             backgroundColor="#FFB703"
             onClick={() => navigate("/register")}
           >
-            Go To Register
+            go to register
           </Button>
         </div>
       </div>
