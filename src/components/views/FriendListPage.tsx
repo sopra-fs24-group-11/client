@@ -193,7 +193,7 @@ const FriendListPage = () => {
             <li key={friend.friendId} className="friend">
               <span className="name">{friend.username}</span>
               <Progress className="progress-bar" value={friend.points} />
-              <div className="stage">Level: {friend.level}</div>
+              <div className="stage">Level: {Math.floor(friend.level)}</div>
               <Button
                 className="remove-friend"
                 onClick={() => handleRemoveFriend(friend.friendId)}
