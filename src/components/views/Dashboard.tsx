@@ -493,7 +493,7 @@ const FriendLeaderboard = () => {
 };
 
 // Main Dashboard component
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const [isLoadingOld, setIsLoadingOld] = useState(true);
   const [isFriendListLoading, setIsFriendListLoading] = useState(true);
   const [isWelcomeMessageLoading, setIsWelcomeMessageLoading] = useState(true);
