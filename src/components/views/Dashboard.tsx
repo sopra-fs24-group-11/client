@@ -401,7 +401,22 @@ const TripInvitations = ({ setIsLoading }) => {
       setTripInvitations(
         tripInvitations.filter((invitation) => invitation.id !== tripId)
       );
-      window.location.reload();
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const handleDenyInvitation = async (tripId) => {
+    try {
+      await api.delete(
+        `/trips/${tripId}/invitation`,
+        {
+          headers: { Authorization: token },
+        }
+      );
+      setTripInvitations(
+        tripInvitations.filter((invitation) => invitation.id !== tripId)
+      );
     } catch (error) {
       handleError(error);
     }
@@ -424,18 +439,27 @@ const TripInvitations = ({ setIsLoading }) => {
               >
                 Accept
               </Button>
+              <Button
+                className="deny-button"
+                width="80px"
+                height="35px"
+                backgroundColor="red"
+                onClick={() => handleDenyInvitation(invitation.id)}
+              >
+                Deny
+              </Button>
             </div>
           ))
         ) : (
           <div className="no-current-trip-invitations">
-            No current trip invitations: create one or let your friends invite
-            you!
+            No current trip invitations: create one or let your friends invite you!
           </div>
         )}
       </div>
     </div>
   );
 };
+
 
 const YourFavorites: React.FC = () => {
   return (
