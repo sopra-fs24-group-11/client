@@ -17,7 +17,6 @@ const FriendList = ({ setIsLoading }) => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  
 
   useEffect(() => {
     let isComponentMounted = true; // Track if the component is still mounted
@@ -85,7 +84,9 @@ const FriendList = ({ setIsLoading }) => {
       setFriendRequests(
         friendRequests.filter((request) => request.id !== friendRequestId)
       );
-      setFriendRequests(prevRequests => prevRequests.filter((request) => request.id !== friendRequestId));
+      setFriendRequests((prevRequests) =>
+        prevRequests.filter((request) => request.id !== friendRequestId)
+      );
       window.location.reload();
     } catch (error) {
       handleError(error);
@@ -131,23 +132,23 @@ const FriendList = ({ setIsLoading }) => {
               <div key={index} className="request">
                 <span className="name">{request.username}</span>
                 <div className="acceptdeny-buttons">
-                <Button
-                  className="accept-button"
-                  width="80px"
-                  height="35px"
-                  backgroundColor="#82FF6D"
-                  onClick={() => handleAcceptFriendRequest(request.friendId)}
-                >
-                  Accept
-                </Button>
-                <Button
-                  className="deny-button"
-                  backgroundColor={"red"}
-                  height="35px"
-                  onClick={() => handleDenyFriendRequest(request.friendId)}
-                >
-                  Deny
-                </Button>
+                  <Button
+                    className="accept-button"
+                    width="80px"
+                    height="35px"
+                    backgroundColor="#82FF6D"
+                    onClick={() => handleAcceptFriendRequest(request.friendId)}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    className="deny-button"
+                    backgroundColor={"red"}
+                    height="35px"
+                    onClick={() => handleDenyFriendRequest(request.friendId)}
+                  >
+                    Deny
+                  </Button>
                 </div>
               </div>
             ))}
@@ -170,7 +171,7 @@ const FriendList = ({ setIsLoading }) => {
   );
 };
 
-const WelcomeMessage: React.FC = ({ setIsLoading }) => {
+const WelcomeMessage = ({ setIsLoading }) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentTrips, setCurrentTrips] = useState([]);
@@ -295,7 +296,7 @@ const WelcomeMessage: React.FC = ({ setIsLoading }) => {
   );
 };
 
-const NotificationsLog: React.FC = ({ setIsLoading }) => {
+const NotificationsLog = ({ setIsLoading }) => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -401,6 +402,7 @@ const TripInvitations = ({ setIsLoading }) => {
       setTripInvitations(
         tripInvitations.filter((invitation) => invitation.id !== tripId)
       );
+      window.location.reload();
     } catch (error) {
       handleError(error);
     }
@@ -408,15 +410,13 @@ const TripInvitations = ({ setIsLoading }) => {
 
   const handleDenyInvitation = async (tripId) => {
     try {
-      await api.delete(
-        `/trips/${tripId}/invitation`,
-        {
-          headers: { Authorization: token },
-        }
-      );
+      await api.delete(`/trips/${tripId}/invitation`, {
+        headers: { Authorization: token },
+      });
       setTripInvitations(
         tripInvitations.filter((invitation) => invitation.id !== tripId)
       );
+      window.location.reload();
     } catch (error) {
       handleError(error);
     }
@@ -429,7 +429,14 @@ const TripInvitations = ({ setIsLoading }) => {
         {tripInvitations.length > 0 ? (
           tripInvitations.map((invitation) => (
             <div key={invitation.id} className="trip-invitation">
-              <div>Invitation to &quot;{invitation.tripName}&quot;</div>
+              <div>
+                Invitation to &quot;{invitation.tripName}&quot; on{" "}
+                {new Date(invitation.meetUpTime).toLocaleDateString("de-DE", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </div>
               <Button
                 className="accept-button"
                 width="80px"
@@ -452,7 +459,8 @@ const TripInvitations = ({ setIsLoading }) => {
           ))
         ) : (
           <div className="no-current-trip-invitations">
-            No current trip invitations: create one or let your friends invite you!
+            No current trip invitations: create one or let your friends invite
+            you!
           </div>
         )}
       </div>
@@ -460,8 +468,7 @@ const TripInvitations = ({ setIsLoading }) => {
   );
 };
 
-
-const YourFavorites: React.FC = () => {
+const YourFavorites = () => {
   return (
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
@@ -472,7 +479,7 @@ const YourFavorites: React.FC = () => {
   );
 };
 
-const FriendLeaderboard: React.FC = () => {
+const FriendLeaderboard = () => {
   // This component will render the friend leaderboard
   return (
     <div className="friend-leaderboard component">
@@ -501,17 +508,18 @@ const Dashboard: React.FC = () => {
     !isNotificationsLogLoading &&
     !isTripInvitationsLoading;
 
-    useEffect(() => { //OLD LOADER
-      const timer = setTimeout(() => {
-        setIsLoadingOld(false);
-      }, 2000);
-  
-      return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+    //OLD LOADER
+    const timer = setTimeout(() => {
+      setIsLoadingOld(false);
+    }, 2000);
 
-    if (isLoadingOld) {
-      return <LinearIndeterminate />;
-    }
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoadingOld) {
+    return <LinearIndeterminate />;
+  }
 
   return true ? ( // REPLACE TRUE WITH allLoaded IF REAL LOADING IS IMPLEMENTED
     <div className="dashboard">
