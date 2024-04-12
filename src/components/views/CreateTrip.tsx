@@ -191,6 +191,14 @@ const CreateTrip = () => {
     setIsHovered(false);
   };
 
+  const dialogTriggerRef = useRef(null); // Create a ref for the DialogTrigger component
+
+  const handleInputFocus = () => {
+    if (dialogTriggerRef.current) {
+      dialogTriggerRef.current.click(); 
+    }
+  };
+
   //-------- What is actually being executed -------- //
 
   useEffect(() => {
@@ -220,15 +228,15 @@ const CreateTrip = () => {
                   onChange={(e) => setTripName(e.target.value)}
                 ></input>
                 <br></br>
-
                 <Dialog>
-                  <DialogTrigger asChild>
+                  <DialogTrigger asChild ref={dialogTriggerRef}>
                     <div>
                       <label>Target Location:</label>
                       <input
                         className="flex input"
                         placeholder="enter..."
                         value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
+                        onFocus={handleInputFocus}
                       ></input>
                     </div>
                   </DialogTrigger>

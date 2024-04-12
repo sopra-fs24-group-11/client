@@ -44,11 +44,11 @@ const Register = () => {
     if (password !== secondPassword) {
       throw new Error("Passwords do not match!");
     }
-  };
+  }; 
 
   const doRegister = async () => {
     try {
-      validatePassword;
+      validatePassword();
 
       const requestBody = JSON.stringify({
         username,

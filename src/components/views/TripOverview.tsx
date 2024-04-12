@@ -10,10 +10,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import {ListCarousel} from "../ui/ListCarousel"
+import { ListCarousel } from "../ui/ListCarousel";
 
 import "../../styles/views/TripOverview.scss";
 import LinearIndeterminate from "components/ui/loader";
@@ -59,8 +62,13 @@ const TripOverview = () => {
   const [connections, setConnections] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [dialogType, setDialogType] = useState(null);
+  //new admin
+  const [tripMembers, setTripMembers] = useState([]); // Array of member objects
+  const [newAdminId, setNewAdminId] = useState(null); // ID of the new selected admin
+
+  const [openDialogNewAdmin, setOpenDialogNewAdmin] = useState(false);
+  const [openLeaveDialog, setOpenLeaveDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -112,6 +120,18 @@ const TripOverview = () => {
     }
   };
 
+  const fetchTripMembers = async () => {
+    try {
+      const response = await api.get(`/trips/${tripId}/participants`, {
+        headers: { Authorization: token },
+      });
+      setTripMembers(response.data);
+      console.log("TRIP MEMBERS:", response.data);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   const fetchConnections = async () => {
     try {
       const response = await api.get(`/trips/${tripId}/connections`, {
@@ -143,47 +163,83 @@ const TripOverview = () => {
     }
   };
 
+  const handleOpenSelectAdminDialog = () => {
+    fetchTripMembers();
+    setOpenDialogNewAdmin(true);
+  };
+  const handleCloseNewAdminDialog = () => {
+    setOpenDialogNewAdmin(false);
+    setNewAdminId(null);
+  };
+
   const handleOpenLeaveDialog = () => {
     if (isAdmin) {
-      // If the user is an admin, prompt them to select a new admin before leaving
       setSnackbarMessage("Please select a new admin before leaving the trip!");
-      setSnackbarSeverity("error"); // Change the Snackbar to red
+      setSnackbarSeverity("error");
       setSnackbarOpen(true);
     } else {
-      // If the user is not an admin, ask for confirmation to leave the trip
-      setDialogType("leave");
-      setOpenDialog(true);
+      setOpenLeaveDialog(true);
     }
   };
 
-  const handleOpenDeleteDialog = () => {
-    setDialogType("delete");
-    setOpenDialog(true);
+  const handleCloseLeaveDialog = () => {
+    setOpenLeaveDialog(false);
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setDialogType(null);
+  const handleOpenDeleteDialog = () => {
+    setOpenDeleteDialog(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleSelectNewAdmin = async () => {
+    if (newAdminId) {
+      try {
+        await api.put(
+          `/trips/${tripId}/admin/${newAdminId}`,
+          {},
+          {
+            headers: { Authorization: token },
+          }
+        );
+        setSnackbarMessage("New admin selected successfully.");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
+        // Close the dialog and possibly refresh the admin status
+        fetchAdminStatus();
+        handleCloseNewAdminDialog();
+      } catch (error) {
+        handleError(error);
+        setSnackbarMessage("Failed to set new admin.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
+        handleCloseNewAdminDialog();
+      }
+    }
   };
 
   const handleConfirmLeave = async () => {
-    handleCloseDialog();
+    handleCloseLeaveDialog(); // Close the dialog first
 
     try {
       await api.delete(`/trips/${tripId}/exit`, {
         headers: { Authorization: token },
       });
       setSnackbarMessage("You have left the trip.");
+      setSnackbarSeverity("success");
       setSnackbarOpen(true);
       setTimeout(() => navigate("/dashboard"), 3000);
       console.log("TRIP LEFT!!!");
     } catch (error) {
       handleError(error);
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
   const handleConfirmDelete = async () => {
-    handleCloseDialog(); // Close the dialog first
+    handleCloseDeleteDialog(); // Close the dialog first
     try {
       await api.delete(`/trips/${tripId}`, {
         headers: { Authorization: token },
@@ -315,7 +371,7 @@ const TripOverview = () => {
               className="newadmin-button"
               backgroundColor="#FFB703"
               color="black"
-              onClick={handleBackClick}
+              onClick={handleOpenSelectAdminDialog}
             >
               Select new Admin
             </Button>
@@ -338,8 +394,7 @@ const TripOverview = () => {
           </div>
         </div>
       )}
-      <ListCarousel>
-      </ListCarousel>
+      <ListCarousel></ListCarousel>
       {/* <div className="lists-container">
           <div className="todo-list-container">
             <h2 className="ul_title">To-Do List</h2>
@@ -349,36 +404,135 @@ const TripOverview = () => {
             <h2 className="ul_title">Group Packing List</h2>
           </div>
         </div> */}
+
+      {/* Dialog for confirming leaving the trip */}
+
       <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{ fontFamily: "M PLUS Rounded 1c" }}
+        open={openLeaveDialog}
+        onClose={handleCloseLeaveDialog}
+        aria-labelledby="leave-dialog-title"
+        aria-describedby="leave-dialog-description"
+        sx={{
+          "& .MuiBackdrop-root": {
+            backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+          },
+          "& .MuiPaper-root": {
+            // Targeting the Paper component inside the Dialog
+            boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+            borderRadius: "10px",
+          },
+        }}
       >
-        <DialogTitle id="alert-dialog-title">
-          {dialogType === "delete" ? "Confirm Deletion" : "Confirm Leave"}
-        </DialogTitle>
+        <DialogTitle id="leave-dialog-title">Confirm Leave</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {dialogType === "delete"
-              ? "Are you sure you want to delete this trip?"
-              : "Are you sure you want to leave this trip?"}
+          <DialogContentText id="leave-dialog-description">
+            Are you sure you want to leave this trip?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLeaveDialog} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmLeave}
+            backgroundColor="#FF7070"
+            color="black"
+          >
+            Leave
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog for confirming deletion */}
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
+        sx={{
+          "& .MuiBackdrop-root": {
+            backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+          },
+          "& .MuiPaper-root": {
+            // Targeting the Paper component inside the Dialog
+            boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+            borderRadius: "10px",
+          },
+        }}
+      >
+        <DialogTitle id="delete-dialog-title">Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-dialog-description">
+            Are you sure you want to delete this trip?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={handleCloseDialog}
+            onClick={handleCloseDeleteDialog}
             style={{ backgroundColor: "#BCFFE3", color: "black" }}
           >
             Cancel
           </Button>
           <Button
-            onClick={
-              dialogType === "delete" ? handleConfirmDelete : handleConfirmLeave
-            }
-            style={{ backgroundColor: "#FF7070", color: "black" }}
-            autoFocus
+            onClick={handleConfirmDelete}
+            backgroundColor="#FF7070"
+            color="black"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Dialog for selecting a new admin */}
+
+      <Dialog
+        open={openDialogNewAdmin}
+        onClose={handleCloseNewAdminDialog}
+        sx={{
+          "& .MuiBackdrop-root": {
+            backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+          },
+          "& .MuiPaper-root": {
+            // Targeting the Paper component inside the Dialog
+            boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+            borderRadius: "10px",
+          },
+        }}
+      >
+        <DialogTitle>Select New Admin</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please select a new admin for this trip:
+          </DialogContentText>
+          <List>
+            {tripMembers.map((member) => (
+              <ListItem
+                key={member.id}
+                button
+                selected={newAdminId === member.id}
+                onClick={() => setNewAdminId(member.id)}
+                sx={{
+                  "&.Mui-selected, &.Mui-selected:hover": {
+                    backgroundColor: "#ffb80386",
+                    color: "black",
+                    borderRadius: "10px",
+                  },
+                }}
+              >
+                <ListItemText primary={member.username} />
+              </ListItem>
+            ))}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseNewAdminDialog} color="primary">
+            Cancel
+          </Button>
+          <Button
+            backgroundColor="#FFB703"
+            color="black"
+            onClick={handleSelectNewAdmin}
           >
             Confirm
           </Button>
