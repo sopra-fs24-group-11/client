@@ -17,6 +17,7 @@ const FriendList = ({ setIsLoading }) => {
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  
 
   useEffect(() => {
     let isComponentMounted = true; // Track if the component is still mounted
@@ -84,11 +85,8 @@ const FriendList = ({ setIsLoading }) => {
       setFriendRequests(
         friendRequests.filter((request) => request.id !== friendRequestId)
       );
-      await fetchFriends();
-      await fetchFriendRequests();
-      if (closeDialogRef.current) {
-        closeDialogRef.current.click();
-      }
+      setFriendRequests(prevRequests => prevRequests.filter((request) => request.id !== friendRequestId));
+      window.location.reload();
     } catch (error) {
       handleError(error);
     }
