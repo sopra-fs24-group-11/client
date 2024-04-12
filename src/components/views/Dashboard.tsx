@@ -75,6 +75,25 @@ const FriendList = ({ setIsLoading }) => {
     }
   };
 
+  const handleDenyFriendRequest = async (friendRequestId) => {
+    try {
+      await api.delete(`/users/friends/${friendRequestId}`, {
+        headers: { Authorization: token },
+      });
+      // Remove the denied request from the list
+      setFriendRequests(
+        friendRequests.filter((request) => request.id !== friendRequestId)
+      );
+      await fetchFriends();
+      await fetchFriendRequests();
+      if (closeDialogRef.current) {
+        closeDialogRef.current.click();
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   // Function to determine the status class
   const getStatusClass = (status) => {
     return status.toLowerCase() === "online"
@@ -113,6 +132,7 @@ const FriendList = ({ setIsLoading }) => {
             {friendRequests.map((request, index) => (
               <div key={index} className="request">
                 <span className="name">{request.username}</span>
+                <div className="acceptdeny-buttons">
                 <Button
                   className="accept-button"
                   width="80px"
@@ -122,6 +142,15 @@ const FriendList = ({ setIsLoading }) => {
                 >
                   Accept
                 </Button>
+                <Button
+                  className="deny-button"
+                  backgroundColor={"red"}
+                  height="35px"
+                  onClick={() => handleDenyFriendRequest(request.friendId)}
+                >
+                  Deny
+                </Button>
+                </div>
               </div>
             ))}
           </div>
