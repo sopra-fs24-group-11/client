@@ -16,14 +16,18 @@
     color: #fbfada;
     border-bottom: 1px solid #fbfada;
     padding-bottom: 3px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    margin: 10px;
+  }
+  &.button-holder {
+    display:flex;
+    justify-content: space-around;
   }
 }
 @media (max-width: 768px) {
   .Carousel{
     &.container {
-      width:75%;
+      width:95%;
+      overflow-x: hidden;
     }
     &.title {
       font-size: 1rem;
@@ -31,3 +35,44 @@
     }
   }
 }
+
+.IndividualPackingList {
+  &.item-holder {
+    color:white;
+  }
+}
+.TripIndividualListItem {
+  &.container {
+    margin: 0;
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+    .name {
+      margin-right:auto;
+    }
+    .item-icons {
+      display:flex;
+      .trash-icon {
+        cursor: pointer;
+        padding-left: 10px;
+        cursor:not-allowed;
+      }
+      .edit-icon {
+        cursor: pointer;
+        padding-left: 10px;
+    }
+    }
+  }
+  &.form {
+    width:100%;
+    display:flex;
+  }
+  &.form-input {
+    width:80%;
+  }
+  &.update-button {
+    margin-left:auto;
+    padding-left:5px;
+  }
+}
+

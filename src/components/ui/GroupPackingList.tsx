@@ -6,8 +6,10 @@ const GroupPackingList = () => {
   return (
     <div>
       <h1 className="text-2xl font-semibold Carousel title">Group Packing List</h1>
-      <Button backgroundColor={"lightblue"}>Add Item</Button>
-      <Button backgroundColor={"yellow"}>Edit Mode</Button>
+      <div className="Carousel button-holder">
+        <Button backgroundColor={"white"}>Add Item</Button>
+        <Button backgroundColor={"white"}>Edit Mode</Button>
+      </div>
     </div>
   )
 }

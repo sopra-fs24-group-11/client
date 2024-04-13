@@ -12,11 +12,11 @@ import ConfirmPopup from "../ui/ConfirmPopup";
 const ListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, updateItemName}) => {
   const handleSubmit = (event, itemId, name, defaultvalue) => {
     event.preventDefault();
+    toggleEditable(itemId);
     if (!name) {
       name = defaultvalue;
     }
     handleUpdate(itemId, name);
-    toggleEditable(itemId);
   };
   return(
     <div className="ListItem container">
@@ -103,12 +103,12 @@ const ListTemplate = () => {
 
   const addItem = async (item) => {
     try {
+      setPopupOpen(false);
       const requestBody = JSON.stringify({ item });
       const response = await api.post("/users/packings", requestBody, {
         headers: { Authorization: token },
       });
       setNewItemName("");
-      setPopupOpen(false);
       setList((oldList) => ([...oldList, {item:response.data.item, id:response.data.id}]));
     } catch (error) {
       alert(`Something went wrong while adding an item: \n${handleError(error)}`);
