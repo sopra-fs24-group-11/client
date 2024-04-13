@@ -8,12 +8,17 @@ import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 
 const FormField = (props) => {
+
+  const inputType = props.isPassword ? "password" : "text";
+  const [showPassword, setShowPassword] = useState(false);
+  
   return (
-    <div className="login field">
+    <div className="register field">
       <label className="login label">{props.label}</label>
       <input
-        className="login input"
+        className="register input"
         placeholder="enter here.."
+        type={inputType}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
       />
@@ -25,6 +30,7 @@ FormField.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  isPassword: PropTypes.bool
 };
 
 const Login = () => {
@@ -59,7 +65,7 @@ const Login = () => {
           <FormField
             label="Password"
             value={password}
-            type="password"
+            isPassword
             onChange={(n) => setPassword(n)}
           />
           <div className="login button-container mb-5">
