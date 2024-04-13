@@ -255,6 +255,16 @@ const CustomizeTrip = () => {
     setIsHovered(false);
   };
 
+  //-------- NEEDED TO OPEN DIALOG WHEN FOCUSIN INPUT FIELD -------- //
+
+  const dialogTriggerRef = useRef(null); // Create a ref for the DialogTrigger component
+
+  const handleInputFocus = () => {
+    if (dialogTriggerRef.current) {
+      dialogTriggerRef.current.click(); 
+    }
+  };
+
   //-------- What is actually being executed -------- //
 
   useEffect(() => {
@@ -289,13 +299,14 @@ const CustomizeTrip = () => {
                 <br></br>
                 
                 <Dialog>
-                  <DialogTrigger asChild>
+                  <DialogTrigger asChild ref={dialogTriggerRef}>
                     <div>
                       <label>Target Location:</label>
                       <input
                         className="flex input"
                         placeholder="enter..."
                         value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
+                        onFocus={handleInputFocus}
                       ></input>
                     </div>
                   </DialogTrigger>
@@ -346,7 +357,7 @@ const CustomizeTrip = () => {
                       </Button>
                     </DialogFooter>
                     <DialogClose ref={closeDialogRef} className="hidden" />
-                                      </DialogContent>
+                  </DialogContent>
                 </Dialog>
               </div>
               <div className="flex box">

@@ -191,6 +191,8 @@ const CreateTrip = () => {
     setIsHovered(false);
   };
 
+  //-------- NEEDED TO OPEN DIALOG WHEN FOCUSIN INPUT FIELD -------- //
+
   const dialogTriggerRef = useRef(null); // Create a ref for the DialogTrigger component
 
   const handleInputFocus = () => {
