@@ -3,65 +3,15 @@ import { api, handleError } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import {Button} from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
 import "styles/views/ListTemplate.scss"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPencilAlt , faCheck } from "@fortawesome/free-solid-svg-icons";
 import ConfirmPopup from "../ui/ConfirmPopup";
+import {TemplateListItem} from "../ui/ListItem"
 
-const ListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, updateItemName}) => {
-  const handleSubmit = (event, itemId, name, defaultvalue) => {
-    event.preventDefault();
-    toggleEditable(itemId);
-    if (!name) {
-      name = defaultvalue;
-    }
-    handleUpdate(itemId, name);
-  };
-  return(
-    <div className="ListItem container">
-      {editable[item.id] ? (
-        <form 
-          className="ListItem form"
-          onSubmit={(event) => handleSubmit(event, item.id, updateItemName[item.id], item.item)}>
-          <input
-            className="ListItem form-input"
-            type="text"
-            value={updateItemName[item.id] || ""}
-            placeholder={item.item}
-            onChange={(e) => handleInputChange(item.id, e.target.value)}
-            style={{ color: "black" }}
-          />
-          <button type="submit" className="ListItem update-button">
-            <FontAwesomeIcon icon={faCheck} />
-          </button>
-        </form>
-      ) : (
-        <>
-          <div className="ListItem name">{item.item}</div>
-          {editMode && 
-            <div className="item-icons">
-              <FontAwesomeIcon icon={faPencilAlt} className="edit-icon" onClick={() => toggleEditable(item.id)} />
-              <FontAwesomeIcon icon={faTrash} className="trash-icon" onClick={() => handleDelete(item.id)}/>
-            </div>
-          }
-        </>
-      )}
-      
-    </div>
-  );
-}
+// to do: use below two things for alert / confirm messages:
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
-ListItem.propTypes = {
-  item: PropTypes.object,
-  handleDelete: PropTypes.func,
-  handleUpdate: PropTypes.func,
-  editMode: PropTypes.bool,
-  editable: PropTypes.object, 
-  toggleEditable: PropTypes.func, 
-  handleInputChange: PropTypes.func, 
-  updateItemName: PropTypes.object,
-};
+
 
 const ListTemplate = () => {
   const navigate = useNavigate();
@@ -160,7 +110,7 @@ const ListTemplate = () => {
         <ul className="ListTemplate list">
           {list.map((x) => (
             <li key={x.id} className="ListTemplate element">
-              <ListItem
+              <TemplateListItem
                 item={x}
                 handleDelete={(itemId) => deleteItem(itemId)}
                 handleUpdate={(itemId, newItem) => updateItem(itemId, newItem)}
@@ -170,7 +120,7 @@ const ListTemplate = () => {
                 handleInputChange = {(itemId, value) => handleUpdateItemName(itemId, value)}
                 updateItemName = {updateItemName}
               >
-              </ListItem>
+              </TemplateListItem>
             </li>
           ))}
         </ul>
