@@ -11,8 +11,6 @@ import {TemplateListItem} from "../ui/ListItem"
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
-
-
 const ListTemplate = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
