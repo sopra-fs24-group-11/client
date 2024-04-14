@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import "styles/views/ListTemplate.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencilAlt , faCheck } from "@fortawesome/free-solid-svg-icons";
 
-const TripSharedListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, updateItemName}) => {
+export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, updateItemName}) => {
   const handleSubmit = (event, itemId, name, defaultvalue) => {
     event.preventDefault();
     toggleEditable(itemId);
@@ -47,7 +47,7 @@ const TripSharedListItem = ({item, handleDelete, handleUpdate, editMode, editabl
   );
 }
 
-TripSharedListItem.propTypes = {
+TemplateListItem.propTypes = {
   item: PropTypes.object,
   handleDelete: PropTypes.func,
   handleUpdate: PropTypes.func,
@@ -58,4 +58,25 @@ TripSharedListItem.propTypes = {
   updateItemName: PropTypes.object,
 };
 
-export default TripSharedListItem;
+
+export const IndividualListItem = () => {
+
+  return(
+    <div className="ListItem container">
+    </div>
+  );
+}
+
+IndividualListItem.propTypes = {
+};
+
+export const GroupListItem = () => {
+
+  return(
+    <div className="ListItem container">
+    </div>
+  );
+}
+
+GroupListItem.propTypes = {
+};
