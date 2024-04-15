@@ -116,20 +116,10 @@ const IndividualPackingList = () => {
   return (
     <div className="Carousel-List-Container">
       <h1 className="text-2xl font-semibold Carousel title">Individual Packing List</h1>
-      <div className="Carousel button-holder">
-        <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal Mode" : "Edit Mode"}</Button>
-        <Button backgroundColor={"white"} onClick={() => {transferTemplate()}}>Transfer</Button>
-      </div>
-      {content}
-      <ConfirmPopup
-          header="Add an item"
-          className="popup"
-          isOpen={isPopupOpen}
-      >
-        <div className="List popup">
+      {isPopupOpen && <div className="List popup-container11">
+        <div className="List popup11">
           <input
-            className="List popup-input"
+            className="List popup-input11"
             type="text"
             value={newItemName}
             placeholder={"Next Item "}
@@ -140,7 +130,13 @@ const IndividualPackingList = () => {
             <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false)}}>Close</Button>
           </div>
         </div>
-      </ConfirmPopup>
+      </div>}
+      {!isPopupOpen && <div className="Carousel button-holder">
+        <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
+        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal Mode" : "Edit Mode"}</Button>
+        <Button backgroundColor={"white"} onClick={() => {transferTemplate()}}>Transfer</Button>
+      </div>}
+      {!isPopupOpen && content}
     </div>
   )
 }

@@ -43,12 +43,16 @@
 }
 
 .List {
-  &.popup {
+  &.popup-container11 {
+    width:70%;
+    margin:auto;
+  }
+  &.popup11 {
     padding: 15px;
     display:flex;
     flex-direction:column;
   }
-  &.popup-input {
+  &.popup-input11 {
     padding: 5px;
     border-radius:10px;
     color: black;
