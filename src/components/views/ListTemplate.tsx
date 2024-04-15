@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
-import { useNavigate } from "react-router-dom";
 import {Button} from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
-import "styles/views/ListTemplate.scss"
+import "styles/views/Lists.scss"
 import ConfirmPopup from "../ui/ConfirmPopup";
 import {TemplateListItem} from "../ui/ListItem"
 
@@ -12,27 +11,12 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const ListTemplate = () => {
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [list, setList] = useState([]);
-  const [editing, setEditing] = useState(false); // edit mode for all items
-  const [editable, setEditable] = useState({}); // edit one specific item
-  const [updateItemName, setUpdateItemName] = useState({});
+  const [editMode, setEditMode] = useState(false); // edit mode for all items
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
-
-  const toggleEditable = (itemId) => {
-    setEditable(oldEditable => ({
-      ...oldEditable,
-      [itemId]: !oldEditable[itemId] || false,
-    }));
-  };
-  
-  const toggleEditing = () => {
-    setEditing(old => (!old));
-    setEditable({});
-    setUpdateItemName({});
-  };
+  const [change, setChange] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +31,7 @@ const ListTemplate = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [change]);
 
   const addItem = async (item) => {
     try {
@@ -80,25 +64,14 @@ const ListTemplate = () => {
       await api.put(`/users/packings/${itemId}`, requestBody, {
         headers: { Authorization: token },
       });
-      
-      setList(oldList => {
-        const index = oldList.findIndex(item => item.id === itemId);
-        const updatedList = [...oldList];
-        updatedList[index] = { ...updatedList[index], item: item };
-        return updatedList;
-      });
+      setChange(old => old + 1);
       
     } catch (error) {
       alert(`Something went wrong while updating an item: \n${handleError(error)}`);
     }
   };
 
-  const handleUpdateItemName = (itemId, val) => {
-    setUpdateItemName(old => ({
-      ...old,
-      [itemId]:val
-    }))
-  }
+
 
   let content = {};
 
@@ -112,11 +85,7 @@ const ListTemplate = () => {
                 item={x}
                 handleDelete={(itemId) => deleteItem(itemId)}
                 handleUpdate={(itemId, newItem) => updateItem(itemId, newItem)}
-                editMode={editing}
-                editable={editable}
-                toggleEditable = {(itemId) => toggleEditable(itemId)}
-                handleInputChange = {(itemId, value) => handleUpdateItemName(itemId, value)}
-                updateItemName = {updateItemName}
+                editMode={editMode}
               >
               </TemplateListItem>
             </li>
@@ -140,9 +109,9 @@ const ListTemplate = () => {
           </Button>
           <Button
             backgroundColor={"#ffbe0b"}
-            onClick={() => toggleEditing()}
+            onClick={() => setEditMode(old => !old)}
           >
-            {editing ? "Normal Mode" : "Edit Mode"}
+            {editMode ? "Normal Mode" : "Edit Mode"}
           </Button>
         </div>
         <ConfirmPopup
@@ -150,31 +119,17 @@ const ListTemplate = () => {
           className="popup"
           isOpen={isPopupOpen}
         >
-          <div className="ListTemplate popup">
-            <div className="ListTemplate popup-content">
-              <input
-                className="ListTemplate popup-input"
-                type="text"
-                value={newItemName}
-                placeholder={"Next Item "}
-                onChange={(e) => setNewItemName(e.target.value)}
-              />
-            </div>
-            <div className="ListTemplate popup-button-holder">
-            <Button
-                className="left confirm-button"
-                onClick={() => addItem(newItemName)}
-                backgroundColor={"green"}
-              >
-                Save
-              </Button>
-              <Button
-                className="right confirm-button"
-                onClick={() => {setPopupOpen(false);setNewItemName("");}}
-                backgroundColor={"red"}
-              >
-                Cancel
-              </Button>
+          <div className="List popup">
+            <input
+              className="List popup-input"
+              type="text"
+              value={newItemName}
+              placeholder={"Next Item "}
+              onChange={(e) => setNewItemName(e.target.value)}
+            />
+            <div>
+              <Button backgroundColor={"beige"} onClick={() => addItem(newItemName)}>Save</Button>
+              <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false);setNewItemName("");}}>Cancel</Button>
             </div>
           </div>
         </ConfirmPopup>

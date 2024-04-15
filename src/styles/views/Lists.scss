@@ -1,5 +1,10 @@
 @import "../theme";
 
+.Carousel-List-Container {
+  width:95%;
+  margin:auto;
+}
+
 .ListTemplate{
   &.template {
     width:100%;
@@ -32,20 +37,45 @@
     flex: 1 1 200px;
     padding:10px 2px;
     min-height:30px;
-    background: darkolivegreen;
+    background: beige;
   }
+  
+}
+
+.List {
   &.popup {
-    background:$background;
-  }
-  &.popup-content {
-    padding: 0 10px 10px 10px;
+    padding: 15px;
+    display:flex;
+    flex-direction:column;
   }
   &.popup-input {
     padding: 5px;
     border-radius:10px;
+    color: black;
+    margin-bottom:15px;
   }
-  &.popup-button-holder{
-    display: flex;
+  &.list {
+    display:flex;
+    flex-wrap: wrap;
+    gap:15px;
+    padding:15px;
+  }
+  &.element {
+    border-radius: 10px;
+    flex: 1 1 200px;
+    padding: 10px 2px;
+    min-height: 30px;
+  }
+  &.avatar {
+    width: 30px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-left:10px;
+  }
+  &.empty-circle {
+    background-color: transparent;
+    border: 2px solid #000; /* Example border color */
   }
 }
 
@@ -55,15 +85,21 @@
     display:flex;
     justify-content: flex-end;
     align-items: center;
+    color:black;
+    flex-wrap: wrap;
     .name {
       margin-right:auto;
+      max-width:80%;
+      display:block;
+      hyphens: auto;
+      overflow-x:hidden;
     }
     .item-icons {
       display:flex;
       .trash-icon {
-        cursor: pointer;
-        padding-left: 10px;
         cursor:not-allowed;
+        padding-left: 10px;
+        
       }
       .edit-icon {
         cursor: pointer;
