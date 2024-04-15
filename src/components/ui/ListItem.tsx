@@ -110,7 +110,9 @@ export const GroupListItem = ({item, editMode, handleComplete, handleDelete, han
       : 
         <>
           <div className="ListItem name">{item.item}</div>
-          {userId===item.userId &&<FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> }
+          {userId===item.userId && <div className="item-icons">
+            <FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> 
+          </div>}
         </>
       }
       </>
@@ -174,7 +176,9 @@ export const IndividualListItem = ({item, editMode, handleComplete, handleDelete
       : 
         <>
           <div className="ListItem name">{item.item}</div>
-          <FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> 
+          <div className="item-icons">
+            <FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> 
+          </div>
         </>
       }
       </>
