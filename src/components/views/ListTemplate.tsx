@@ -71,8 +71,6 @@ const ListTemplate = () => {
     }
   };
 
-
-
   let content = {};
 
   if (list && list.length > 0) {
