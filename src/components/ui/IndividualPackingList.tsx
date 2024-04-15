@@ -125,7 +125,7 @@ const IndividualPackingList = () => {
             placeholder={"Next Item "}
             onChange={(e) => setNewItemName(e.target.value)}
           />
-          <div>
+          <div className="List popup-buttons11">
             <Button backgroundColor={"beige"} onClick={() => {addItem(newItemName)}}>Save</Button>
             <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false)}}>Close</Button>
           </div>

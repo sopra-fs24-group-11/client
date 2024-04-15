@@ -132,16 +132,16 @@ const GroupPackingList = ({avatars, userId}) => {
     
     <div className="Carousel-List-Container">
       <h1 className="text-2xl font-semibold Carousel title">Group Packing List</h1>
-      {isPopupOpen && <div className="List popup-container1">
-        <div className="List popup1">
+      {isPopupOpen && <div className="List popup-container11">
+        <div className="List popup11">
           <input
-            className="List popup-input1"
+            className="List popup-input11"
             type="text"
             value={newItemName}
             placeholder={"Next Item "}
             onChange={(e) => setNewItemName(e.target.value)}
           />
-          <div>
+          <div className="List popup-buttons11">
             <Button backgroundColor={"beige"} onClick={() => {addItem(newItemName)}}>Save</Button>
             <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false)}}>Close</Button>
           </div>
