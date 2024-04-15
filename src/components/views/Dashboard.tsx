@@ -468,7 +468,7 @@ const TripInvitations = ({ setIsLoading }) => {
   );
 };
 
-const YourFavorites = () => {
+const YourFavorites = ({ setIsLoading }) => {
   return (
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
@@ -479,14 +479,85 @@ const YourFavorites = () => {
   );
 };
 
-const FriendLeaderboard = () => {
-  // This component will render the friend leaderboard
+const FriendLeaderboard = ({ setIsLoading }) => {
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    let isComponentMounted = true;
+    const fetchFriends = async () => {
+      try {
+        const response = await api.get("/users/friends", {
+          headers: { Authorization: localStorage.getItem("token") },
+        });
+        console.log("FRIENDS FOR LEADERBOARD:", response.data);
+        setLeaderboard(response.data);
+      } catch (error) {
+        handleError(error);
+      } finally {
+        if (isComponentMounted) {
+          console.log("---- LEADERBOARD LOADED ----");
+          //setIsLoading(false);
+        }
+      }
+      try {
+        const userdata = await api.get("/users", {
+          headers: { Authorization: localStorage.getItem("token") },
+        });
+        setCurrentUser(userdata.data);
+        console.log("CURRENT USER DATA:", userdata.data);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
+    fetchFriends();
+
+    const intervalId = setInterval(fetchFriends, 7000);
+
+    return () => {
+      isComponentMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [setIsLoading]);
+
+  leaderboard.sort((a, b) => b.points - a.points || b.level - a.level); // Sort by points, then level
+
+  const getBackgroundColor = (index) => {
+    switch (index) {
+      case 0:
+        return "#FFD700"; // gold
+      case 1:
+        return "#C0C0C0"; // silver
+      case 2:
+        return "#CD7F32"; // bronze
+      default:
+        return "#dddddd"; // default background
+    }
+  };
+
   return (
     <div className="friend-leaderboard component">
-      <h2>Friend Leaderboard</h2>
-      {/* Placeholder content */}
-      <ol>
-        <li>To be implemented...</li>
+      <h2>Your Friend-Leaderboard</h2>
+      <ol className="leaderboard-list">
+        {leaderboard.map((friend, index) => (
+          <li
+            key={friend.friendId}
+            className={`leaderboard-item ${friend.username}`}
+            style={{
+              backgroundColor: getBackgroundColor(index),
+              color: "black",
+              fontWeight: "500",
+              padding: "10px",
+              borderRadius: "10px",
+              margin: "10px 0",
+              border: index < 3 ? "1px solid black" : "none", // Optional border for top 3
+            }}
+          >
+            {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) - {" "}
+            {friend.points} points
+          </li>
+        ))}
       </ol>
     </div>
   );
@@ -554,6 +625,14 @@ NotificationsLog.propTypes = {
 };
 
 TripInvitations.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
+YourFavorites.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+};
+
+FriendLeaderboard.propTypes = {
   setIsLoading: PropTypes.func.isRequired,
 };
 
