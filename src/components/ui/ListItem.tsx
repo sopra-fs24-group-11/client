@@ -1,30 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import "styles/views/ListTemplate.scss"
+import "styles/views/Lists.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPencilAlt , faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPencilAlt , faCheck, faListCheck } from "@fortawesome/free-solid-svg-icons";
 
-export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode, editable, toggleEditable, handleInputChange, updateItemName}) => {
-  const handleSubmit = (event, itemId, name, defaultvalue) => {
+export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode}) => {
+  const [updateItemName, setUpdateItemName] = useState("");
+  const [editing, setEditing] = useState(false);
+  const handleSubmit = (event, item, newName) => {
     event.preventDefault();
-    toggleEditable(itemId);
-    if (!name) {
-      name = defaultvalue;
+    setEditing(false);
+    if (!newName) {
+      newName = item.item;
     }
-    handleUpdate(itemId, name);
-  };
+    handleUpdate(item, newName);
+    setUpdateItemName("");
+  };  
   return(
     <div className="ListItem container">
-      {editable[item.id] ? (
+      {editing ? (
         <form 
           className="ListItem form"
-          onSubmit={(event) => handleSubmit(event, item.id, updateItemName[item.id], item.item)}>
+          onSubmit={(event) => handleSubmit(event, item.id, updateItemName)}>
           <input
             className="ListItem form-input"
             type="text"
-            value={updateItemName[item.id] || ""}
+            value={updateItemName}
             placeholder={item.item}
-            onChange={(e) => handleInputChange(item.id, e.target.value)}
+            onChange={(e) => setUpdateItemName(e.target.value)}
             style={{ color: "black" }}
           />
           <button type="submit" className="ListItem update-button">
@@ -36,7 +39,7 @@ export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode, ed
           <div className="ListItem name">{item.item}</div>
           {editMode && 
             <div className="item-icons">
-              <FontAwesomeIcon icon={faPencilAlt} className="edit-icon" onClick={() => toggleEditable(item.id)} />
+              <FontAwesomeIcon icon={faPencilAlt} className="edit-icon" onClick={() => setEditing(true)} />
               <FontAwesomeIcon icon={faTrash} className="trash-icon" onClick={() => handleDelete(item.id)}/>
             </div>
           }
@@ -52,31 +55,138 @@ TemplateListItem.propTypes = {
   handleDelete: PropTypes.func,
   handleUpdate: PropTypes.func,
   editMode: PropTypes.bool,
-  editable: PropTypes.object, 
-  toggleEditable: PropTypes.func, 
-  handleInputChange: PropTypes.func, 
-  updateItemName: PropTypes.object,
 };
 
 
-export const IndividualListItem = () => {
+export const GroupListItem = ({item, editMode, handleComplete, handleDelete, handleUpdate, handleSelect, avatars, userId}) => {
+  const [updateItemName, setUpdateItemName] = useState("");
+  const [editing, setEditing] = useState(false);
 
-  return(
-    <div className="ListItem container">
-    </div>
+  const handleSubmit = (event, item, newName) => {
+    event.preventDefault();
+    setEditing(false);
+    if (!newName) {
+      newName = item.item;
+    }
+    handleUpdate(item, newName);
+    setUpdateItemName("");
+  };
+
+
+  const avatarForItem = avatars.find(avatar => avatar.userId === item.userId);
+  const avatarImage = avatarForItem ? (
+    <img className="List avatar" src={avatarForItem.image} alt="User Avatar" onClick={() => handleSelect(item)}/>
+  ) : (
+    <div className="List avatar empty-circle" onClick={() => handleSelect(item)}></div>
   );
-}
-
-IndividualListItem.propTypes = {
-};
-
-export const GroupListItem = () => {
 
   return(
     <div className="ListItem container">
+      {editing ? 
+      <form 
+      className="ListItem form"
+      onSubmit={(event) => handleSubmit(event, item, updateItemName)}>
+        <input
+          className="ListItem form-input"
+          type="text"
+          value={updateItemName}
+          placeholder={item.item}
+          onChange={(e) => setUpdateItemName(e.target.value)}
+          style={{ color: "black" }}
+        />
+        <button type="submit" className="ListItem update-button">
+          <FontAwesomeIcon icon={faCheck} />
+        </button>
+      </form>
+      : <>
+      {editMode ?
+      <>
+      <div className="ListItem name">{item.item}</div>
+        {(item.userId===null || userId===item.userId) && <div className="item-icons">
+          <FontAwesomeIcon icon={faPencilAlt}  className="edit-icon" onClick={() => setEditing(true)}/>
+          <FontAwesomeIcon icon={faTrash} className="trash-icon" onClick={() => handleDelete(item)}/>
+        </div>}
+        </>
+      : 
+        <>
+          <div className="ListItem name">{item.item}</div>
+          {userId===item.userId &&<FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> }
+        </>
+      }
+      </>
+    }
+    {avatarImage}
     </div>
   );
 }
 
 GroupListItem.propTypes = {
+  item: PropTypes.object,
+  editMode: PropTypes.bool,
+  handleComplete: PropTypes.func,
+  handleDelete: PropTypes.func,
+  handleUpdate: PropTypes.func,
+  handleSelect: PropTypes.func,
+  avatars: PropTypes.array,
+  userId: PropTypes.long,
+};
+
+
+export const IndividualListItem = ({item, editMode, handleComplete, handleDelete, handleUpdate}) => {
+  const [updateItemName, setUpdateItemName] = useState("");
+  const [editing, setEditing] = useState(false);
+  const handleSubmit = (event, item, newName) => {
+    event.preventDefault();
+    setEditing(false);
+    if (!newName) {
+      newName = item.item;
+    }
+    handleUpdate(item, newName);
+    setUpdateItemName("");
+  };
+  return(
+    <div className="ListItem container">
+      {editing ? 
+      <form 
+      className="ListItem form"
+      onSubmit={(event) => handleSubmit(event, item, updateItemName)}>
+        <input
+          className="ListItem form-input"
+          type="text"
+          value={updateItemName}
+          placeholder={item.item}
+          onChange={(e) => setUpdateItemName(e.target.value)}
+          style={{ color: "black" }}
+        />
+        <button type="submit" className="ListItem update-button">
+          <FontAwesomeIcon icon={faCheck} />
+        </button>
+      </form>
+      : <>
+      {editMode ?
+      <>
+      <div className="ListItem name">{item.item}</div>
+        <div className="item-icons">
+          <FontAwesomeIcon icon={faPencilAlt}  className="edit-icon" onClick={() => setEditing(true)}/>
+          <FontAwesomeIcon icon={faTrash} className="trash-icon" onClick={() => handleDelete(item)}/>
+        </div> 
+        </>
+      : 
+        <>
+          <div className="ListItem name">{item.item}</div>
+          <FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> 
+        </>
+      }
+      </>
+    }
+    </div>
+  );
+}
+
+IndividualListItem.propTypes = {
+  item: PropTypes.object,
+  editMode: PropTypes.bool,
+  handleComplete: PropTypes.func,
+  handleDelete: PropTypes.func,
+  handleUpdate: PropTypes.func,
 };
