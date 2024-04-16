@@ -538,7 +538,7 @@ const FriendLeaderboard = ({ setIsLoading }) => {
 
   return (
     <div className="friend-leaderboard component">
-      <h2>Your Friend-Leaderboard</h2>
+      <h2>Your Top-Friends</h2>
       <ol className="leaderboard-list">
         {leaderboard.map((friend, index) => (
           <li
