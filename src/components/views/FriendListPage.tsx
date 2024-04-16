@@ -9,15 +9,21 @@ import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
 import { Input } from "components/ui/input";
 import {
-  Dialog,
-  DialogContent,
-  DialogClose,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
+  Dialog as DialogSCN,
+  DialogContent as DialogContentSCN,
+  DialogClose as DialogCloseSCN,
+  DialogHeader as DialogHeaderSCN,
+  DialogTitle as DialogTitleSCN,
+  DialogDescription as DialogDescriptionSCN,
+  DialogFooter as DialogFooterSCN,
+  DialogTrigger as DialogTriggerSCN,
 } from "components/ui/dialog";
+
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
 
 const FriendListPage = () => {
   const navigate = useNavigate();
@@ -25,11 +31,12 @@ const FriendListPage = () => {
   const [friendList, setFriendList] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [newFriendUsername, setNewFriendUsername] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const closeDialogRef = useRef(null);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [friendToDelete, setFriendToDelete] = useState(null);
 
   const fetchFriends = async () => {
     try {
@@ -53,11 +60,6 @@ const FriendListPage = () => {
       handleError(error);
     }
   };
-
-  useEffect(() => {
-    fetchFriends();
-    fetchFriendRequests();
-  }, []);
 
   const handleAcceptFriendRequest = async (friendRequestId) => {
     try {
@@ -130,17 +132,32 @@ const FriendListPage = () => {
     navigate("/dashboard");
   };
 
-  const handleRemoveFriend = async (friendId) => {
-    try {
-      await api.delete(`/users/friends/${friendId}`, {
-        headers: { Authorization: token },
-      });
-      // Remove the friend from the friendList in the UI after successful deletion
-      setFriendList(
-        friendList.filter((friend) => friend.friendId !== friendId)
-      );
-    } catch (error) {
-      handleError(error);
+  const handleOpenDeleteDialog = (friendId) => {
+    setFriendToDelete(friendId);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleRemoveFriend = async () => {
+    // Perform deletion only if friendToDelete is set
+    if (friendToDelete) {
+      try {
+        await api.delete(`/users/friends/${friendToDelete}`, {
+          headers: { Authorization: token },
+        });
+        // Remove the friend from the friendList in the UI after successful deletion
+        setFriendList(
+          friendList.filter((friend) => friend.friendId !== friendToDelete)
+        );
+        // Reset the friendToDelete state and close dialog
+        setFriendToDelete(null);
+        setOpenDeleteDialog(false);
+      } catch (error) {
+        handleError(error);
+      }
     }
   };
 
@@ -179,6 +196,17 @@ const FriendListPage = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const fetchAllData = async () => {
+      await fetchFriends();
+      await fetchFriendRequests();
+      console.log("------ FETCHED FRIENDS AND REQUESTS ------");
+    };
+    fetchAllData();
+    const intervalId = setInterval(fetchAllData, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   if (isLoading) {
     return <LinearIndeterminate />;
   }
@@ -188,53 +216,97 @@ const FriendListPage = () => {
       <div className="friend-list-page">
         <h1>Your Friend List</h1>
         {friendList.length > 0 ? (
-        <ul className="friend-list">
-          {friendList.map((friend) => (
-            <li key={friend.friendId} className="friend">
-              <span className="name">{friend.username}</span>
-              <Progress className="progress-bar" value={friend.points} />
-              <div className="stage">Level: {Math.floor(friend.level)}</div>
-              <Button
-                className="remove-friend"
-                onClick={() => handleRemoveFriend(friend.friendId)}
-              >
-                X
-              </Button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="no-friends-message">No friends yet. Click on add new friend to send a request!</div>
-      )}
+          <ul className="friend-list">
+            {friendList.map((friend) => (
+              <li key={friend.friendId} className="friend">
+                <span className="name">{friend.username}</span>
+                <Progress className="progress-bar" value={friend.points} />
+                <div className="stage">Level: {Math.floor(friend.level)}</div>
+                <Button
+                  className="remove-friend"
+                  onClick={() => handleOpenDeleteDialog(friend.friendId)}
+                >
+                  X
+                </Button>
+                <Dialog
+                  open={openDeleteDialog}
+                  onClose={handleCloseDeleteDialog}
+                  sx={{
+                    "& .MuiBackdrop-root": {
+                      backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+                    },
+                    "& .MuiPaper-root": {
+                      // Targeting the Paper component inside the Dialog
+                      boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+                      borderRadius: "10px",
+                    },
+                  }}
+                >
+                  <DialogTitle id="delete-dialog-title">
+                    Confirm Deletion
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="delete-dialog-description">
+                      Are you sure you want to delete this friend?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={handleCloseDeleteDialog}
+                      style={{ backgroundColor: "#BCFFE3", color: "black" }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        handleRemoveFriend();
+                        handleCloseDeleteDialog();
+                      }}
+                      style={{ backgroundColor: "#FF7070", color: "black" }}
+                    >
+                      Delete
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="no-friends-message">
+            No friends yet. Click on add new friend to send a request!
+          </div>
+        )}
 
         <h1>Friend Requests</h1>
         {friendRequests.length > 0 ? (
-        <ul className="friend-requests">
-          {friendRequests.map((request) => (
-            <li key={request.id} className="friend-request">
-              <span className="name">{request.username}</span>
-              <div className="accept-deny-buttons">
-                <Button
-                  className="accept-request"
-                  backgroundColor="#82FF6D"
-                  onClick={() => handleAcceptFriendRequest(request.friendId)}
-                >
-                  Accept
-                </Button>
-                <Button
-                  className="deny-request"
-                  backgroundColor={"red"}
-                  onClick={() => handleDenyFriendRequest(request.friendId)}
-                >
-                  Deny
-                </Button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="no-requests-message">No friend requests. Check back later or send your own requests!</div>
-      )}
+          <ul className="friend-requests">
+            {friendRequests.map((request) => (
+              <li key={request.id} className="friend-request">
+                <span className="name">{request.username}</span>
+                <div className="accept-deny-buttons">
+                  <Button
+                    className="accept-request"
+                    backgroundColor="#82FF6D"
+                    onClick={() => handleAcceptFriendRequest(request.friendId)}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    className="deny-request"
+                    backgroundColor={"red"}
+                    onClick={() => handleDenyFriendRequest(request.friendId)}
+                  >
+                    Deny
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="no-requests-message">
+            No friend requests. Check back later or send your own requests!
+          </div>
+        )}
 
         <div className="action-buttons">
           <Button
@@ -245,8 +317,8 @@ const FriendListPage = () => {
           >
             Back to Dashboard
           </Button>
-          <Dialog>
-            <DialogTrigger asChild>
+          <DialogSCN>
+            <DialogTriggerSCN asChild>
               <Button
                 className="add-friend-button"
                 backgroundColor="#FB8500"
@@ -254,14 +326,14 @@ const FriendListPage = () => {
               >
                 Add new Friend
               </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
+            </DialogTriggerSCN>
+            <DialogContentSCN>
+              <DialogHeaderSCN>
                 <DialogTitle>Add New Friend</DialogTitle>
-                <DialogDescription>
+                <DialogDescriptionSCN>
                   Enter the username of the friend you want to add.
-                </DialogDescription>
-              </DialogHeader>
+                </DialogDescriptionSCN>
+              </DialogHeaderSCN>
               <input
                 type="text"
                 placeholder="Search..."
@@ -281,17 +353,17 @@ const FriendListPage = () => {
                   ))}
                 </ul>
               )}
-              <DialogFooter>
+              <DialogFooterSCN>
                 <Button
                   onClick={handleAddFriendSubmit}
                   backgroundColor="#14AE5C"
                 >
                   Send Friend Request
                 </Button>
-              </DialogFooter>
-              <DialogClose ref={closeDialogRef} className="hidden" />
-            </DialogContent>
-          </Dialog>
+              </DialogFooterSCN>
+              <DialogCloseSCN ref={closeDialogRef} className="hidden" />
+            </DialogContentSCN>
+          </DialogSCN>
         </div>
       </div>
     </>

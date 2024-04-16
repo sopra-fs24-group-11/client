@@ -25,7 +25,7 @@ Button.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   backgroundColor: PropTypes.string,
-  color: PropTypes.string, // Add the PropTypes for color
+  color: PropTypes.string,
   style: PropTypes.object,
   className: PropTypes.string,
   children: PropTypes.node,
