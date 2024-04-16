@@ -21,6 +21,11 @@ import { ListCarousel } from "../ui/ListCarousel";
 import "../../styles/views/TripOverview.scss";
 import LinearIndeterminate from "components/ui/loader";
 
+import { styled } from "@mui/material/styles";
+import Rating from "@mui/material/Rating";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 // ============== HELPER FUNCTIONS ==============
 
 const ConnectionItem = ({ connection }) => {
@@ -265,6 +270,25 @@ const TripOverview = () => {
     setSnackbarOpen(false);
   };
 
+  const StyledRating = styled(Rating)({
+    "& .MuiRating-iconFilled": {
+      color: "#ff6d75",
+    },
+    "& .MuiRating-iconHover": {
+      color: "#ff3d47",
+    },
+  });
+
+  const handleToFavourites = async () => {
+    try{
+      const response = await api.put(`/trips/${tripId}/favorites `, {}, {
+        headers: { Authorization: token },
+      });
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
   // =========================================================
 
   useEffect(() => {
@@ -361,6 +385,15 @@ const TripOverview = () => {
           >
             Leave this trip
           </Button>
+          <StyledRating
+          defaultValue={0} 
+          max={1}
+          precision={1}
+          icon={<FavoriteIcon fontSize="inherit" />}
+          emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+          onMouseDown={handleToFavourites}
+          onTouchStart={handleToFavourites}
+        />
         </div>
       </div>
       {isAdmin && (

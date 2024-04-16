@@ -473,10 +473,7 @@ const YourFavorites = ({ setIsLoading }) => {
   return (
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
-      <ol>
-        <li>To be implemented...</li>
-        <Favourites></Favourites>
-      </ol>
+      <Favourites></Favourites>
     </div>
   );
 };
