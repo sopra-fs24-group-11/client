@@ -9,6 +9,7 @@ import { Progress } from "../ui/progress";
 
 import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
+import Favourites from "components/ui/favourites";
 
 // Components
 const FriendList = ({ setIsLoading }) => {
@@ -474,6 +475,7 @@ const YourFavorites = ({ setIsLoading }) => {
       <h2>Your Favourites</h2>
       <ol>
         <li>To be implemented...</li>
+        <Favourites></Favourites>
       </ol>
     </div>
   );

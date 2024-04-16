@@ -394,24 +394,12 @@ const TripOverview = () => {
           </div>
         </div>
       )}
+
       <ListCarousel></ListCarousel>
-      {/* <div className="lists-container">
-          <div className="todo-list-container">
-            <h2 className="ul_title">To-Do List</h2>
-          </div>
-
-          <div className="packing-lists-container">
-            <h2 className="ul_title">Group Packing List</h2>
-          </div>
-        </div> */}
-
-      {/* Dialog for confirming leaving the trip */}
 
       <Dialog
         open={openLeaveDialog}
         onClose={handleCloseLeaveDialog}
-        aria-labelledby="leave-dialog-title"
-        aria-describedby="leave-dialog-description"
         sx={{
           "& .MuiBackdrop-root": {
             backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
