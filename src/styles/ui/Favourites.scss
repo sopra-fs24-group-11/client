@@ -1,0 +1,10 @@
+@import "../theme";
+
+.test {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: space-between;
+    max-width: 300px;
+    background-color: blueviolet;
+}
