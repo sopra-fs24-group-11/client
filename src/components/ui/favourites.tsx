@@ -20,13 +20,11 @@ const TripContainer = ({ id }) => {
     <div className="test">
       <label>Trip {id}</label>
       <StyledRating
-        name="customized-color"
-        defaultValue={0}
+        //name="customized-color" // braucht es womöglich nicht
+        defaultValue={1} // Herzen sollen ausgefüllt sein
         max={1}
         precision={1}
-        getLabelText={(value: number) =>
-          `${value} Heart${value !== 1 ? "s" : ""}`
-        }
+        // sorgt dafür dass die Form Herz ist
         icon={<FavoriteIcon fontSize="inherit" />}
         emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
       />
@@ -39,6 +37,7 @@ TripContainer.propTypes = {
 };
 
 const Favourites = () => {
+
   // hier alle favourites fetchen
   const trips = ["Trip 1", "Trip 2", "Trip 3"];
   return (
