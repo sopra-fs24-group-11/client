@@ -32,7 +32,7 @@ export const handleError = error => {
     return info;
   } else {
     if (error.message.match(/Network Error/)) {
-      alert("The server cannot be reached.\nDid you start it?");
+      alert("No Internet Connection! / The server cannot be reached.\nDid you start it?");
     }
 
     console.log("Something else happened.", error);
