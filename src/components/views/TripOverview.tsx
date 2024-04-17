@@ -428,7 +428,13 @@ const TripOverview = () => {
         </div>
       )}
 
-      <ListCarousel></ListCarousel>
+      <ListCarousel
+        setSnackbarMessage={setSnackbarMessage}
+        setSnackbarSeverity={setSnackbarSeverity}
+        setSnackbarOpen={setSnackbarOpen}
+      >
+
+      </ListCarousel>
 
       <Dialog
         open={openLeaveDialog}

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { GroupListItem } from "./ListItem"
-import ConfirmPopup from "../ui/ConfirmPopup";
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const GroupPackingList = ({avatars, userId}) => {
+const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSeverity, setSnackbarOpen}) => {
   const token = localStorage.getItem("token");
   const {tripId} = useParams();
   const [list, setList] = useState([]);
@@ -14,6 +13,26 @@ const GroupPackingList = ({avatars, userId}) => {
   const [newItemName, setNewItemName] = useState("");
   const [editMode, setEditMode] = useState<boolean>(false);
   const [change, setChange] = useState(1);
+
+  useEffect(() => {
+    const fetchPeriodically = async () => {
+      await fetchList();
+    };
+    fetchPeriodically();
+    const intervalId = setInterval(fetchPeriodically, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const fetchList = async () => {
+    try {
+      const response = await api.get(`/trips/${tripId}/groupPackings`, {
+        headers: { Authorization: token },
+      });
+      setList(response.data)
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,8 +57,14 @@ const GroupPackingList = ({avatars, userId}) => {
       });
       setNewItemName("");
       setList((oldList) => ([...oldList, response.data]));
+      setSnackbarMessage("Item added.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while adding an item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be added.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -49,8 +74,14 @@ const GroupPackingList = ({avatars, userId}) => {
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
+      setSnackbarMessage("Item deleted.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while deleting the item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be deleted.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -62,7 +93,10 @@ const GroupPackingList = ({avatars, userId}) => {
       });
       setChange(old => old + 1);
     } catch (error) {
-      alert(`Something went wrong while completing the item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be completed.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -74,7 +108,10 @@ const GroupPackingList = ({avatars, userId}) => {
         });
         setChange(old => old + 1);
       } catch (error) {
-        alert(`Something went wrong while selecting the item: \n${handleError(error)}`);
+        handleError(error);
+        setSnackbarMessage("Item couldn't be selected.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
       }
     } else {
       try{
@@ -83,7 +120,10 @@ const GroupPackingList = ({avatars, userId}) => {
         });
         setChange(old => old + 1);
       } catch (error) {
-        alert(`Something went wrong while deselecting the item: \n${handleError(error)}`);
+        handleError(error);
+        setSnackbarMessage("Item couldn't be deselected.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
       }
     }
   };
@@ -95,8 +135,14 @@ const GroupPackingList = ({avatars, userId}) => {
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
+      setSnackbarMessage("Item updated.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while updating the item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be updated.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -125,7 +171,7 @@ const GroupPackingList = ({avatars, userId}) => {
       </div>
     );
   } else {
-    content = "No Items yet, feel free to add some!"
+    content = <h1 style={{textAlign:"center", color:"white", paddingTop:"20px"}}>No Items yet, feel free to add some!</h1>
   }
 
   return (
@@ -160,5 +206,8 @@ export default GroupPackingList;
 
 GroupPackingList.propTypes = {
   avatars: PropTypes.array,
-  userId: PropTypes.long,
+  userId: PropTypes.number,
+  setSnackbarMessage: PropTypes.func,
+  setSnackbarSeverity: PropTypes.func,
+  setSnackbarOpen: PropTypes.func,
 };

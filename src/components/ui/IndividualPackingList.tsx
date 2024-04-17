@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { IndividualListItem } from "./ListItem"
-import ConfirmPopup from "../ui/ConfirmPopup";
 import { useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const IndividualPackingList = () => {
+const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnackbarOpen}) => {
   const token = localStorage.getItem("token");
   const {tripId} = useParams();
   const [list, setList] = useState([]);
@@ -37,8 +37,14 @@ const IndividualPackingList = () => {
       });
       setNewItemName("");
       setList((oldList) => ([...oldList, response.data]));
+      setSnackbarMessage("Item added.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while adding an item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be added.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -48,8 +54,14 @@ const IndividualPackingList = () => {
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
+      setSnackbarMessage("Template transferred.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while transfering the items: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Template couldn't be transferred.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -72,8 +84,14 @@ const IndividualPackingList = () => {
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
+      setSnackbarMessage("Item updated.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while updating the item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be updated.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -83,8 +101,14 @@ const IndividualPackingList = () => {
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
+      setSnackbarMessage("Item deleted.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while deleting the item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Item couldn't be deleted.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
   
@@ -110,7 +134,7 @@ const IndividualPackingList = () => {
       </div>
     );
   } else {
-    content = "No Items yet, feel free to add some!"
+    content = <h1 style={{textAlign:"center", color:"white", paddingTop:"20px"}}>No Items yet, feel free to add some!</h1>
   }
 
   return (
@@ -142,3 +166,9 @@ const IndividualPackingList = () => {
 }
 
 export default IndividualPackingList;
+
+IndividualPackingList.propTypes = {
+  setSnackbarMessage: PropTypes.func,
+  setSnackbarSeverity: PropTypes.func,
+  setSnackbarOpen: PropTypes.func,
+};
