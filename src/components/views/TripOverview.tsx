@@ -63,7 +63,18 @@ const calculateProgress = (departureTime, arrivalTime) => {
 // ============== MAIN FUNCTION ==============
 const TripOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [currentTrip, setCurrentTrip] = useState({});
+  const [currentTrip, setCurrentTrip] = useState({
+    tripName: "",
+    meetUpTime: "",
+    numberOfParticipant: "",
+    tripDescription: "",
+    favourite: "", 
+    numberOfParticipants: "",
+    meetUpPlace: {
+      stationName: "",
+      stationCode: ""
+    }
+  });
   const [connections, setConnections] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -384,7 +395,7 @@ const TripOverview = () => {
             Leave this trip
           </Button>
           <StyledRating
-          defaultValue={0} 
+          defaultValue={currentTrip.favourite ? 1 : 0}
           max={1}
           precision={1}
           icon={<FavoriteIcon fontSize="inherit" />}
