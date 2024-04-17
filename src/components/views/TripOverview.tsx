@@ -116,9 +116,7 @@ const TripOverview = () => {
       setCurrentTrip(response.data);
     } catch (error) {
       if (error.response.status === 404) {
-        alert(
-          "You have been kicked from the trip or the trip has been deleted."
-        );
+        alert("There was an error, possible reasons:\nThe trip does not exist.\nThe trip has been deleted.\nYou are not part of this trip.\nYou have to first accept the trip invitation.")
         navigate("/dashboard");
       }
       handleError(error);
