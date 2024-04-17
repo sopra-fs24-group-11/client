@@ -331,10 +331,22 @@ const TripOverview = () => {
 
   return (
     <div className="main-container">
-      <h1 className="main-title">
-        &quot;{currentTrip.tripName}&quot; to &quot;
-        {currentTrip.meetUpPlace.stationName}&quot;
-      </h1>
+      <div className="main-header">
+        <h1 className="main-title">
+          &quot;{currentTrip.tripName}&quot; to &quot;
+          {currentTrip.meetUpPlace.stationName}&quot;
+        </h1>
+        <StyledRating
+            defaultValue={currentTrip.favourite ? 1 : 0}
+            max={1}
+            precision={1}
+            icon={<FavoriteIcon fontSize="inherit" />}
+            emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            onMouseDown={handleToFavourites}
+            onTouchStart={handleToFavourites}
+          />
+      </div>
+      
       <div className="trip-information-container">
         <h3 className="trip-description">
           Trip Description: {currentTrip.tripDescription}
@@ -394,15 +406,6 @@ const TripOverview = () => {
           >
             Leave this trip
           </Button>
-          <StyledRating
-          defaultValue={currentTrip.favourite ? 1 : 0}
-          max={1}
-          precision={1}
-          icon={<FavoriteIcon fontSize="inherit" />}
-          emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-          onMouseDown={handleToFavourites}
-          onTouchStart={handleToFavourites}
-        />
         </div>
       </div>
       {isAdmin && (
