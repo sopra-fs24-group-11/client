@@ -7,3 +7,11 @@
     align-items: space-between;
     width: 100%;
 }
+
+.trip-label {
+    cursor: pointer;
+  }
+  
+  .trip-label:hover {
+    text-shadow: 2px 2px 4px #000;
+  }
