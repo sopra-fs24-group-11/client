@@ -85,7 +85,7 @@
   }
   &.empty-circle {
     background-color: transparent;
-    border: 2px solid #000; /* Example border color */
+    border: 2px solid #000;
   }
 }
 
@@ -102,7 +102,6 @@
       max-width:60%;
       display:block;
       hyphens: auto;
-      overflow-x:hidden;
     }
     .item-icons {
       display:flex;
@@ -130,5 +129,15 @@
   &.update-button {
     margin-left:auto;
     padding-left:5px;
+  }
+}
+
+@media (max-width:768px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 100px;
+      }
+    }
   }
 }

@@ -3,7 +3,6 @@ import { api, handleError } from "helpers/api";
 import {Button} from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
 import "styles/views/Lists.scss"
-import ConfirmPopup from "../ui/ConfirmPopup";
 import {TemplateListItem} from "../ui/ListItem"
 
 // to do: use below two things for alert / confirm messages:
@@ -17,6 +16,16 @@ const ListTemplate = () => {
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
   const [change, setChange] = useState(1);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,9 +50,15 @@ const ListTemplate = () => {
         headers: { Authorization: token },
       });
       setNewItemName("");
+      setSnackbarMessage("Item added.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
       setList((oldList) => ([...oldList, {item:response.data.item, id:response.data.id}]));
     } catch (error) {
-      alert(`Something went wrong while adding an item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Couldn't add the item.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -52,9 +67,15 @@ const ListTemplate = () => {
       await api.delete(`/users/packings/${itemId}`, {
         headers: { Authorization: token },
       });
+      setSnackbarMessage("Item deleted.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
       setList((oldList) => oldList.filter(item => item.id !== itemId));
     } catch (error) {
-      alert(`Something went wrong while deleting an item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Couldn't delete the item.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -65,9 +86,14 @@ const ListTemplate = () => {
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
-      
+      setSnackbarMessage("Item updated.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
-      alert(`Something went wrong while updating an item: \n${handleError(error)}`);
+      handleError(error);
+      setSnackbarMessage("Couldn't update the item.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -92,47 +118,48 @@ const ListTemplate = () => {
       </div>
     );
   } else {
-    content = "No Items yet, feel free to add some!"
+    content = <h1>No Items yet, feel free to add some!</h1>
   }
 
   return (
     <BaseContainer>
       <div className="ListTemplate container">
-        <div className="ListTemplate button-holder">
-          <Button
-            backgroundColor={"green"}
-            onClick={() => setPopupOpen(true)}
-          >
-            Add item
-          </Button>
-          <Button
-            backgroundColor={"#ffbe0b"}
-            onClick={() => setEditMode(old => !old)}
-          >
-            {editMode ? "Normal Mode" : "Edit Mode"}
-          </Button>
-        </div>
-        <ConfirmPopup
-          header="Enter your next item"
-          className="popup"
-          isOpen={isPopupOpen}
-        >
-          <div className="List popup">
-            <input
-              className="List popup-input"
-              type="text"
-              value={newItemName}
-              placeholder={"Next Item "}
-              onChange={(e) => setNewItemName(e.target.value)}
-            />
-            <div>
-              <Button backgroundColor={"beige"} onClick={() => addItem(newItemName)}>Save</Button>
-              <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false);setNewItemName("");}}>Cancel</Button>
-            </div>
+        {isPopupOpen && <div className="List popup-container11">
+        <div className="List popup11">
+          <input
+            className="List popup-input11"
+            type="text"
+            value={newItemName}
+            placeholder={"Next Item "}
+            onChange={(e) => setNewItemName(e.target.value)}
+          />
+          <div className="List popup-buttons11">
+            <Button backgroundColor={"beige"} onClick={() => {addItem(newItemName)}}>Save</Button>
+            <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false)}}>Close</Button>
           </div>
-        </ConfirmPopup>
-        {content}
+        </div>
+      </div>}
+      {!isPopupOpen && <div className="ListTemplate button-holder">
+        <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
+        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal Mode" : "Edit Mode"}</Button>
+      </div>}
+      {!isPopupOpen && content}
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={1000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          elevation={6}
+          variant="filled"
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </BaseContainer>
   )
 }

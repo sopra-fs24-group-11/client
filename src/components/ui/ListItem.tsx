@@ -13,7 +13,7 @@ export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode}) =
     if (!newName) {
       newName = item.item;
     }
-    handleUpdate(item, newName);
+    handleUpdate(item.id, newName);
     setUpdateItemName("");
   };  
   return(
@@ -21,7 +21,7 @@ export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode}) =
       {editing ? (
         <form 
           className="ListItem form"
-          onSubmit={(event) => handleSubmit(event, item.id, updateItemName)}>
+          onSubmit={(event) => handleSubmit(event, item, updateItemName)}>
           <input
             className="ListItem form-input"
             type="text"
@@ -74,8 +74,8 @@ export const GroupListItem = ({item, editMode, handleComplete, handleDelete, han
 
 
   const avatarForItem = avatars.find(avatar => avatar.userId === item.userId);
-  const avatarImage = avatarForItem ? (
-    <img className="List avatar" src={avatarForItem.image} alt="User Avatar" onClick={() => handleSelect(item)}/>
+  const avatarImage = avatarForItem ? (userId===item.userId ? 
+    (<img className="List avatar" src={avatarForItem.image} alt="User Avatar" onClick={() => handleSelect(item)}/>) : (<img className="List avatar" src={avatarForItem.image} alt="User Avatar"/>)
   ) : (
     <div className="List avatar empty-circle" onClick={() => handleSelect(item)}></div>
   );
@@ -130,7 +130,7 @@ GroupListItem.propTypes = {
   handleUpdate: PropTypes.func,
   handleSelect: PropTypes.func,
   avatars: PropTypes.array,
-  userId: PropTypes.long,
+  userId: PropTypes.number,
 };
 
 
