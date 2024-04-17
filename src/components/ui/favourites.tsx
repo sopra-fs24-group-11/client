@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { api, handleError } from "helpers/api";
 import { styled } from "@mui/material/styles";
@@ -9,8 +10,11 @@ import "../../styles/ui/Favourites.scss";
 
 const Favourites = () => {
 
+  //onClick={() => navigate(`/tripOverview/${trip.id}`)}
+
   const [favTrips, setFavTrips] = useState([]);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {
@@ -50,7 +54,7 @@ const Favourites = () => {
   const TripContainer = ({ name, id }) => {
     return (
       <div className="favourites-container">
-        <label>{name}</label>
+        <label onClick={() => navigate(`/tripOverview/${id}`)}>{name}</label>
         <StyledRating
           defaultValue={1} 
           max={1}
