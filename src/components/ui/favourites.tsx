@@ -10,8 +10,6 @@ import "../../styles/ui/Favourites.scss";
 
 const Favourites = () => {
 
-  //onClick={() => navigate(`/tripOverview/${trip.id}`)}
-
   const [favTrips, setFavTrips] = useState([]);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -54,7 +52,7 @@ const Favourites = () => {
   const TripContainer = ({ name, id }) => {
     return (
       <div className="favourites-container">
-        <label onClick={() => navigate(`/tripOverview/${id}`)}>{name}</label>
+        <label className="trip-label" onClick={() => navigate(`/tripOverview/${id}`)}>{name}</label>
         <StyledRating
           defaultValue={1} 
           max={1}
@@ -80,7 +78,7 @@ const Favourites = () => {
   return (
     <ul>
       {favTrips.map((fav) => (
-        <li className="test" key={fav.id}>
+        <li key={fav.id}>
           <TripContainer name={fav.tripName} id={fav.id}></TripContainer>
         </li>
       ))}
