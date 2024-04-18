@@ -195,7 +195,7 @@ const ToDoList = ({avatars, userId, setSnackbarMessage, setSnackbarSeverity, set
       </div>}
       {!isPopupOpen && <div className="Carousel button-holder">
         <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal Mode" : "Edit Mode"}</Button>
+        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
       </div>}
       {!isPopupOpen && content}
     </div>
