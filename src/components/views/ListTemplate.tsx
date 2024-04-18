@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import { api, handleError } from "helpers/api";
 import {Button} from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
-import "styles/views/Lists.scss"
+import "styles/ui/Lists.scss"
 import {TemplateListItem} from "../ui/ListItem"
-
-// to do: use below two things for alert / confirm messages:
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
@@ -141,7 +139,7 @@ const ListTemplate = () => {
       </div>}
       {!isPopupOpen && <div className="ListTemplate button-holder">
         <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal Mode" : "Edit Mode"}</Button>
+        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
       </div>}
       {!isPopupOpen && content}
       </div>

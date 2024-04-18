@@ -7,6 +7,8 @@ import { Label } from "../ui/label";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
 import ConfirmPopup from "../ui/ConfirmPopup";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 // Main Profile component
 const ProfilePage: React.FC = () => {
@@ -24,6 +26,16 @@ const ProfilePage: React.FC = () => {
   });
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [isDeleted, setDeleted] = useState<boolean>(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -70,6 +82,9 @@ const ProfilePage: React.FC = () => {
       }));
     } catch (error) {
       handleError(error);
+      setSnackbarMessage("Couldn't receive avatar.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -91,8 +106,9 @@ const ProfilePage: React.FC = () => {
 
   const handleAvatarUpload = async () => {
     if (!avatar) {
-      alert("Waehle zuerst eine Datei aus");
-      
+      setSnackbarMessage("Choose a file first!");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);      
       return;
     }
 
@@ -121,11 +137,17 @@ const ProfilePage: React.FC = () => {
           avatar: imageUrl, // This should trigger a re-render of the component displaying the avatar
         }));
         setAvatar(null); // Clear the avatar state
+        setSnackbarMessage("Image uploaded successfully.");
+        setSnackbarSeverity("success");
+        setSnackbarOpen(true);
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
       handleError(error);
+      setSnackbarMessage("Couldn't update the image.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -141,8 +163,14 @@ const ProfilePage: React.FC = () => {
       }
       getAvatar();
       setSelectedFileName("");
+      setSnackbarMessage("Avatar deleted and new default avatar created.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       handleError(error);
+      setSnackbarMessage("Couldn't delete the image.");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 
@@ -161,16 +189,20 @@ const ProfilePage: React.FC = () => {
       });
       setUser((prev) => ({ ...prev, ...updatedUser }));
       setEditMode(false);
-      alert("Profile updated successfully.");
+      setSnackbarMessage("Profile updated successfully.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       console.log(error);
       if (error.response.data.status === 409) {
-        alert(
-          "Username can't be changed as selected username is already taken"
-        );
+        setSnackbarMessage("Username is already taken.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
       } else {
         handleError(error);
-        alert("There was an error: " + error);
+        setSnackbarMessage("Couldn't update the information.");
+        setSnackbarSeverity("error");
+        setSnackbarOpen(true);
       }
     }
   };
@@ -368,6 +400,21 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          elevation={6}
+          variant="filled"
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

@@ -68,7 +68,7 @@ const TripOverview = () => {
     meetUpTime: "",
     numberOfParticipant: "",
     tripDescription: "",
-    favourite: "",
+    favourite: false,
     numberOfParticipants: "",
     meetUpPlace: {
       stationName: "",
@@ -299,8 +299,15 @@ const TripOverview = () => {
           headers: { Authorization: token },
         }
       );
+      setCurrentTrip(old => ({...old, favourite:!old.favourite}))
+      setSnackbarMessage("Added to favourites or deleted from favourites.");
+      setSnackbarSeverity("success");
+      setSnackbarOpen(true);
     } catch (error) {
       handleError(error);
+      setSnackbarMessage("Favourite button unsuccessful");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
     }
   };
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import "styles/views/Lists.scss"
+import "styles/ui/Lists.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencilAlt , faCheck, faListCheck } from "@fortawesome/free-solid-svg-icons";
 
