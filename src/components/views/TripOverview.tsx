@@ -68,12 +68,12 @@ const TripOverview = () => {
     meetUpTime: "",
     numberOfParticipant: "",
     tripDescription: "",
-    favourite: "", 
+    favourite: "",
     numberOfParticipants: "",
     meetUpPlace: {
       stationName: "",
-      stationCode: ""
-    }
+      stationCode: "",
+    },
   });
   const [connections, setConnections] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -127,7 +127,9 @@ const TripOverview = () => {
       setCurrentTrip(response.data);
     } catch (error) {
       if (error.response.status === 404) {
-        alert("There was an error, possible reasons:\nThe trip does not exist.\nThe trip has been deleted.\nYou are not part of this trip.\nYou have to first accept the trip invitation.")
+        alert(
+          "There was an error, possible reasons:\nThe trip does not exist.\nThe trip has been deleted.\nYou are not part of this trip.\nYou have to first accept the trip invitation."
+        );
         navigate("/dashboard");
       }
       handleError(error);
@@ -289,14 +291,18 @@ const TripOverview = () => {
   });
 
   const handleToFavourites = async () => {
-    try{
-      const response = await api.put(`/trips/${tripId}/favorites `, {}, {
-        headers: { Authorization: token },
-      });
+    try {
+      const response = await api.put(
+        `/trips/${tripId}/favorites `,
+        {},
+        {
+          headers: { Authorization: token },
+        }
+      );
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
-  }
+  };
 
   // =========================================================
 
@@ -337,16 +343,16 @@ const TripOverview = () => {
           {currentTrip.meetUpPlace.stationName}&quot;
         </h1>
         <StyledRating
-            defaultValue={currentTrip.favourite ? 1 : 0}
-            max={1}
-            precision={1}
-            icon={<FavoriteIcon fontSize="inherit" />}
-            emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-            onMouseDown={handleToFavourites}
-            onTouchStart={handleToFavourites}
-          />
+          defaultValue={currentTrip.favourite ? 1 : 0}
+          max={1}
+          precision={1}
+          icon={<FavoriteIcon fontSize="inherit" />}
+          emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+          onMouseDown={handleToFavourites}
+          onTouchStart={handleToFavourites}
+        />
       </div>
-      
+
       <div className="trip-information-container">
         <h3 className="trip-description">
           Trip Description: {currentTrip.tripDescription}
@@ -444,9 +450,7 @@ const TripOverview = () => {
         setSnackbarMessage={setSnackbarMessage}
         setSnackbarSeverity={setSnackbarSeverity}
         setSnackbarOpen={setSnackbarOpen}
-      >
-
-      </ListCarousel>
+      ></ListCarousel>
 
       <Dialog
         open={openLeaveDialog}
@@ -533,7 +537,6 @@ const TripOverview = () => {
             backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
           },
           "& .MuiPaper-root": {
-            // Targeting the Paper component inside the Dialog
             boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
             borderRadius: "10px",
           },
@@ -542,41 +545,46 @@ const TripOverview = () => {
         <DialogTitle>Select New Admin</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please select a new admin for this trip:
+            {tripMembers.length > 0
+              ? "Please select a new admin for this trip."
+              : "No other members to select as admin. Invite your friends first!"}
           </DialogContentText>
-          <List>
-            {tripMembers.map((member) => (
-              <ListItem
-                key={member.id}
-                button
-                selected={newAdminId === member.id}
-                onClick={() => setNewAdminId(member.id)}
-                sx={{
-                  "&.Mui-selected, &.Mui-selected:hover": {
-                    backgroundColor: "#ffb80386",
-                    color: "black",
-                    borderRadius: "10px",
-                  },
-                }}
-              >
-                <ListItemText primary={member.username} />
-              </ListItem>
-            ))}
-          </List>
+          {tripMembers.length > 0 && (
+            <List>
+              {tripMembers.map((member) => (
+                <ListItem
+                  key={member.id}
+                  button
+                  selected={newAdminId === member.id}
+                  onClick={() => setNewAdminId(member.id)}
+                  sx={{
+                    "&.Mui-selected, &.Mui-selected:hover": {
+                      backgroundColor: "#ffb80386",
+                      color: "black",
+                      borderRadius: "10px",
+                    },
+                  }}
+                >
+                  <ListItemText primary={member.username} />
+                </ListItem>
+              ))}
+            </List>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseNewAdminDialog} color="primary">
             Cancel
           </Button>
           <Button
-            backgroundColor="#FFB703"
-            color="black"
+            style={{ backgroundColor: "#FFB703", color: "black" }} // Fix style attribute
             onClick={handleSelectNewAdmin}
+            disabled={!newAdminId}
           >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}

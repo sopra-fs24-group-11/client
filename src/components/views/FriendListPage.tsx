@@ -254,6 +254,11 @@ const FriendListPage = () => {
                     <Button
                       onClick={handleCloseDeleteDialog}
                       style={{ backgroundColor: "#BCFFE3", color: "black" }}
+                      width={null}
+                      height={null}
+                      backgroundColor={null}
+                      color={null}
+                      className={null}
                     >
                       Cancel
                     </Button>
