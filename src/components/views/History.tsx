@@ -44,8 +44,8 @@ const Heart = () => {
           precision={1}
           icon={<FavoriteIcon fontSize="inherit" />}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-          onMouseDown={() => handleClick(id)}
-          onTouchStart={() => handleClick(id)}
+          //onMouseDown={() => handleClick(id)}
+          //onTouchStart={() => handleClick(id)}
         />
   )
 }
