@@ -58,7 +58,7 @@ const History = () => {
    
   const fetchHistory = async () => {
     try {
-      const response = await api.get(`/trips/history`, {
+      const response = await api.get("/trips/history", {
         headers: { Authorization: token },
       });
       setHistoryTrips(response.data);
