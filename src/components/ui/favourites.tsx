@@ -30,7 +30,7 @@ const Favourites = () => {
       });
       
     } catch (error) {
-      handleError(error)
+      handleError(error);
     }
     finally {
       fetchTrips();

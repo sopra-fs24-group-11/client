@@ -5,50 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import { Progress } from "../ui/progress";
 import LinearIndeterminate from "components/ui/loader";
-import "../../styles/views/History.scss";
 import { Input } from "components/ui/input";
-
-// For Heart
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { styled } from "@mui/material/styles";
-import Rating from "@mui/material/Rating";
-
-const Heart = () => {
-  const token = localStorage.getItem("token");
-
-  const StyledRating = styled(Rating)({
-    "& .MuiRating-iconFilled": {
-      color: "#ff6d75",
-    },
-    "& .MuiRating-iconHover": {
-      color: "#ff3d47",
-    },
-  });
-
-  const handleClick = async (tripId) => {
-    try {
-      const response = await api.put(`/trips/${tripId}/favorites `, {}, {
-        headers: { Authorization: token },
-      });
-      
-    } catch (error) {
-      handleError(error)
-    }
-  }
-
-  return (
-    <StyledRating
-          defaultValue={1} 
-          max={1}
-          precision={1}
-          icon={<FavoriteIcon fontSize="inherit" />}
-          emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-          //onMouseDown={() => handleClick(id)}
-          //onTouchStart={() => handleClick(id)}
-        />
-  )
-}
+import "../../styles/views/History.scss";
+import Heart from "components/ui/Heart"
 
 const History = () => {
   const navigate = useNavigate();
@@ -62,6 +21,7 @@ const History = () => {
         headers: { Authorization: token },
       });
       setHistoryTrips(response.data);
+      console.log(response.data);
 
     } catch (error) {
       handleError(error);
@@ -96,6 +56,7 @@ const History = () => {
           {historyTrips.map((trip) => (
               <li key={trip.id} className="trip">
                 <span className="name" onClick={() => showTripOverview(trip.id)}>{trip.tripName}</span>
+                <Heart tripId={trip.id} isFavourite={trip.favourite}></Heart>
               </li>
           ))}
           </ul>
