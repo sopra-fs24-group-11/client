@@ -470,10 +470,24 @@ const TripInvitations = ({ setIsLoading }) => {
 };
 
 const YourFavorites = ({ setIsLoading }) => {
+
+  const navigate = useNavigate();
+
+  const showHistory = () => {
+    navigate("/profile"); // nur mal als Beispiel
+  }
+
   return (
     <div className="your-favorites component">
       <h2>Your Favourites</h2>
       <Favourites></Favourites>
+      <Button
+        onClick={showHistory}
+        width="150px"
+        backgroundColor="#FFB703"
+        >
+        Trip History
+      </Button>
     </div>
   );
 };
