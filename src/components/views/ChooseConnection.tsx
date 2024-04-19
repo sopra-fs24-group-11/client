@@ -39,7 +39,7 @@ const ChooseConnection = () => {
   const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-  const [activeConnection, setActiveConnection] = useState<string>(null); // New state
+  const [activeConnection, setActiveConnection] = useState<number>(null); // New state
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
