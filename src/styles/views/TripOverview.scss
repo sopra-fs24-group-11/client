@@ -31,7 +31,7 @@
     margin-right: 20px;
   }
 
-  .trip-information-container{
+  .trip-information-container {
     min-height: 100px;
     display: flex;
     flex-direction: column;
@@ -41,8 +41,8 @@
     width: 95%;
     margin: 0px 20px 30px 20px;
     box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
-    
-    .trip-description{
+
+    .trip-description {
       font-size: 1rem;
       font-weight: 500;
       color: #fbfada;
@@ -52,7 +52,7 @@
       padding-right: 10px;
     }
 
-    .trip-arrival-participants{
+    .trip-arrival-participants {
       display: flex;
       justify-content: space-around;
       width: 95%;
@@ -89,29 +89,38 @@
       width: 100%;
       overflow-y: auto;
       max-height: 200px;
-      padding-left: 30px;
-      padding-right: 30px;
+      padding-left: 10px;
+      padding-right: 10px;
       margin-bottom: 30px;
 
       .connection-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-image: linear-gradient(to left, rgba(18, 55, 42), rgba(68, 106, 81)); // gradient background
+        background-image: linear-gradient(
+          to left,
+          rgba(18, 55, 42),
+          rgba(68, 106, 81)
+        ); // gradient background
         border-radius: 7px;
         margin-bottom: 20px; // spacing between items
         box-shadow: inset 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
         padding: 10px;
 
         .connection-name {
-          min-width: 90px;
-          margin-right: 20px;
+          min-width: 170px;
+          max-width: 170px;
+          margin-right: 10px;
           color: #fbfada;
           font-size: 1rem;
           font-weight: 500;
+          overflow: hidden; /* Prevents text from flowing outside the box */
+          white-space: nowrap; /* Keeps the text on a single line */
+          text-overflow: ellipsis; /* Adds an ellipsis (...) at the end when text overflows */
+          border-right: 1px solid #fbfada;
         }
 
-        .start-text{
+        .start-text {
           color: #fbfada;
           padding-right: 20px;
           min-width: 100px;
@@ -122,17 +131,16 @@
           box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
         }
 
-        .arrival-text{
+        .arrival-text {
           color: #fbfada;
           padding-left: 20px;
           min-width: 130px;
           font-size: 0.8rem;
         }
-
       }
     }
 
-    .trip-buttons{
+    .trip-buttons {
       display: flex;
       justify-content: space-around;
       width: 95%;
@@ -152,11 +160,12 @@
     margin: 0px 20px 30px 20px;
     box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
 
-    .admin-buttons{
+    .admin-buttons {
       display: flex;
       justify-content: space-around;
       width: 95%;
       margin-bottom: 20px;
+      gap: 10px;
     }
   }
 
@@ -181,7 +190,7 @@
     flex-wrap: wrap;
     width: 95%;
     margin: 0px 20px 30px 20px;
-  
+
     .todo-list-container,
     .packing-lists-container {
       min-height: 150px;
@@ -193,13 +202,78 @@
       width: calc(50% - 10px); // Adjust width here
       box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
     }
-  
-    // Update the background color for .packing-lists-container if needed
+
     .packing-lists-container {
       background-color: #436850e6;
     }
   }
-  
+}
+
+@media (max-width: 600px) {
+  .main-container {
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 10%;
+    min-height: 600px;
+    padding-left: 3px;
+    padding-right: 3px;
+
+    .main-title {
+      text-align: center;
+      max-width: 60%;
+    }
+  }
+
+  .trip-information-container {
+    .trip-description {
+      text-align: center;
+    }
+
+    .trip-arrival-participants {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .current-locations-container {
+    .current-locations-title {
+      text-align: center;
+    }
+
+    .connections-list {
+      padding-left: 0;
+      padding-right: 0;
+      min-height: 300px;
+
+      .connection-item {
+        flex-direction: column;
+        align-items: center;
+
+        .connection-name {
+          text-align: center;
+          width: 100%;
+          margin-right: 0 !important;
+          border-right: none !important; 
+          border-bottom: 1px solid #fbfada;
+          margin-bottom: 10px;
+        }
+
+        .start-text {
+          padding-right: 0 !important;
+          min-width: 0 !important;
+        }
+
+        .progress-bar {
+          margin-bottom: 10px;
+        }
+
+        .arrival-text {
+          padding-left: 0 !important;
+          min-width: 0 !important;
+        }
+      }
+    }
+  }
 }
 
 @keyframes blink {
@@ -209,11 +283,13 @@
 }
 
 @keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 7px #BCFFE3, 0 0 7px #BCFFE3, 0 0 8px #BCFFE3;
+  0%,
+  100% {
+    box-shadow: 0 0 7px #bcffe3, 0 0 7px #bcffe3, 0 0 8px #bcffe3;
   }
   50% {
-    box-shadow: 0 0 7px rgba(105, 105, 105, 0.504), 0 0 8px rgba(96, 96, 96, 0.389), 0 0 7px rgba(87, 87, 87, 0.382);
+    box-shadow: 0 0 7px rgba(105, 105, 105, 0.504),
+      0 0 8px rgba(96, 96, 96, 0.389), 0 0 7px rgba(87, 87, 87, 0.382);
   }
 }
 
