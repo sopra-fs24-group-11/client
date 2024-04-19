@@ -15,6 +15,7 @@ import TestPage from "../../views/TestPage";
 import TripOverview from "../../views/TripOverview";
 import CustomizeTrip from "../../views/CustomizeTrip";
 import ListTemplate from "../../views/ListTemplate";
+import History from "../../views/History";
 import PropTypes from "prop-types";
 
 const AppRouter = ({alertUser}) => {
@@ -50,6 +51,10 @@ const AppRouter = ({alertUser}) => {
 
         <Route path="/friends" element={<GameGuard />}>
           <Route path="" element={<FriendListPage alertUser={alertUser}/>} />
+        </Route>
+
+        <Route path="/history" element={<GameGuard />}>
+          <Route path="" element={<History />} />
         </Route>
 
         <Route path="/createTrip" element={<GameGuard />}>
