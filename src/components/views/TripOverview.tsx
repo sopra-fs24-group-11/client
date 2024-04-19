@@ -102,7 +102,7 @@ const TripOverview = () => {
     navigate(`/customizeTrip/${tripId}`);
   };
 
-  const handleMissedConnection = () => {
+  const handleChooseConnection = () => {
     navigate(`/chooseConnection/${tripId}`);
   };
 
@@ -407,9 +407,9 @@ const TripOverview = () => {
             className="missed-button"
             backgroundColor="#BCFFE3"
             color="black"
-            onClick={handleMissedConnection}
+            onClick={handleChooseConnection}
           >
-            I missed a connection
+            Choose Connection
           </Button>
           <Button
             className="leavetrip-button"
