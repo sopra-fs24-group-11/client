@@ -4,17 +4,16 @@ import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import { Label } from "../ui/label";
+import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
 import ConfirmPopup from "../ui/ConfirmPopup";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
 // Main Profile component
-const ProfilePage: React.FC = () => {
+const ProfilePage: React.FC = ({alertUser}) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null); // Hier ist das Problem: ihr setzt user = null und React versucht unten user.username etc. zu rendern. ==> Error
   const [avatar, setAvatar] = useState<File | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
@@ -26,16 +25,6 @@ const ProfilePage: React.FC = () => {
   });
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [isDeleted, setDeleted] = useState<boolean>(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -62,7 +51,7 @@ const ProfilePage: React.FC = () => {
 
         getAvatar();
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Something went wrong.", error)
       }
     };
     fetchData();
@@ -81,10 +70,7 @@ const ProfilePage: React.FC = () => {
         avatar: imageUrl,
       }));
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Couldn't receive avatar.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Couldn't receive avatar.", error)
     }
   };
 
@@ -99,16 +85,14 @@ const ProfilePage: React.FC = () => {
         setAvatar(event.target.files[0]);
         setSelectedFileName(event.target.files[0].name);
       } else {
-        alert("File is not an image");
+        alertUser("error", "File is not an image.");
       }
     }
   };
 
   const handleAvatarUpload = async () => {
     if (!avatar) {
-      setSnackbarMessage("Choose a file first!");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);      
+      alertUser("error", "Choose a file first!");     
       return;
     }
 
@@ -137,17 +121,12 @@ const ProfilePage: React.FC = () => {
           avatar: imageUrl, // This should trigger a re-render of the component displaying the avatar
         }));
         setAvatar(null); // Clear the avatar state
-        setSnackbarMessage("Image uploaded successfully.");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
+        alertUser("success", "Image uploaded successfully.");
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Couldn't update the image.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Couldn't update the image.", error);
     }
   };
 
@@ -163,14 +142,9 @@ const ProfilePage: React.FC = () => {
       }
       getAvatar();
       setSelectedFileName("");
-      setSnackbarMessage("Avatar deleted and new default avatar created.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Avatar deleted and new default avatar created.");;
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Couldn't delete the image.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Couldn't delete the image.", error);
     }
   };
 
@@ -189,21 +163,10 @@ const ProfilePage: React.FC = () => {
       });
       setUser((prev) => ({ ...prev, ...updatedUser }));
       setEditMode(false);
-      setSnackbarMessage("Profile updated successfully.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Profile updated successfully.");
     } catch (error) {
-      console.log(error);
-      if (error.response.data.status === 409) {
-        setSnackbarMessage("Username is already taken.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-      } else {
-        handleError(error);
-        setSnackbarMessage("Couldn't update the information.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
-      }
+      alertUser("error", "Couldn't update the information.", error);
+      
     }
   };
 
@@ -227,7 +190,7 @@ const ProfilePage: React.FC = () => {
       });
       document.getElementsByClassName("popup");
     } catch (error) {
-      handleError(error);
+      alertUser("error", "There was an error.", error);
     }
 
     setPopupOpen(false);
@@ -309,13 +272,13 @@ const ProfilePage: React.FC = () => {
           ) : (
             <>
               <Label className="label">Username</Label>
-              <p>{user.username}</p>
+              <p>{user.username || ""}</p>
               <Label className="label">Email</Label>
-              <p>{user.email}</p>
+              <p>{user.email || ""}</p>
               <Label className="label">Birthday</Label>
-              <p>{user.birthday}</p>
+              <p>{user.birthday || ""}</p>
               <Label className="label">Creation Date</Label>
-              <p>{user.creationDate}</p>
+              <p>{user.creationDate || ""}</p>
             </>
           )}
           <div className="buttons-container">
@@ -400,23 +363,12 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          elevation={6}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </div>
   );
 };
 
 export default ProfilePage;
+
+ProfilePage.propTypes = {
+  alertUser: PropTypes.func,
+};

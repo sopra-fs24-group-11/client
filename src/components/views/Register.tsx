@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
+import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Register.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
 const FormField = (props) => {
 
@@ -35,23 +32,15 @@ FormField.propTypes = {
   isPassword: PropTypes.bool
 };
 
-const Register = () => {
+const Register = ({alertUser}) => {
   const navigate = useNavigate();
   const [password, setPassword] = useState<string>(null);
   const [secondPassword, setSecondPassword] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
   const [birthday, setBirthday] = useState<string>(null);
   const [email, setMail] = useState<string>(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
+
   const handleBirthdayChange = (event) => {
     const { value } = event.target;
     setBirthday(value);
@@ -75,21 +64,10 @@ const Register = () => {
       });
       const response = await api.post("/users/register", requestBody);
 
-      // Store the token into the local storage.
       localStorage.setItem("token", response.data);
-
-      // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/Dashboard");
+      navigate("/dashboard");
     } catch (error) {
-      handleError(error);
-      if(error.response && error.response.data && error.response.data.message) {
-        setSnackbarMessage(`There was en error. ${error.response.data.message}.`);
-      } else {
-        setSnackbarMessage(`There was en error. ${handleError(error)}.`);
-      }
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
-      
+      alertUser("error", "", error)      
     }
   };
 
@@ -152,23 +130,12 @@ const Register = () => {
           </div>
         </div>
       </div>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          elevation={6}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </BaseContainer>
   );
 };
 
 export default Register;
+
+Register.propTypes = {
+  alertUser: PropTypes.func,
+}

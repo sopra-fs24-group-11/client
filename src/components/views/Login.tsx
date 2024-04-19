@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
+import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import "styles/views/Login.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
 const FormField = (props) => {
 
@@ -35,35 +32,20 @@ FormField.propTypes = {
   isPassword: PropTypes.bool
 };
 
-const Login = () => {
+const Login = ({alertUser}) => {
   const navigate = useNavigate();
   const [password, setPassword] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
   const doLogin = async () => {
     try {
       const requestBody = JSON.stringify({ username, password });
       const response = await api.post("/users/login", requestBody);
 
-      // Store the token into the local storage.
       localStorage.setItem("token", response.data);
-
-      // Login successfully worked --> navigate to the route /game in the GameRouter
-      navigate("/Dashboard");
+      navigate("/dashboard");
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Username or password are wrong.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Username or password are wrong.", error)
     }
   };
 
@@ -101,23 +83,12 @@ const Login = () => {
           </Button>
         </div>
       </div>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          elevation={6}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </BaseContainer>
   );
 };
 
 export default Login;
+
+Login.propTypes = {
+  alertUser: PropTypes.func,
+}
