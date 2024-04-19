@@ -39,7 +39,7 @@ const ChooseConnection = () => {
   const [locationSearchTerm, setLocationSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
 
-  const [activeConnection, setActiveConnection] = useState(null); // New state
+  const [activeConnection, setActiveConnection] = useState<string>(null); // New state
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
@@ -83,7 +83,7 @@ const ChooseConnection = () => {
       setShowSpinner(true);
       
       const possibleConnections = await api.get(
-        "/trips/" + tripId + "/startPoint?start=" + locationCode,
+        "/trips/" + tripId + "/startPoint?start=" + locationCode + "&isLate=" + "false",
         { headers: { Authorization: localStorage.getItem("token") } }
       );
 
