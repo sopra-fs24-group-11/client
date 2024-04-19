@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import {Button} from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
 import "styles/ui/Lists.scss"
+import PropTypes from "prop-types";
 import {TemplateListItem} from "../ui/ListItem"
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
-const ListTemplate = () => {
+const ListTemplate = ({alertUser}) => {
   const token = localStorage.getItem("token");
   const [list, setList] = useState([]);
   const [editMode, setEditMode] = useState(false); // edit mode for all items
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
   const [change, setChange] = useState(1);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +23,7 @@ const ListTemplate = () => {
         
         setList(response.data)
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Couldn't fetch the list.", error);
       }
     };
     fetchData();
@@ -48,15 +37,10 @@ const ListTemplate = () => {
         headers: { Authorization: token },
       });
       setNewItemName("");
-      setSnackbarMessage("Item added.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Item added.");
       setList((oldList) => ([...oldList, {item:response.data.item, id:response.data.id}]));
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Couldn't add the item.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Couldn't add the item.", error);
     }
   };
 
@@ -65,15 +49,10 @@ const ListTemplate = () => {
       await api.delete(`/users/packings/${itemId}`, {
         headers: { Authorization: token },
       });
-      setSnackbarMessage("Item deleted.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-      setList((oldList) => oldList.filter(item => item.id !== itemId));
+      alertUser("success", "Item deleted.");
+      setChange(old => old + 1);
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Couldn't delete the item.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Couldn't delete the item.", error);
     }
   };
 
@@ -83,15 +62,10 @@ const ListTemplate = () => {
       await api.put(`/users/packings/${itemId}`, requestBody, {
         headers: { Authorization: token },
       });
+      alertUser("success", "Item updated.");
       setChange(old => old + 1);
-      setSnackbarMessage("Item updated.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Couldn't update the item.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Couldn't update the item.", error);
     }
   };
 
@@ -143,23 +117,12 @@ const ListTemplate = () => {
       </div>}
       {!isPopupOpen && content}
       </div>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={1000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          elevation={6}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </BaseContainer>
   )
 }
 
 export default ListTemplate;
+
+ListTemplate.propTypes = {
+  alertUser: PropTypes.func,
+};

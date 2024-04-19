@@ -40,3 +40,39 @@ export const handleError = error => {
     return error.message;
   }
 };
+
+export const handleError1 = (error, handleAlert, errorMessage) => {
+  if (error === false) {
+    handleAlert(errorMessage);
+    return;
+  }
+  if (error && error.message && error.message.match(/Network Error/)) {
+    handleAlert("No Internet Connection!");
+    return;
+  }
+  if (errorMessage === "") {
+    errorMessage = "There was an error"
+  }
+  const response = error.response;
+
+  // catch 4xx and 5xx status codes
+  if (response && !!`${response.status}`.match(/^[4|5]\d{2}$/)) {
+    let info = `\nrequest to: ${response.request.responseURL}`;
+
+    if (response.data.status) {
+      info += `\nstatus code: ${response.data.status}`;
+      info += `\nerror: ${response.data.error}`;
+      info += `\nerror message: ${response.data.message}`;
+      errorMessage = response.data.message;
+    } else {
+      info += `\nstatus code: ${response.status}`;
+      info += `\nerror message:\n${response.data}`;
+    }
+    handleAlert(errorMessage)
+    console.log("The request was made and answered but was unsuccessful.", error.response);
+    
+    return info;
+  } else {
+    handleAlert("" + error)
+  }
+};
