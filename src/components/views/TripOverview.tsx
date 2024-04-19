@@ -76,6 +76,9 @@ const TripOverview = () => {
     },
   });
   const [connections, setConnections] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
+  const [currentUserHasConnection, setCurrentUserHasConnection] =
+    useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
   //new admin
@@ -106,37 +109,62 @@ const TripOverview = () => {
     navigate(`/chooseConnection/${tripId}`);
   };
 
-  const fetchAdminStatus = async () => {
+  async function fetchAllData() {
     try {
-      const response = await api.get(`/trips/${tripId}/admin/`, {
-        headers: { Authorization: token },
-      });
-      console.log("ADMIN?:", response.data);
-      setIsAdmin(response.data);
-    } catch (error) {
-      handleError(error);
-    }
-  };
+        // Fetch current user data
+        const userResponse = await api.get("/users", { headers: { Authorization: token } });
+        const currentUserData = userResponse.data;
+        console.log("CURRENT USER:", currentUserData);
 
-  const fetchTripInformation = async () => {
-    try {
-      const response = await api.get(`/trips/${tripId}`, {
-        headers: { Authorization: token },
-      });
-      console.log("CURRENT TRIP INFORMATION:", response.data);
-      setCurrentTrip(response.data);
-    } catch (error) {
-      if (error.response.status === 404) {
-        alert(
-          "There was an error, possible reasons:\nThe trip does not exist.\nThe trip has been deleted.\nYou are not part of this trip.\nYou have to first accept the trip invitation."
-        );
-        navigate("/dashboard");
-      }
-      handleError(error);
-    }
-  };
+        // Fetch trip information
+        let tripData = null;
+        try {
+            const tripResponse = await api.get(`/trips/${tripId}`, { headers: { Authorization: token } });
+            tripData = tripResponse.data;
+            console.log("CURRENT TRIP INFORMATION:", tripData);
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                alert("There was an error, possible reasons:\nThe trip does not exist.\nThe trip has been deleted.\nYou are not part of this trip.\nYou have to first accept the trip invitation.");
+                navigate("/dashboard");
+                return;  // Early return to stop further execution
+            }
+            throw error;  // Re-throw the error after handling it
+        }
 
-  const fetchTripMembers = async () => {
+        // Fetch admin status
+        const adminStatusResponse = await api.get(`/trips/${tripId}/admin/`, { headers: { Authorization: token } });
+        const isAdmin = adminStatusResponse.data;
+        console.log("ADMIN?:", isAdmin);
+
+        // Fetch connections
+        const connectionsResponse = await api.get(`/trips/${tripId}/connections`, { headers: { Authorization: token } });
+        const connectionsData = connectionsResponse.data.map((participant) => {
+            const { connectionDTO } = participant;
+            const firstConnection = connectionDTO[0];
+            const lastConnection = connectionDTO[connectionDTO.length - 1];
+            return {
+                username: participant.username,
+                startTime: firstConnection?.departureTime ? new Date(firstConnection.departureTime).toLocaleTimeString() : "N/A",
+                endTime: lastConnection?.arrivalTime ? new Date(lastConnection.arrivalTime).toLocaleTimeString() : "N/A",
+                progress: calculateProgress(firstConnection?.departureTime, lastConnection?.arrivalTime),
+            };
+        });
+        console.log("CONNECTIONS:", connectionsData);
+
+        // Perform the connection check with the most up-to-date data
+        checkIfUserHasConnection(connectionsData, currentUserData);
+
+        // Update state with the fetched data
+        setCurrentUser(currentUserData);
+        setCurrentTrip(tripData);
+        setIsAdmin(isAdmin);
+        setConnections(connectionsData);
+    } catch (error) {
+        handleError(error);
+    }
+}
+
+  const fetchTripMembers = async () => { //Only for Admin
     try {
       const response = await api.get(`/trips/${tripId}/participants`, {
         headers: { Authorization: token },
@@ -148,36 +176,6 @@ const TripOverview = () => {
     }
   };
 
-  const fetchConnections = async () => {
-    try {
-      const response = await api.get(`/trips/${tripId}/connections`, {
-        headers: { Authorization: token },
-      });
-      console.log("CONNECTIONS:", response.data);
-      const processedConnections = response.data.map((participant) => {
-        const { connectionDTO } = participant;
-        const firstConnection = connectionDTO[0];
-        const lastConnection = connectionDTO[connectionDTO.length - 1];
-
-        return {
-          username: participant.username,
-          startTime: firstConnection?.departureTime
-            ? new Date(firstConnection.departureTime).toLocaleTimeString()
-            : "N/A",
-          endTime: lastConnection?.arrivalTime
-            ? new Date(lastConnection.arrivalTime).toLocaleTimeString()
-            : "N/A",
-          progress: calculateProgress(
-            firstConnection?.departureTime,
-            lastConnection?.arrivalTime
-          ),
-        };
-      });
-      setConnections(processedConnections);
-    } catch (error) {
-      handleError(error);
-    }
-  };
 
   const handleOpenSelectAdminDialog = () => {
     fetchTripMembers();
@@ -205,6 +203,7 @@ const TripOverview = () => {
   const handleOpenDeleteDialog = () => {
     setOpenDeleteDialog(true);
   };
+
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
   };
@@ -299,7 +298,7 @@ const TripOverview = () => {
           headers: { Authorization: token },
         }
       );
-      setCurrentTrip(old => ({...old, favourite:!old.favourite}))
+      setCurrentTrip((old) => ({ ...old, favourite: !old.favourite }));
       setSnackbarMessage("Added to favourites or deleted from favourites.");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -309,6 +308,17 @@ const TripOverview = () => {
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
+  };
+
+  const checkIfUserHasConnection = (connections, currentUser) => {
+    console.log("Checking connections for:", currentUser.username);
+
+    const hasConnection = connections.some(
+      (connection) => connection.username === currentUser.username && connection.startTime !== "N/A"
+    );
+    console.log("Has connection:", hasConnection);
+
+    setCurrentUserHasConnection(hasConnection);
   };
 
   // =========================================================
@@ -323,9 +333,11 @@ const TripOverview = () => {
 
   useEffect(() => {
     const fetchPeriodically = async () => {
-      await fetchTripInformation();
-      await fetchAdminStatus();
-      await fetchConnections();
+      try {
+        await fetchAllData();
+      } catch (error) {
+        handleError(error);
+      }
     };
 
     // Fetch immediately when the component mounts
@@ -404,7 +416,9 @@ const TripOverview = () => {
             Back to Dashboard
           </Button>
           <Button
-            className="missed-button"
+            className={`chooseconnection-button ${
+              !currentUserHasConnection ? "blinking-glowing" : ""
+            }`}
             backgroundColor="#BCFFE3"
             color="black"
             onClick={handleChooseConnection}

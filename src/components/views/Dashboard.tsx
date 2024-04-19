@@ -474,8 +474,8 @@ const YourFavorites = ({ setIsLoading }) => {
   const navigate = useNavigate();
 
   const showHistory = () => {
-    navigate("/profile"); // nur mal als Beispiel
-  }
+    navigate("/history");
+  };
 
   return (
     <div className="your-favorites component">
