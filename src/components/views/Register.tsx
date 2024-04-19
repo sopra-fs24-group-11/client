@@ -6,6 +6,8 @@ import { Button } from "components/ui/Button";
 import "styles/views/Register.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const FormField = (props) => {
 
@@ -40,7 +42,16 @@ const Register = () => {
   const [username, setUsername] = useState<string>(null);
   const [birthday, setBirthday] = useState<string>(null);
   const [email, setMail] = useState<string>(null);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
   const handleBirthdayChange = (event) => {
     const { value } = event.target;
     setBirthday(value);
@@ -70,7 +81,15 @@ const Register = () => {
       // Login successfully worked --> navigate to the route /game in the GameRouter
       navigate("/Dashboard");
     } catch (error) {
-      alert(`Something went wrong during the login: \n${handleError(error)}`);
+      handleError(error);
+      if(error.response && error.response.data && error.response.data.message) {
+        setSnackbarMessage(`There was en error. ${error.response.data.message}.`);
+      } else {
+        setSnackbarMessage(`There was en error. ${handleError(error)}.`);
+      }
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+      
     }
   };
 
@@ -133,6 +152,21 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          elevation={6}
+          variant="filled"
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </BaseContainer>
   );
 };

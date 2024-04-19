@@ -157,7 +157,7 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
       </div>}
       {!isPopupOpen && <div className="Carousel button-holder">
         <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal Mode" : "Edit Mode"}</Button>
+        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
         <Button backgroundColor={"white"} onClick={() => {transferTemplate()}}>Transfer</Button>
       </div>}
       {!isPopupOpen && content}
