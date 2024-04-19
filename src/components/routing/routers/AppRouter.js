@@ -56,8 +56,8 @@ const AppRouter = () => {
           <Route path="" element={<CreateTrip />} />
         </Route>
 
-        <Route path="/chooseConnection" element={<GameGuard />}>
-          <Route path=":id" element={<ChooseConnection />} />
+        <Route path="/chooseConnection/:tripId" element={<GameGuard />}>
+          <Route path="" element={<ChooseConnection />} />
         </Route>
 
         <Route path="/tripOverview/:tripId" element={<GameGuard />}>

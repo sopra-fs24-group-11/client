@@ -103,7 +103,7 @@ const TripOverview = () => {
   };
 
   const handleMissedConnection = () => {
-    navigate("/chooseConnection");
+    navigate(`/chooseConnection/${tripId}`);
   };
 
   const fetchAdminStatus = async () => {
