@@ -1,11 +1,51 @@
-import React from "react";
-import Header from "./components/views/Header";
+import React, { useState } from "react";
+import { handleError1 } from "helpers/api";
 import AppRouter from "./components/routing/routers/AppRouter";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const App = () => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  // how to call this in case of success: alertUser("success", "blabla")
+  // how to call this in case of error: alertUser("error", "blabla", error)
+  const alertUser = (severity, message="", error=false) => {
+    const handleAlert = (msg) => {
+      setSnackbarMessage(msg)
+      setSnackbarSeverity(severity);
+      setSnackbarOpen(true);
+    }
+    handleError1(error, handleAlert, message);
+
+  }
+
   return (
     <div className="">
-      <AppRouter />
+      <AppRouter alertUser={alertUser}/>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          elevation={6}
+          variant="filled"
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 };

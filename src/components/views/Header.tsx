@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import PropTypes from "prop-types";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -12,7 +12,7 @@ import signalImage from "../../graphics/signal.png";
 import rails from "../../graphics/rails.png";
 import "../../styles/views/Header.scss";
 
-const Header = () => {
+const Header = ({alertUser}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
@@ -45,15 +45,12 @@ const Header = () => {
           headers: { Authorization: token },
         });
         handleClose();
-        navigate("/login");
+        alertUser("success", "Logout successful.");
       } catch (error) {
-        console.error(error);
-        handleError(error);
+        alertUser("error", "Something went wrong.", error)
       }
-    } else {
-      console.error("No token found in local storage.");
     }
-  navigate("/login")
+    navigate("/login")
   };
 
   return (
@@ -106,7 +103,7 @@ const Header = () => {
 };
 
 Header.propTypes = {
-  height: PropTypes.string,
+  alertUser: PropTypes.func,
 };
 
 export default Header;

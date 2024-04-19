@@ -7,7 +7,7 @@ export const LoginGuard = () => {
     return <Outlet />;
   }
 
-  return <Navigate to="/login" replace />;
+  return <Navigate to="/dashboard" replace />;
 };
 
 LoginGuard.propTypes = {

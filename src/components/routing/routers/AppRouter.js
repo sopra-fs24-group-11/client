@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
-import { RegisterGuard } from "../routeProtectors/RegisterGuard";
 import Login from "../../views/Login";
 import Dashboard from "../../views/Dashboard";
 import Header from "../../views/Header";
@@ -16,19 +15,19 @@ import TestPage from "../../views/TestPage";
 import TripOverview from "../../views/TripOverview";
 import CustomizeTrip from "../../views/CustomizeTrip";
 import ListTemplate from "../../views/ListTemplate";
-import History from "../../views/History";
+import PropTypes from "prop-types";
 
-const AppRouter = () => {
+const AppRouter = ({alertUser}) => {
   return (
     <BrowserRouter>
-      <Header />
+      <Header alertUser={alertUser}/>
       <Routes>
         <Route path="/login" element={<LoginGuard />}>
-          <Route path="" element={<Login />} />
+          <Route path="" element={<Login alertUser={alertUser}/>} />
         </Route>
 
-        <Route path="/register" element={<RegisterGuard />}>
-          <Route path="" element={<Register />} />
+        <Route path="/register" element={<LoginGuard />}>
+          <Route path="" element={<Register alertUser={alertUser}/>} />
         </Route>
         {/*------------------ TESTPAGES ------------------*/}
         <Route path="/registerexample" element={<LoginGuard />}>
@@ -42,15 +41,15 @@ const AppRouter = () => {
         </Route>
 
         <Route path="/profile" element={<GameGuard />}>
-          <Route path="" element={<UserProfile />} />
+          <Route path="" element={<UserProfile alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/template" element={<GameGuard />}>
-          <Route path="" element={<ListTemplate />} />
+          <Route path="" element={<ListTemplate alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/friends" element={<GameGuard />}>
-          <Route path="" element={<FriendListPage />} />
+          <Route path="" element={<FriendListPage alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/history" element={<GameGuard />}>
@@ -80,3 +79,7 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+
+AppRouter.propTypes = {
+  alertUser: PropTypes.func,
+}

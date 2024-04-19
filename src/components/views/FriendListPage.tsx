@@ -1,10 +1,11 @@
 // =================================================================
 
 import React, { useState, useEffect, useRef } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import { Progress } from "../ui/progress";
+import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
 import { Input } from "components/ui/input";
@@ -25,7 +26,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 
-const FriendListPage = () => {
+const FriendListPage = ({alertUser}) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [friendList, setFriendList] = useState([]);
@@ -46,7 +47,7 @@ const FriendListPage = () => {
       setFriendList(response.data);
       console.log("Friend list: ", response.data);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Couldn't fetch the friend list.", error);
     }
   };
 
@@ -57,7 +58,7 @@ const FriendListPage = () => {
       });
       setFriendRequests(response.data); // Assuming this is an array of friend requests
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Couldn't fetch the friend requests.", error);
     }
   };
 
@@ -70,17 +71,14 @@ const FriendListPage = () => {
           headers: { Authorization: token },
         }
       );
-      // Remove the accepted request from the list
-      setFriendRequests(
-        friendRequests.filter((request) => request.id !== friendRequestId)
-      );
+      alertUser("success", "Friend request accepted.");
       await fetchFriends();
       await fetchFriendRequests();
       if (closeDialogRef.current) {
         closeDialogRef.current.click();
       }
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Couldn't accept the friend request.", error);
     }
   };
 
@@ -89,17 +87,14 @@ const FriendListPage = () => {
       await api.delete(`/users/friends/${friendRequestId}`, {
         headers: { Authorization: token },
       });
-      // Remove the denied request from the list
-      setFriendRequests(
-        friendRequests.filter((request) => request.id !== friendRequestId)
-      );
+      alertUser("success", "Friend request denied.");
       await fetchFriends();
       await fetchFriendRequests();
       if (closeDialogRef.current) {
         closeDialogRef.current.click();
       }
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Couldn't deny the friend request.", error);
     }
   };
 
@@ -117,7 +112,7 @@ const FriendListPage = () => {
         );
         setSuggestions(response.data); // Assuming this is an array of user objects
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Query error. Try again.", error);
       }
     }
   };
@@ -126,10 +121,6 @@ const FriendListPage = () => {
     setSearchTerm(friend.username); // Set the username in the input field
     setSelectedFriend(friend); // Store the selected friend's data
     setSuggestions([]); // Clear suggestions
-  };
-
-  const handleBackClick = () => {
-    navigate("/dashboard");
   };
 
   const handleOpenDeleteDialog = (friendId) => {
@@ -148,6 +139,7 @@ const FriendListPage = () => {
         await api.delete(`/users/friends/${friendToDelete}`, {
           headers: { Authorization: token },
         });
+        alertUser("success", "Friend removed.");
         // Remove the friend from the friendList in the UI after successful deletion
         setFriendList(
           friendList.filter((friend) => friend.friendId !== friendToDelete)
@@ -156,7 +148,7 @@ const FriendListPage = () => {
         setFriendToDelete(null);
         setOpenDeleteDialog(false);
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Couldn't remove the friend.", error);
       }
     }
   };
@@ -172,6 +164,7 @@ const FriendListPage = () => {
             headers: { Authorization: token },
           }
         );
+        alertUser("success", "Friend request sent.");
         // Refresh the friend list to show the newly added friend
         fetchFriends();
         setSearchTerm(""); // Clear the search term
@@ -183,7 +176,7 @@ const FriendListPage = () => {
         if (closeDialogRef.current) {
           closeDialogRef.current.click();
         }
-        handleError(error);
+        alertUser("error", "Couldn't send the friend request.", error);
       }
     }
   };
@@ -318,7 +311,7 @@ const FriendListPage = () => {
             className="back-button"
             backgroundColor="#FFB703"
             color="black"
-            onClick={handleBackClick}
+            onClick={() => navigate("/dashboard")}
           >
             Back to Dashboard
           </Button>
@@ -376,3 +369,7 @@ const FriendListPage = () => {
 };
 
 export default FriendListPage;
+
+FriendListPage.propTypes = {
+  alertUser: PropTypes.func,
+};
