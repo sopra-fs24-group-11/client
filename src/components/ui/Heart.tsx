@@ -1,12 +1,12 @@
 import React from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import PropTypes from "prop-types";
 
-const Heart = ({tripId, isFavourite}) => {
+const Heart = ({tripId, isFavourite, alertUser}) => {
   const token = localStorage.getItem("token");
 
   const StyledRating = styled(Rating)({
@@ -20,12 +20,13 @@ const Heart = ({tripId, isFavourite}) => {
 
   const handleClick = async () => {
     try {
-      const response = await api.put(`/trips/${tripId}/favorites `, {}, {
+      await api.put(`/trips/${tripId}/favorites `, {}, {
         headers: { Authorization: token },
       });
-      
+      alertUser("success", isFavourite ? "Removed from favourites." : "Added to favourites.");
+      // TO DO: Set state! Or fetch again. But right now, the heart does not know what to do...
     } catch (error) {
-      handleError(error);
+      alertUser("error", "", error);
     }
   }
 
@@ -44,7 +45,8 @@ const Heart = ({tripId, isFavourite}) => {
 
 Heart.propTypes = {
   tripId: PropTypes.number,
-  isFavourite: PropTypes.bool
+  isFavourite: PropTypes.bool,
+  alertUser: PropTypes.func,
 };
 
 export default Heart;

@@ -75,9 +75,9 @@ export const GroupListItem = ({item, editMode, handleComplete, handleDelete, han
 
   const avatarForItem = avatars.find(avatar => avatar.userId === item.userId);
   const avatarImage = avatarForItem ? (userId===item.userId ? 
-    (<img className="List avatar" src={avatarForItem.image} alt="User Avatar" onClick={() => handleSelect(item)}/>) : (<img className="List avatar" src={avatarForItem.image} alt="User Avatar"/>)
+    (<img className="ListItem avatar" src={avatarForItem.image} alt="User Avatar" onClick={() => handleSelect(item)}/>) : (<img className="ListItem avatar" src={avatarForItem.image} alt="User Avatar"/>)
   ) : (
-    <div className="List avatar empty-circle" onClick={() => handleSelect(item)}></div>
+    <div className="ListItem avatar empty-circle" onClick={() => handleSelect(item)}></div>
   );
 
   return(
@@ -168,7 +168,7 @@ export const IndividualListItem = ({item, editMode, handleComplete, handleDelete
       {editMode ?
       <>
       <div className="ListItem name">{item.item}</div>
-        <div className="item-icons">
+        <div className="item-icons-individual">
           <FontAwesomeIcon icon={faPencilAlt}  className="edit-icon" onClick={() => setEditing(true)}/>
           <FontAwesomeIcon icon={faTrash} className="trash-icon" onClick={() => handleDelete(item)}/>
         </div> 
@@ -176,7 +176,7 @@ export const IndividualListItem = ({item, editMode, handleComplete, handleDelete
       : 
         <>
           <div className="ListItem name">{item.item}</div>
-          <div className="item-icons">
+          <div className="item-icons-individual">
             <FontAwesomeIcon icon={faListCheck} className="complete-icon" onClick={() => handleComplete(item)}/> 
           </div>
         </>

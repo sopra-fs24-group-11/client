@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
@@ -14,8 +14,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 import { ListCarousel } from "../ui/ListCarousel";
 
 import "../../styles/views/TripOverview.scss";
@@ -61,7 +59,7 @@ const calculateProgress = (departureTime, arrivalTime) => {
 };
 
 // ============== MAIN FUNCTION ==============
-const TripOverview = () => {
+const TripOverview = ({alertUser}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTrip, setCurrentTrip] = useState({
     tripName: "",
@@ -88,10 +86,6 @@ const TripOverview = () => {
   const [openDialogNewAdmin, setOpenDialogNewAdmin] = useState(false);
   const [openLeaveDialog, setOpenLeaveDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Default to "success"
 
   const navigate = useNavigate();
   const { tripId } = useParams();
@@ -123,12 +117,8 @@ const TripOverview = () => {
             tripData = tripResponse.data;
             console.log("CURRENT TRIP INFORMATION:", tripData);
         } catch (error) {
-            if (error.response && error.response.status === 404) {
-                alert("There was an error, possible reasons:\nThe trip does not exist.\nThe trip has been deleted.\nYou are not part of this trip.\nYou have to first accept the trip invitation.");
-                navigate("/dashboard");
-                return;  // Early return to stop further execution
-            }
-            throw error;  // Re-throw the error after handling it
+          alertUser("error", "", error)
+          navigate("/dashboard");
         }
 
         // Fetch admin status
@@ -160,7 +150,7 @@ const TripOverview = () => {
         setIsAdmin(isAdmin);
         setConnections(connectionsData);
     } catch (error) {
-        handleError(error);
+      alertUser("error", "", error);
     }
 }
 
@@ -172,7 +162,7 @@ const TripOverview = () => {
       setTripMembers(response.data);
       console.log("TRIP MEMBERS:", response.data);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "", error);
     }
   };
 
@@ -188,9 +178,7 @@ const TripOverview = () => {
 
   const handleOpenLeaveDialog = () => {
     if (isAdmin) {
-      setSnackbarMessage("Please select a new admin before leaving the trip!");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Please select a new admin before leaving the trip!");
     } else {
       setOpenLeaveDialog(true);
     }
@@ -218,17 +206,12 @@ const TripOverview = () => {
             headers: { Authorization: token },
           }
         );
-        setSnackbarMessage("New admin selected successfully.");
-        setSnackbarSeverity("success");
-        setSnackbarOpen(true);
+        alertUser("success", "New admin selected successfully.");
         // Close the dialog and possibly refresh the admin status
-        fetchAdminStatus();
+        fetchAllData();
         handleCloseNewAdminDialog();
       } catch (error) {
-        handleError(error);
-        setSnackbarMessage("Failed to set new admin.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
+        alertUser("error", "Failed to set new admin.", error);
         handleCloseNewAdminDialog();
       }
     }
@@ -241,15 +224,11 @@ const TripOverview = () => {
       await api.delete(`/trips/${tripId}/exit`, {
         headers: { Authorization: token },
       });
-      setSnackbarMessage("You have left the trip.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-      setTimeout(() => navigate("/dashboard"), 3000);
+      alertUser("success", "You left the trip.");
+      setTimeout(() => navigate("/dashboard"), 1000);
       console.log("TRIP LEFT!!!");
     } catch (error) {
-      handleError(error);
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Failed to leave the trip.", error);
     }
   };
 
@@ -259,26 +238,15 @@ const TripOverview = () => {
       await api.delete(`/trips/${tripId}`, {
         headers: { Authorization: token },
       });
-
-      setSnackbarMessage("Trip successfully deleted.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
-
-      setTimeout(() => navigate("/dashboard"), 3000);
+      alertUser("success", "Trip deleted.");
+      setTimeout(() => navigate("/dashboard"), 3000); // 3 seconds too long? Or couple with await? Because when fetching the Trip not found error could come.
 
       console.log("TRIP DELETED!!!");
     } catch (error) {
-      handleError(error);
-      setSnackbarSeverity("error");
+      alertUser("error", "Trip deletion failed.", error);
     }
   };
 
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
 
   const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {
@@ -291,22 +259,17 @@ const TripOverview = () => {
 
   const handleToFavourites = async () => {
     try {
-      const response = await api.put(
+      await api.put(
         `/trips/${tripId}/favorites `,
         {},
         {
           headers: { Authorization: token },
         }
       );
+      alertUser("success", currentTrip.favourite ? "Removed from favourites." : "Added to favourites.");
       setCurrentTrip((old) => ({ ...old, favourite: !old.favourite }));
-      setSnackbarMessage("Added to favourites or deleted from favourites.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Favourite button unsuccessful");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "", error);
     }
   };
 
@@ -336,7 +299,7 @@ const TripOverview = () => {
       try {
         await fetchAllData();
       } catch (error) {
-        handleError(error);
+        alertUser("error", "", error);
       }
     };
 
@@ -468,9 +431,7 @@ const TripOverview = () => {
       )}
 
       <ListCarousel
-        setSnackbarMessage={setSnackbarMessage}
-        setSnackbarSeverity={setSnackbarSeverity}
-        setSnackbarOpen={setSnackbarOpen}
+        alertUser={alertUser}
       ></ListCarousel>
 
       <Dialog
@@ -605,24 +566,12 @@ const TripOverview = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={handleSnackbarClose}
-          severity={snackbarSeverity}
-          elevation={6}
-          variant="filled"
-        >
-          {snackbarMessage}
-        </MuiAlert>
-      </Snackbar>
     </div>
   );
 };
 
 export default TripOverview;
+
+TripOverview.propTypes = {
+  alertUser: PropTypes.func,
+}

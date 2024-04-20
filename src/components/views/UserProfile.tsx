@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
@@ -190,7 +190,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
       });
       document.getElementsByClassName("popup");
     } catch (error) {
-      alertUser("error", "There was an error.", error);
+      alertUser("error", "", error);
     }
 
     setPopupOpen(false);

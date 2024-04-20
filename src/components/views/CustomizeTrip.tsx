@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import User from "models/User";
 import { useNavigate, useParams } from "react-router-dom";
 import image from "../../graphics/add.png";
 import { Button } from "components/ui/Button";
 import "styles/views/Flex.scss";
 import BaseContainer from "components/ui/BaseContainer";
+import PropTypes from "prop-types";
 import DateTimePicker from "react-datetime-picker";
 import LinearIndeterminate from "components/ui/loader";
 import {
@@ -19,7 +20,7 @@ import {
   DialogTrigger,
 } from "components/ui/dialog";
 
-const CustomizeTrip = () => {
+const CustomizeTrip = ({alertUser}) => {
   // used to navigate
   const navigate = useNavigate();
 
@@ -81,7 +82,7 @@ const CustomizeTrip = () => {
         }
       },
       (error) => {
-        console.error("Error getting geolocation:", error);
+        alertUser("error", "Failed to get the current location.", error)
       },
       options
     );
@@ -95,7 +96,7 @@ const CustomizeTrip = () => {
       });
       setAllFriends(response.data);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Failed to fetch the friends.", error)
     }
   };
 
@@ -115,7 +116,7 @@ const CustomizeTrip = () => {
       }));
 
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Failed to fetch the trip.", error)
     }
   };
 
@@ -131,7 +132,7 @@ const CustomizeTrip = () => {
       });
       setFriends(tempObject);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Failed to fetch the participants.", error)
     }
   };
 
@@ -165,12 +166,13 @@ const CustomizeTrip = () => {
       });
 
       const token = localStorage.getItem("token");
-      const response = await api.put(`/trips/${tripId}`, requestBody, {
+      await api.put(`/trips/${tripId}`, requestBody, {
         headers: { Authorization: token },
       });
+      alertUser("success", "Trip updated.")
       navigate(`/tripOverview/${tripId}`);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Failed to update trip.", error)
     }
   };
 
@@ -191,7 +193,7 @@ const CustomizeTrip = () => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Query Error. Try again.", error)
       }
     }
   };
@@ -482,3 +484,7 @@ const CustomizeTrip = () => {
 };
 
 export default CustomizeTrip;
+
+CustomizeTrip.propTypes = {
+  alertUser: PropTypes.func,
+}

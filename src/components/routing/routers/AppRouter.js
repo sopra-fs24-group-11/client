@@ -38,7 +38,7 @@ const AppRouter = ({alertUser}) => {
         <Route path="/testpage" element={<TestPage />} />
         {/*---------------------------------------------- */}
         <Route path="/dashboard" element={<GameGuard />}>
-          <Route path="" element={<Dashboard />} />
+          <Route path="" element={<Dashboard alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/profile" element={<GameGuard />}>
@@ -54,23 +54,23 @@ const AppRouter = ({alertUser}) => {
         </Route>
 
         <Route path="/history" element={<GameGuard />}>
-          <Route path="" element={<History />} />
+          <Route path="" element={<History alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/createTrip" element={<GameGuard />}>
-          <Route path="" element={<CreateTrip />} />
+          <Route path="" element={<CreateTrip alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/chooseConnection/:tripId" element={<GameGuard />}>
-          <Route path="" element={<ChooseConnection />} />
+          <Route path="" element={<ChooseConnection alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/tripOverview/:tripId" element={<GameGuard />}>
-          <Route path="" element={<TripOverview />} />
+          <Route path="" element={<TripOverview alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/customizeTrip/:tripId" element={<GameGuard />}>
-          <Route path="" element={<CustomizeTrip />} />
+          <Route path="" element={<CustomizeTrip alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />

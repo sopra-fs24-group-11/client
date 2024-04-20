@@ -1,6 +1,6 @@
 // For List
 import React, { useState, useEffect, useRef } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import { Progress } from "../ui/progress";
@@ -8,8 +8,9 @@ import LinearIndeterminate from "components/ui/loader";
 import { Input } from "components/ui/input";
 import "../../styles/views/History.scss";
 import Heart from "components/ui/Heart"
+import PropTypes from "prop-types";
 
-const History = () => {
+const History = ({alertUser}) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,7 @@ const History = () => {
       console.log(response.data);
 
     } catch (error) {
-      handleError(error);
+      alertUser("error", "", error);
     }
   };
 
@@ -56,7 +57,7 @@ const History = () => {
           {historyTrips.map((trip) => (
               <li key={trip.id} className="trip">
                 <span className="name" onClick={() => showTripOverview(trip.id)}>{trip.tripName}</span>
-                <Heart tripId={trip.id} isFavourite={trip.favourite}></Heart>
+                <Heart tripId={trip.id} isFavourite={trip.favourite} alertUser={alertUser}></Heart>
               </li>
           ))}
           </ul>
@@ -80,3 +81,7 @@ const History = () => {
 };
 
 export default History;
+
+History.propTypes = {
+  alertUser: PropTypes.func,
+}
