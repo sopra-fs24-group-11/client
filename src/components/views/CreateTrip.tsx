@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import image from "../../graphics/add.png";
 import { Button } from "components/ui/Button";
 import "styles/views/Flex.scss";
 import BaseContainer from "components/ui/BaseContainer";
+import PropTypes from "prop-types";
 import DateTimePicker from "react-datetime-picker";
 import LinearIndeterminate from "components/ui/loader";
 import {
@@ -19,7 +20,7 @@ import {
   DialogTrigger,
 } from "components/ui/dialog";
 
-const CreateTrip = () => {
+const CreateTrip = ({alertUser}) => {
   // used to navigate
   const navigate = useNavigate();
 
@@ -63,7 +64,7 @@ const CreateTrip = () => {
       });
       setAllFriends(response.data);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Couldn't fetch the friends.", error)
     }
   };
 
@@ -100,10 +101,10 @@ const CreateTrip = () => {
       const response = await api.post("/trips/new", requestBody, {
         headers: { Authorization: token },
       });
-
-      navigate("/chooseConnection/" + response.data);
+      alertUser("success", "Trip created!");
+      navigate("/tripOverview/" + response.data);
     } catch (error) {
-      handleError(error);
+      alertUser("error", "Trip creation failed.", error)
     }
   };
 
@@ -124,7 +125,7 @@ const CreateTrip = () => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Query Error. Try again.", error)
       }
     }
   };
@@ -414,3 +415,7 @@ const CreateTrip = () => {
 };
 
 export default CreateTrip;
+
+CreateTrip.propTypes = {
+  alertUser: PropTypes.func,
+}

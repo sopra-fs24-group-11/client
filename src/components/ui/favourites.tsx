@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "../../styles/ui/Favourites.scss";
 
-const Favourites = () => {
+const Favourites = ({ alertUser }) => {
 
   const [favTrips, setFavTrips] = useState([]);
   const token = localStorage.getItem("token");
@@ -25,14 +25,13 @@ const Favourites = () => {
 
   const handleClick = async (tripId) => {
     try {
-      const response = await api.put(`/trips/${tripId}/favorites `, {}, {
+      await api.put(`/trips/${tripId}/favorites `, {}, {
         headers: { Authorization: token },
       });
-      
+      alertUser("success", "Removed from favourites.");
     } catch (error) {
-      handleError(error);
-    }
-    finally {
+      alertUser("error", "", error);
+    } finally {
       fetchTrips();
     }
   }
@@ -45,7 +44,7 @@ const Favourites = () => {
       setFavTrips(response.data);
 
     } catch (error) {
-      handleError(error);
+      alertUser("error", "", error);
     }
   }
 
@@ -87,3 +86,7 @@ const Favourites = () => {
 };
 
 export default Favourites;
+
+Favourites.propTypes = {
+  alertUser: PropTypes.func,
+}

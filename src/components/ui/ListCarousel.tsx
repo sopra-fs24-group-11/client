@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import PropTypes from "prop-types";
-import {Button} from "components/ui/Button";
 import { useParams } from "react-router-dom";
+import "../../styles/ui/ListCarousel.scss";
+import ToDoList from "./ToDoList";
+import IndividualPackingList from "./IndividualPackingList";
+import GroupPackingList from "./GroupPackingList";
 import {
   Carousel,
   CarouselContent,
@@ -10,12 +13,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./carousel"
-import "../../styles/ui/ListCarousel.scss";
-import ToDoList from "./ToDoList";
-import IndividualPackingList from "./IndividualPackingList";
-import GroupPackingList from "./GroupPackingList";
   
-export function ListCarousel({setSnackbarMessage, setSnackbarSeverity, setSnackbarOpen}) {
+export function ListCarousel({alertUser}) {
   const [avatar, setAvatar] = useState([]);
   const [userId, setUserId] = useState(0);
   const {tripId} = useParams();
@@ -37,7 +36,7 @@ export function ListCarousel({setSnackbarMessage, setSnackbarSeverity, setSnackb
       }));
       setAvatar(avatarArray);
       } catch (error) {
-        handleError(error);
+        alertUser("error", "", error);
       }
     };
     fetchData();
@@ -48,9 +47,7 @@ export function ListCarousel({setSnackbarMessage, setSnackbarSeverity, setSnackb
       <CarouselContent>
         <CarouselItem>
           <IndividualPackingList
-            setSnackbarMessage={setSnackbarMessage}
-            setSnackbarSeverity={setSnackbarSeverity}
-            setSnackbarOpen={setSnackbarOpen}
+            alertUser={alertUser}
           >
 
           </IndividualPackingList>
@@ -59,9 +56,7 @@ export function ListCarousel({setSnackbarMessage, setSnackbarSeverity, setSnackb
           <GroupPackingList
             avatars={avatar}
             userId={userId}
-            setSnackbarMessage={setSnackbarMessage}
-            setSnackbarSeverity={setSnackbarSeverity}
-            setSnackbarOpen={setSnackbarOpen}
+            alertUser={alertUser}
           >
             
           </GroupPackingList>
@@ -70,9 +65,7 @@ export function ListCarousel({setSnackbarMessage, setSnackbarSeverity, setSnackb
           <ToDoList
             avatars={avatar}
             userId={userId}
-            setSnackbarMessage={setSnackbarMessage}
-            setSnackbarSeverity={setSnackbarSeverity}
-            setSnackbarOpen={setSnackbarOpen}
+            alertUser={alertUser}
           >
             
           </ToDoList>
@@ -85,7 +78,5 @@ export function ListCarousel({setSnackbarMessage, setSnackbarSeverity, setSnackb
 }
 
 ListCarousel.propTypes = {
-  setSnackbarMessage: PropTypes.func,
-  setSnackbarSeverity: PropTypes.func,
-  setSnackbarOpen: PropTypes.func,
+  alertUser: PropTypes.func,
 }

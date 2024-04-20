@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { GroupListItem } from "./ListItem"
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSeverity, setSnackbarOpen}) => {
+const GroupPackingList = ({avatars, userId, alertUser}) => {
   const token = localStorage.getItem("token");
   const {tripId} = useParams();
   const [list, setList] = useState([]);
@@ -30,7 +30,7 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
       });
       setList(response.data)
     } catch (error) {
-      handleError(error);
+      alertUser("error", "", error);
     }
   };
 
@@ -42,7 +42,7 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
         });
         setList(response.data)
       } catch (error) {
-        handleError(error);
+        alertUser("error", "", error);
       }
     };
     fetchData();
@@ -56,15 +56,10 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
         headers: { Authorization: token },
       });
       setNewItemName("");
+      alertUser("success", "Item added.");
       setList((oldList) => ([...oldList, response.data]));
-      setSnackbarMessage("Item added.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be added.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be added.", error);
     }
   };
 
@@ -74,14 +69,9 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
-      setSnackbarMessage("Item deleted.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Item deleted.");
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be deleted.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be deleted.", error);
     }
   };
 
@@ -93,10 +83,7 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
       });
       setChange(old => old + 1);
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be completed.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be completed.", error);
     }
   };
 
@@ -108,10 +95,7 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
         });
         setChange(old => old + 1);
       } catch (error) {
-        handleError(error);
-        setSnackbarMessage("Item couldn't be selected.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
+        alertUser("error", "Item couldn't be selected.", error);
       }
     } else {
       try{
@@ -120,10 +104,7 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
         });
         setChange(old => old + 1);
       } catch (error) {
-        handleError(error);
-        setSnackbarMessage("Item couldn't be deselected.");
-        setSnackbarSeverity("error");
-        setSnackbarOpen(true);
+        alertUser("error", "Item couldn't be deselected.", error);
       }
     }
   };
@@ -135,14 +116,9 @@ const GroupPackingList = ({avatars, userId, setSnackbarMessage, setSnackbarSever
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
-      setSnackbarMessage("Item updated.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Item updated.");
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be updated.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be updated.", error);
     }
   };
 
@@ -207,7 +183,5 @@ export default GroupPackingList;
 GroupPackingList.propTypes = {
   avatars: PropTypes.array,
   userId: PropTypes.number,
-  setSnackbarMessage: PropTypes.func,
-  setSnackbarSeverity: PropTypes.func,
-  setSnackbarOpen: PropTypes.func,
+  alertUser: PropTypes.func,
 };

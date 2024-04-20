@@ -1,8 +1,6 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
-import { api, handleError } from "helpers/api";
-import User from "models/User";
+import { api } from "helpers/api";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
@@ -22,7 +20,7 @@ import {
 import ReactDOM from "react-dom";
 
 
-const ChooseConnection = () => {
+const ChooseConnection = ({alertUser}) => {
   const navigate = useNavigate();
   const [tripDescription, setTripDescription] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
@@ -67,7 +65,7 @@ const ChooseConnection = () => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        handleError(error);
+        alertUser("error", "Query Error. Try again.", error)
       }
     }
   };
@@ -105,8 +103,8 @@ const ChooseConnection = () => {
       });
       setConnections(l);
       setShowConnections(true);
-    } catch (e) {
-      handleError(e);
+    } catch (error) {
+      alertUser("error", "Couldn't render the connection.", error)
     }
   };
 
@@ -127,9 +125,14 @@ const ChooseConnection = () => {
   };
 
   const handleConnectionSubmit = async () => {
-    const response = await api.post("/trips/" + tripId + "/connection", {
+    try {
+      const response = await api.post("/trips/" + tripId + "/connection", {
       body: {},
     });
+    } catch (error) {
+      alertUser("error", "Choosing the connection failed.", error)
+    } 
+    
   };
 
   useEffect(() => {
@@ -151,8 +154,8 @@ const ChooseConnection = () => {
         console.log(response.data.meetUpPlace);
 
         setDestination(response.data.meetUpPlace.stationName);
-      } catch (e) {
-        handleError(e);
+      } catch (error) {
+        alertUser("error", "Couldn't fetch the trip's destination.", error)
       }
     };
     fetchData();
@@ -271,3 +274,7 @@ const ChooseConnection = () => {
 };
 
 export default ChooseConnection;
+
+ChooseConnection.propTypes = {
+  alertUser: PropTypes.func,
+}

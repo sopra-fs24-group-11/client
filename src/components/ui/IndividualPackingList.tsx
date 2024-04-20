@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { api, handleError } from "helpers/api";
+import { api } from "helpers/api";
 import { Button } from "components/ui/Button";
 import { IndividualListItem } from "./ListItem"
 import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnackbarOpen}) => {
+const IndividualPackingList = ({alertUser}) => {
   const token = localStorage.getItem("token");
   const {tripId} = useParams();
   const [list, setList] = useState([]);
@@ -22,7 +22,7 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
         });
         setList(response.data)
       } catch (error) {
-        handleError(error);
+        alertUser("error", "", error);
       }
     };
     fetchData();
@@ -36,15 +36,10 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
         headers: { Authorization: token },
       });
       setNewItemName("");
+      alertUser("success", "Item added.");
       setList((oldList) => ([...oldList, response.data]));
-      setSnackbarMessage("Item added.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be added.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be added.", error);
     }
   };
 
@@ -54,14 +49,9 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
-      setSnackbarMessage("Template transferred.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Template transferred.");
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Template couldn't be transferred.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Template couldn't be transferred.", error);
     }
   };
 
@@ -73,7 +63,7 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
       });
       setChange(old => old + 1);
     } catch (error) {
-      alert(`Something went wrong while completing the item: \n${handleError(error)}`);
+      alertUser("error", "", error);
     }
   };
 
@@ -84,14 +74,9 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
-      setSnackbarMessage("Item updated.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Item updated.");
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be updated.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be updated.", error);
     }
   };
 
@@ -101,14 +86,9 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
         headers: { Authorization: token },
       });
       setChange(old => old + 1);
-      setSnackbarMessage("Item deleted.");
-      setSnackbarSeverity("success");
-      setSnackbarOpen(true);
+      alertUser("success", "Item deleted.");
     } catch (error) {
-      handleError(error);
-      setSnackbarMessage("Item couldn't be deleted.");
-      setSnackbarSeverity("error");
-      setSnackbarOpen(true);
+      alertUser("error", "Item couldn't be deleted.", error);
     }
   };
   
@@ -168,7 +148,5 @@ const IndividualPackingList = ({setSnackbarMessage, setSnackbarSeverity, setSnac
 export default IndividualPackingList;
 
 IndividualPackingList.propTypes = {
-  setSnackbarMessage: PropTypes.func,
-  setSnackbarSeverity: PropTypes.func,
-  setSnackbarOpen: PropTypes.func,
+  alertUser: PropTypes.func,
 };
