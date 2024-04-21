@@ -10,8 +10,22 @@
 
 .trip-label {
     cursor: pointer;
-  }
+}
   
-  .trip-label:hover {
-    text-shadow: 2px 2px 4px #000;
+.trip-label:hover {
+  text-shadow: 2px 2px 4px #000;
+}
+
+.favourites-log-list {
+  overflow-y: auto;
+  max-height: 462px;
+
+  ol {
+    li {
+      margin-bottom: 5px;
+      border-bottom: 1px solid #a5a5a5;
+      padding-bottom: 5px;
+      margin-right: 10px;
+    }
   }
+}
