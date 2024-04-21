@@ -246,7 +246,6 @@ const CustomizeTrip = ({alertUser}) => {
     fetchTrip();
     fetchParticipants();
     fetchFriends();
-    fetchLocation();
   }, []);
 
   if (isLoading) {
