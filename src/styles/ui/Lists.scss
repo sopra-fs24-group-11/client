@@ -70,7 +70,7 @@
   }
   &.element {
     border-radius: 10px;
-    flex: 1 1 200px;
+    flex: 1 1 350px;
     padding: 10px 2px;
     min-height: 30px;
   }
@@ -84,17 +84,18 @@
     justify-content: flex-end;
     align-items: center;
     color:black;
+    max-width:100%;
     .name {
       padding-left:10px;
-      height:50px;
+      height:60px;
       align-content:center;
       overflow-y:auto;
       overflow-x:hidden;
       margin-right:auto;
-      max-width:130px;
+      max-width:230px;
       display:block;
+      text-wrap: pretty;
       hyphens: auto;
-      text-overflow: ellipsis;
     }
     .item-icons {
       display:flex;
@@ -155,14 +156,68 @@
   }
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .Carousel-List-Container {
     min-height:550px;
   }
+  .List {
+    &.element {
+      flex: 1 1 250px;
+    }
+  }
+}
+@media (max-width:400px) {
   .ListItem {
     &.container{
       .name {
-        max-width: 150px;
+        max-width: 130px;
+      }
+    }
+  }
+}
+
+@media (min-width:400px) and (max-width:450px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 160px;
+      }
+    }
+  }
+}
+@media (min-width:450px) and (max-width:500px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 200px;
+      }
+    }
+  }
+}
+
+@media (min-width:500px) and (max-width:671px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 230px;
+      }
+    }
+  }
+}
+@media (min-width:672px) and (max-width:768px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 130px;
+      }
+    }
+  }
+}
+@media (min-width: 769px) and (max-width:945px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 400px;
       }
     }
   }
