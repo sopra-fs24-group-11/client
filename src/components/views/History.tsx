@@ -22,7 +22,6 @@ const History = ({alertUser}) => {
         headers: { Authorization: token },
       });
       setHistoryTrips(response.data);
-      console.log(response.data);
 
     } catch (error) {
       alertUser("error", "", error);
@@ -41,7 +40,7 @@ const History = ({alertUser}) => {
     fetchHistory();
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Show loader for x seconds
+    }, 1500); 
     return () => clearTimeout(timer);
   }, []);
 

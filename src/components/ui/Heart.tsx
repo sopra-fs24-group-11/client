@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { api } from "helpers/api";
@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 
 const Heart = ({tripId, isFavourite, alertUser}) => {
   const token = localStorage.getItem("token");
+  const [favourite, setFavourite] = useState(isFavourite);
 
   const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {
@@ -23,8 +24,8 @@ const Heart = ({tripId, isFavourite, alertUser}) => {
       await api.put(`/trips/${tripId}/favorites `, {}, {
         headers: { Authorization: token },
       });
-      alertUser("success", isFavourite ? "Removed from favourites." : "Added to favourites.");
-      // TO DO: Set state! Or fetch again. But right now, the heart does not know what to do...
+      alertUser("success", favourite ? "Removed from favourites." : "Added to favourites.");
+      setFavourite(!favourite);
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -32,7 +33,7 @@ const Heart = ({tripId, isFavourite, alertUser}) => {
 
   return (
     <StyledRating
-      defaultValue={isFavourite ? 1 : 0}
+      defaultValue={favourite ? 1 : 0}
       max={1}
       precision={1}
       icon={<FavoriteIcon fontSize="inherit" />}

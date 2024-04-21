@@ -75,13 +75,16 @@ const Favourites = ({ alertUser }) => {
   }, []);
 
   return (
-    <ul>
-      {favTrips.map((fav) => (
-        <li key={fav.id}>
-          <TripContainer name={fav.tripName} id={fav.id}></TripContainer>
-        </li>
-      ))}
-    </ul>
+    <div className="favourites-log-list">
+      <ol>
+        {favTrips.map((fav) => (
+          <li key={fav.id}>
+            <TripContainer name={fav.tripName} id={fav.id}></TripContainer>
+          </li>
+        ))}
+      </ol>
+    </div>
+    
   );
 };
 

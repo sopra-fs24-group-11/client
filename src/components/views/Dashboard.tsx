@@ -472,16 +472,12 @@ const YourFavorites = ({ setIsLoading, alertUser }) => {
   };
 
   return (
-    <div className="your-favorites component">
+    <div className="component">
       <h2>Your Favourites</h2>
       <Favourites alertUser={alertUser}></Favourites>
-      <Button
-        onClick={showHistory}
-        width="150px"
-        backgroundColor="#FFB703"
-        >
-        Trip History
-      </Button>
+      <div className ="show-details-button-container">
+        <Button onClick={showHistory} width="150px" backgroundColor="#FFB703">Trip History</Button>
+      </div>
     </div>
   );
 };
