@@ -331,7 +331,7 @@ const TripOverview = ({alertUser}) => {
           icon={<FavoriteIcon fontSize="inherit" />}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
           onMouseDown={handleToFavourites}
-          onTouchStart={handleToFavourites}
+          //onTouchStart={handleToFavourites}
         />
       </div>
 

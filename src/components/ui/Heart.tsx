@@ -39,7 +39,7 @@ const Heart = ({tripId, isFavourite, alertUser}) => {
       icon={<FavoriteIcon fontSize="inherit" />}
       emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
       onMouseDown={() => handleClick()}
-      onTouchStart={() => handleClick()}
+      //onTouchEnd={() => handleClick()}
     />
   );
 };
