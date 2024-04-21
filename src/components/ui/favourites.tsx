@@ -59,7 +59,7 @@ const Favourites = ({ alertUser }) => {
           icon={<FavoriteIcon fontSize="inherit" />}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
           onMouseDown={() => handleClick(id)}
-          onTouchStart={() => handleClick(id)}
+          //onTouchStart={() => handleClick(id)}
         />
       </div>
     );
