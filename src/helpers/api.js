@@ -63,9 +63,9 @@ export const handleError1 = (error, handleAlert, errorMessage) => {
       info += `\nstatus code: ${response.data.status}`;
       info += `\nerror: ${response.data.error}`;
       info += `\nerror message: ${response.data.message}`;
-      if (response.status.toString().startsWith("4")) {
-        errorMessage = response.data.message; // Use Server error message instead of client-provided one.
-      }
+      // if (response.status.toString().startsWith("4")) {
+      errorMessage = response.data.message; // Use Server error message instead of client-provided one.
+      // }
     } else {
       info += `\nstatus code: ${response.status}`;
       info += `\nerror message:\n${response.data}`;
