@@ -8,12 +8,13 @@ import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
 import ConfirmPopup from "../ui/ConfirmPopup";
+import defaultImage from '../../graphics/Get-Together.png';
 
 // Main Profile component
 const ProfilePage: React.FC = ({alertUser}) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null); // Hier ist das Problem: ihr setzt user = null und React versucht unten user.username etc. zu rendern. ==> Error
+  const [user, setUser] = useState<User>({}); // Hier ist das Problem: ihr setzt user = null und React versucht unten user.username etc. zu rendern. ==> Error
   const [avatar, setAvatar] = useState<File | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
@@ -207,7 +208,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
       <div className="avatar-and-text">
         {user && (
           <div className="avatar-and-buttons">
-            <img className="avatar" src={user.avatar} alt="User Avatar" />
+            {user.avatar ? <img className="avatar" src={user.avatar} alt="User Avatar" /> : <img className="avatar" src={defaultImage} />}
             {editMode && (
               <div className="avatar-buttons">
                 <div className="file-upload-container">
@@ -268,17 +269,25 @@ const ProfilePage: React.FC = ({alertUser}) => {
                 name="birthday"
                 onChange={handleChange}
               />
+              <Label className="label">Password</Label>
+              <input
+              className="input-password"
+                type="text"
+                value={editedUser.password}
+                name="password"
+                onChange={handleChange}
+              />
             </>
           ) : (
             <>
               <Label className="label">Username</Label>
-              <p>{user.username || ""}</p>
+              <p>{user.username}</p>
               <Label className="label">Email</Label>
-              <p>{user.email || ""}</p>
+              <p>{user.email}</p>
               <Label className="label">Birthday</Label>
-              <p>{user.birthday || ""}</p>
+              <p>{user.birthday}</p>
               <Label className="label">Creation Date</Label>
-              <p>{user.creationDate || ""}</p>
+              <p>{user.creationDate}</p>
             </>
           )}
           <div className="buttons-container">
