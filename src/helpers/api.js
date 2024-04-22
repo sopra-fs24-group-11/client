@@ -76,5 +76,6 @@ export const handleError1 = (error, handleAlert, errorMessage) => {
     return info;
   } else {
     handleAlert("" + error)
+    console.log("The request was made and answered but was unsuccessful.", error);
   }
 };
