@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
 import ConfirmPopup from "../ui/ConfirmPopup";
-import defaultImage from '../../graphics/Get-Together.png';
+import defaultImage from "../../graphics/Get-Together.png";
 
 // Main Profile component
 const ProfilePage: React.FC = ({alertUser}) => {
