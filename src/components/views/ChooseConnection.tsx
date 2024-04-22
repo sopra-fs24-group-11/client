@@ -120,15 +120,13 @@ const ChooseConnection = ({alertUser}) => {
     }
   };
 
-  const moveBack = () => {
-    navigate("/createTrip");
-  };
 
   const handleConnectionSubmit = async () => {
     try {
       const response = await api.post("/trips/" + tripId + "/connection", {
       body: {},
     });
+      navigate(`/tripOverview/${tripId}`)
     } catch (error) {
       alertUser("error", "Choosing the connection failed.", error)
     } 
@@ -161,9 +159,6 @@ const ChooseConnection = ({alertUser}) => {
     fetchData();
   }, []);
 
-  const cancelTrip = () => {
-    navigate("/createTrip");
-  };
 
   return (
     <BaseContainer>
@@ -255,7 +250,7 @@ const ChooseConnection = ({alertUser}) => {
               </div>
             )}
             <div className="box-row">
-              <Button className="button" id="cancelButton" onClick={moveBack}>
+              <Button className="button" id="cancelButton" onClick={() => navigate(`/tripOverview/${tripId}`)}>
                 BACK
               </Button>
               <Button
