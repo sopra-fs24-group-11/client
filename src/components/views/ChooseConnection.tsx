@@ -86,7 +86,8 @@ const ChooseConnection = ({alertUser}) => {
         { headers: { Authorization: localStorage.getItem("token") } }
       );
 
-      console.log("request: " + possibleConnections);
+      console.log("request: ");
+      console.log(possibleConnections);
 
       let l = possibleConnections.data.map((connection, index) => {
         console.log(index);
