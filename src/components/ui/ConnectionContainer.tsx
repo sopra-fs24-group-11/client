@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import "../../styles/ui/ConnectionContainer.scss";
-import "../../graphics/infoIcon.jpeg";
+import picture from "../../graphics/infoIcon.jpeg";
 
 interface ConnectionContainerProps {
   children?: React.ReactNode;
@@ -124,8 +124,8 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
           {slicer(departureTime)}
         </p>
         <img
-          style={{ width: 100, position: "absolute", right: 0 }}
-          src={"../../graphics/infoIcon.jpeg"}
+          style={{ width: "30px", position: "absolute", right: 0 }}
+          src={picture}
           alt="Information Icon"
         />
       </div>
