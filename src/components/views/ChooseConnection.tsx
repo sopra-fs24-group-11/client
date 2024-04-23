@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { api } from "helpers/api";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
 import DateTimePicker from "react-datetime-picker";
@@ -17,20 +17,20 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
-import ReactDOM from "react-dom";
 
 
 const ChooseConnection = ({alertUser}) => {
   const navigate = useNavigate();
-  const [tripDescription, setTripDescription] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
-  const [tripId, setTripId] = useState<string>("");
+  const token = localStorage.getItem("token");
+  const {tripId} = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
   const [departureTime, setDepartureTime] = useState<string>("");
   const [arrivalTime, setArrivalTime] = useState<string>("");
   const [travelTime, setTravelTime] = useState<string>("");
   const [connections, setConnections] = useState([]);
+  const [chosenConnection, setChosenConnection] = useState([]);
   const [showConnections, setShowConnections] = useState<boolean>(false);
 
   // used for Location Pop-Up
@@ -51,7 +51,6 @@ const ChooseConnection = ({alertUser}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleLocationSearchChange = async (event) => {
-    const token = localStorage.getItem("token");
     setLocationSearchTerm(event.target.value);
     if (event.target.value.trim() === "") {
       setLocationSuggestions([]);
@@ -83,31 +82,33 @@ const ChooseConnection = ({alertUser}) => {
       
       const possibleConnections = await api.get(
         "/trips/" + tripId + "/startPoint?start=" + locationCode + "&isLate=" + "false",
-        { headers: { Authorization: localStorage.getItem("token") } }
+        { headers: { Authorization: token } }
       );
+      let filteredList = possibleConnections.data.filter(sublist => sublist.length > 0);
+      setConnections(filteredList);
+      setShowConnections(true);
+    } catch (error) {
+      alertUser("error", "Couldn't render the connection.", error)
+    }
+  };
 
-      console.log("request: ");
-      console.log(possibleConnections);
-
-      let l = possibleConnections.data.map((connection, index) => {
-        console.log(index);
-        return (
+  let content = <h1>No connections found.</h1>;
+  if (connections && connections.length > 0) {
+    content = (
+      <div>
+        {connections.map((connection, index) => (
           <ConnectionContainer
             departureTime={connection[0].departureTime}
             arrivalTime={connection[connection.length - 1].arrivalTime}
             key={index}
             wholeTrip={connection}
             isClicked={activeConnection === index} // Pass down whether this connection is active
-            onClick={() => setActiveConnection(index)} // Pass down function to set active connection
+            onClick={() => {setActiveConnection(index);setChosenConnection(connection);}} // Pass down function to set active connection
           />
-        );
-      });
-      setConnections(l);
-      setShowConnections(true);
-    } catch (error) {
-      alertUser("error", "Couldn't render the connection.", error)
-    }
-  };
+        ))}
+      </div>
+    );
+  }
 
   const handleLocationSubmit = () => {
     if (selectedLocation) {
@@ -123,10 +124,11 @@ const ChooseConnection = ({alertUser}) => {
 
 
   const handleConnectionSubmit = async () => {
+    const requestBody = JSON.stringify(chosenConnection);
     try {
-      const response = await api.post("/trips/" + tripId + "/connection", {
-      body: {},
-    });
+      await api.post(`/trips/${tripId}/connection`, requestBody, {
+        headers: { Authorization: token },
+      });
       navigate(`/tripOverview/${tripId}`)
     } catch (error) {
       alertUser("error", "Choosing the connection failed.", error)
@@ -136,16 +138,8 @@ const ChooseConnection = ({alertUser}) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const id =
-        window.location.href.split("/")[
-          window.location.href.split("/").length - 1
-        ];
-
-      setTripId(id);
-
       try {
-        const token = localStorage.getItem("token");
-        const response = await api.get("/trips/" + id, {
+        const response = await api.get(`/trips/${tripId}`, {
           headers: { Authorization: token },
         });
 
@@ -246,7 +240,8 @@ const ChooseConnection = ({alertUser}) => {
               <div id="results" className="connection box">
                 <h2 className="text-2xl mb-2">Select Your Connection:</h2>
                 <div className="connectionContainer" style={{ height: 0 }}>
-                  {connections}
+                  {/* {connections} */}
+                  {content}
                 </div>
               </div>
             )}
