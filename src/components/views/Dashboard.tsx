@@ -465,20 +465,8 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
 };
 
 const YourFavorites = ({ setIsLoading, alertUser }) => {
-  const navigate = useNavigate();
-
-  const showHistory = () => {
-    navigate("/history");
-  };
-
   return (
-    <div className="component">
-      <h2>Your Favourites</h2>
-      <Favourites alertUser={alertUser}></Favourites>
-      <div className ="show-details-button-container">
-        <Button onClick={showHistory} width="150px" backgroundColor="#FFB703">Trip History</Button>
-      </div>
-    </div>
+    <Favourites alertUser={alertUser}></Favourites>
   );
 };
 

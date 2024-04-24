@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { api } from "helpers/api";
 import { styled } from "@mui/material/styles";
+import { Button } from "components/ui/Button";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -59,7 +60,6 @@ const Favourites = ({ alertUser }) => {
           icon={<FavoriteIcon fontSize="inherit" />}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
           onMouseDown={() => handleClick(id)}
-          //onTouchStart={() => handleClick(id)}
         />
       </div>
     );
@@ -75,14 +75,27 @@ const Favourites = ({ alertUser }) => {
   }, []);
 
   return (
-    <div className="favourites-log-list">
-      <ol>
-        {favTrips.map((fav) => (
-          <li key={fav.id}>
-            <TripContainer name={fav.tripName} id={fav.id}></TripContainer>
-          </li>
-        ))}
-      </ol>
+    <div className="component">
+      <h2>Your Favourites</h2>
+      {favTrips.length > 0 ? (
+        <div className="favourites-log-list">
+          <ol>
+            {favTrips.map((fav) => (
+              <li key={fav.id}>
+                <TripContainer name={fav.tripName} id={fav.id}></TripContainer>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : (
+        <div className="no-friends-message">
+        No trips selected as favourites yet!
+        </div>
+      )}
+      <div className ="show-details-button-container">
+        <Button onClick={() => navigate("/history")} width="150px" backgroundColor="#FFB703">Trip History</Button>
+      </div>
+      
     </div>
     
   );
