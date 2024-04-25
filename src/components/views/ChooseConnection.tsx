@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { api } from "helpers/api";
+import React, {useState, useEffect, useRef} from "react";
+import {api} from "helpers/api";
 import PropTypes from "prop-types";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "components/ui/Button";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button} from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
 import DateTimePicker from "react-datetime-picker";
 import "styles/views/Connections.scss";
@@ -59,7 +59,7 @@ const ChooseConnection = ({alertUser}) => {
         const response = await api.get(
           `/trips/searchStation?start=${event.target.value}`,
           {
-            headers: { Authorization: token },
+            headers: {Authorization: token},
           }
         );
         setLocationSuggestions(response.data);
@@ -79,14 +79,15 @@ const ChooseConnection = ({alertUser}) => {
     try {
       setShowConnections(false); //
       setShowSpinner(true);
-      
+
       const possibleConnections = await api.get(
         "/trips/" + tripId + "/startPoint?start=" + locationCode + "&isLate=" + "false",
-        { headers: { Authorization: token } }
+        {headers: {Authorization: token}}
       );
       let filteredList = possibleConnections.data.filter(sublist => sublist.length > 0);
       setConnections(filteredList);
       setShowConnections(true);
+      console.log(possibleConnections);
     } catch (error) {
       alertUser("error", "Couldn't render the connection.", error)
     }
@@ -103,7 +104,10 @@ const ChooseConnection = ({alertUser}) => {
             key={index}
             wholeTrip={connection}
             isClicked={activeConnection === index} // Pass down whether this connection is active
-            onClick={() => {setActiveConnection(index);setChosenConnection(connection);}} // Pass down function to set active connection
+            onClick={() => {
+              setActiveConnection(index);
+              setChosenConnection(connection);
+            }} // Pass down function to set active connection
           />
         ))}
       </div>
@@ -127,20 +131,20 @@ const ChooseConnection = ({alertUser}) => {
     const requestBody = JSON.stringify(chosenConnection);
     try {
       await api.post(`/trips/${tripId}/connection`, requestBody, {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       navigate(`/tripOverview/${tripId}`)
     } catch (error) {
       alertUser("error", "Choosing the connection failed.", error)
-    } 
-    
+    }
+
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await api.get(`/trips/${tripId}`, {
-          headers: { Authorization: token },
+          headers: {Authorization: token},
         });
 
         console.log(Object.keys(response.data));
@@ -164,7 +168,7 @@ const ChooseConnection = ({alertUser}) => {
             <div className="connection locations_container">
               <Dialog>
                 <DialogTrigger asChild>
-                  <div style={{ width: "100%" }}>
+                  <div style={{width: "100%"}}>
                     <h2 className="text-2xl mb-5">Starting Location:</h2>
                     <textarea
                       id="startLocation"
@@ -221,7 +225,7 @@ const ChooseConnection = ({alertUser}) => {
                       Select Starting Location
                     </Button>
                   </DialogFooter>
-                  <DialogClose ref={closeDialogRef} className="hidden" />
+                  <DialogClose ref={closeDialogRef} className="hidden"/>
                 </DialogContent>
               </Dialog>
               <textarea
@@ -239,7 +243,7 @@ const ChooseConnection = ({alertUser}) => {
             ) : (
               <div id="results" className="connection box">
                 <h2 className="text-2xl mb-2">Select Your Connection:</h2>
-                <div className="connectionContainer" style={{ height: 0 }}>
+                <div className="connectionContainer" style={{height: 0}}>
                   {/* {connections} */}
                   {content}
                 </div>
