@@ -289,7 +289,7 @@ const TripOverview = ({alertUser}) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1300); // Show loader for x seconds
+    }, 1200); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);
