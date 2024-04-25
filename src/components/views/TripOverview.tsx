@@ -439,7 +439,7 @@ const TripOverview = ({alertUser}) => {
         onClose={handleCloseLeaveDialog}
         sx={{
           "& .MuiBackdrop-root": {
-            backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
           },
           "& .MuiPaper-root": {
             // Targeting the Paper component inside the Dialog
@@ -477,7 +477,7 @@ const TripOverview = ({alertUser}) => {
         aria-describedby="delete-dialog-description"
         sx={{
           "& .MuiBackdrop-root": {
-            backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+            backgroundColor: "rgba(0, 0, 0, 0.8)", 
           },
           "& .MuiPaper-root": {
             // Targeting the Paper component inside the Dialog
@@ -516,7 +516,7 @@ const TripOverview = ({alertUser}) => {
         onClose={handleCloseNewAdminDialog}
         sx={{
           "& .MuiBackdrop-root": {
-            backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
           },
           "& .MuiPaper-root": {
             boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
@@ -558,7 +558,7 @@ const TripOverview = ({alertUser}) => {
             Cancel
           </Button>
           <Button
-            style={{ backgroundColor: "#FFB703", color: "black" }} // Fix style attribute
+            style={{ backgroundColor: "#FFB703", color: "black" }}
             onClick={handleSelectNewAdmin}
             disabled={!newAdminId}
           >
