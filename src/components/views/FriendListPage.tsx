@@ -1,14 +1,14 @@
 // =================================================================
 
-import React, { useState, useEffect, useRef } from "react";
-import { api } from "helpers/api";
-import { useNavigate } from "react-router-dom";
-import { Button } from "components/ui/Button";
-import { Progress } from "../ui/progress";
+import React, {useState, useEffect, useRef} from "react";
+import {api} from "helpers/api";
+import {useNavigate} from "react-router-dom";
+import {Button} from "components/ui/Button";
+import {Progress} from "../ui/progress";
 import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
-import { Input } from "components/ui/input";
+import {Input} from "components/ui/input";
 import {
   Dialog as DialogSCN,
   DialogContent as DialogContentSCN,
@@ -42,10 +42,13 @@ const FriendListPage = ({alertUser}) => {
   const fetchFriends = async () => {
     try {
       const response = await api.get("/users/friends", {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
-      setFriendList(response.data);
-      console.log("Friend list: ", response.data);
+
+      let x = response.data.sort((a, b) => a.username.localeCompare(b.username));
+
+      setFriendList(x);
+      console.log("Friend list: ", x);
     } catch (error) {
       alertUser("error", "Couldn't fetch the friend list.", error);
     }
@@ -54,7 +57,7 @@ const FriendListPage = ({alertUser}) => {
   const fetchFriendRequests = async () => {
     try {
       const response = await api.get("/users/friends/requests", {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       setFriendRequests(response.data); // Assuming this is an array of friend requests
     } catch (error) {
@@ -68,7 +71,7 @@ const FriendListPage = ({alertUser}) => {
         `/users/friends/${friendRequestId}`,
         {},
         {
-          headers: { Authorization: token },
+          headers: {Authorization: token},
         }
       );
       alertUser("success", "Friend request accepted.");
@@ -85,7 +88,7 @@ const FriendListPage = ({alertUser}) => {
   const handleDenyFriendRequest = async (friendRequestId) => {
     try {
       await api.delete(`/users/friends/${friendRequestId}`, {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       alertUser("success", "Friend request denied.");
       await fetchFriends();
@@ -107,7 +110,7 @@ const FriendListPage = ({alertUser}) => {
         const response = await api.get(
           `/users/search?name=${event.target.value}`,
           {
-            headers: { Authorization: token },
+            headers: {Authorization: token},
           }
         );
         setSuggestions(response.data); // Assuming this is an array of user objects
@@ -137,7 +140,7 @@ const FriendListPage = ({alertUser}) => {
     if (friendToDelete) {
       try {
         await api.delete(`/users/friends/${friendToDelete}`, {
-          headers: { Authorization: token },
+          headers: {Authorization: token},
         });
         alertUser("success", "Friend removed.");
         // Remove the friend from the friendList in the UI after successful deletion
@@ -161,7 +164,7 @@ const FriendListPage = ({alertUser}) => {
           `/users/friends/${selectedFriend.id}`,
           {},
           {
-            headers: { Authorization: token },
+            headers: {Authorization: token},
           }
         );
         alertUser("success", "Friend request sent.");
@@ -201,7 +204,7 @@ const FriendListPage = ({alertUser}) => {
   }, []);
 
   if (isLoading) {
-    return <LinearIndeterminate />;
+    return <LinearIndeterminate/>;
   }
 
   return (
@@ -213,7 +216,7 @@ const FriendListPage = ({alertUser}) => {
             {friendList.map((friend) => (
               <li key={friend.friendId} className="friend">
                 <span className="name">{friend.username}</span>
-                <Progress className="progress-bar" value={friend.points} />
+                <Progress className="progress-bar" value={friend.points}/>
                 <div className="stage">Level: {Math.floor(friend.level)}</div>
                 <Button
                   className="remove-friend"
@@ -246,7 +249,7 @@ const FriendListPage = ({alertUser}) => {
                   <DialogActions>
                     <Button
                       onClick={handleCloseDeleteDialog}
-                      style={{ backgroundColor: "#BCFFE3", color: "black" }}
+                      style={{backgroundColor: "#BCFFE3", color: "black"}}
                       width={null}
                       height={null}
                       backgroundColor={null}
@@ -260,7 +263,7 @@ const FriendListPage = ({alertUser}) => {
                         handleRemoveFriend();
                         handleCloseDeleteDialog();
                       }}
-                      style={{ backgroundColor: "#FF7070", color: "black" }}
+                      style={{backgroundColor: "#FF7070", color: "black"}}
                     >
                       Delete
                     </Button>
@@ -359,7 +362,7 @@ const FriendListPage = ({alertUser}) => {
                   Send Friend Request
                 </Button>
               </DialogFooterSCN>
-              <DialogCloseSCN ref={closeDialogRef} className="hidden" />
+              <DialogCloseSCN ref={closeDialogRef} className="hidden"/>
             </DialogContentSCN>
           </DialogSCN>
         </div>
