@@ -114,12 +114,12 @@ const IndividualPackingList = ({alertUser}) => {
       </div>
     );
   } else {
-    content = <h1 style={{textAlign:"center", color:"white", paddingTop:"20px"}}>No Items yet, feel free to add some!</h1>
+    content = <h1 style={{textAlign:"center", paddingTop:"20px"}}>No Items yet, feel free to add some!</h1>
   }
 
   return (
     <div className="Carousel-List-Container">
-      <h1 className="text-2xl font-semibold Carousel title">Individual Packing List</h1>
+      <h1 className=" font-semibold Carousel title">Individual Packing List</h1>
       {isPopupOpen && <div className="List popup-container11">
         <div className="List popup11">
           <input
@@ -136,9 +136,9 @@ const IndividualPackingList = ({alertUser}) => {
         </div>
       </div>}
       {!isPopupOpen && <div className="Carousel button-holder">
-        <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
-        <Button backgroundColor={"white"} onClick={() => {transferTemplate()}}>Transfer</Button>
+        <Button  onClick={() => {setPopupOpen(true)}}>Add Item</Button>
+        <Button  onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
+        <Button  onClick={() => {transferTemplate()}}>Transfer</Button>
       </div>}
       {!isPopupOpen && content}
     </div>

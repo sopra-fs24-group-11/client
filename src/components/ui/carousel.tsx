@@ -213,6 +213,7 @@ const CarouselPrevious = React.forwardRef<
         className
       )}
       disabled={!canScrollPrev}
+
       onClick={scrollPrev}
       {...props}
     >
