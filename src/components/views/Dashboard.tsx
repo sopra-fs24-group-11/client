@@ -264,8 +264,6 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
                   )}`}
                 </div>
                 <Button
-                  width="80px"
-                  height="35px"
                   backgroundColor="#FFB703"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevents the navigation from firing when the Info button is clicked

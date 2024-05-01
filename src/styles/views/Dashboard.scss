@@ -29,14 +29,14 @@
   margin: 0;
   font-size: 1.1rem;
   font-weight: 500;
-  border-bottom: 2px solid #222222;
+  border-bottom: 2px solid #383838;
   padding-bottom: 3px;
   margin-bottom: 20px;
 }
 
 /* Styling for the welcome message */
 .welcome {
-  background: rgb(58, 74, 88, 0.95);
+  background: rgba(0, 31, 51, 0.8);
   .welcome-title {
     color: #ffffff;
     border-bottom: 2px solid #ffffff;
@@ -76,7 +76,7 @@
     justify-content: space-between;
     align-items: stretch;
     align-items: center;
-    background: #6e90ae;
+    background: rgba(87, 113, 133, 0.65);
     min-height: 55px;
     color: white; 
     margin-bottom: 20px;
@@ -161,7 +161,7 @@
   text-align: center;
   margin-top: 20px;
   font-size: 1rem;
-  color: #000000; // Adjust color to match design
+  color: $textColor;
   font-style: italic;
   min-height: 70px;
 }
@@ -206,7 +206,7 @@
 
 /* Styling for the current trips component */
 .current-trips {
-  background: rgb(33, 104, 158, 0.7);
+  background: $containerFront;
   padding: 10px; /* Smaller padding to make the component a bit smaller */
   max-height: 300px;
   margin-bottom: 25px;

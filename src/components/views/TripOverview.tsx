@@ -373,7 +373,6 @@ const TripOverview = ({alertUser}) => {
           <Button
             className="back-button"
             backgroundColor="#FFB703"
-            color="black"
             onClick={handleBackClick}
           >
             Back to Dashboard
@@ -383,7 +382,6 @@ const TripOverview = ({alertUser}) => {
               !currentUserHasConnection ? "blinking-glowing" : ""
             }`}
             backgroundColor="#BCFFE3"
-            color="black"
             onClick={handleChooseConnection}
           >
             Choose Connection
@@ -391,7 +389,6 @@ const TripOverview = ({alertUser}) => {
           <Button
             className="leavetrip-button"
             backgroundColor="#FF7070"
-            color="black"
             onClick={handleOpenLeaveDialog}
           >
             Leave this trip
@@ -405,7 +402,6 @@ const TripOverview = ({alertUser}) => {
             <Button
               className="newadmin-button"
               backgroundColor="#FFB703"
-              color="black"
               onClick={handleOpenSelectAdminDialog}
             >
               Select new Admin
@@ -413,7 +409,6 @@ const TripOverview = ({alertUser}) => {
             <Button
               className="managetrip-button"
               backgroundColor="#BCFFE3"
-              color="black"
               onClick={handleToCustomizeTrip}
             >
               Manage Trip
@@ -421,7 +416,6 @@ const TripOverview = ({alertUser}) => {
             <Button
               className="deletetrip-button"
               backgroundColor="#FF7070"
-              color="black"
               onClick={handleOpenDeleteDialog}
             >
               Delete Trip

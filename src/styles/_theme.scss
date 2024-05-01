@@ -8,10 +8,14 @@
    feel free to play around with these and see what other look you can come up with! :D
 */
 
-$accent: #b9ffd4;
-$accentDark: #123597;
-$textColor: white;
+$buttonDefault: rgb(92, 136, 231);
+//$accentDark: #123597;
+$textColor: rgb(31, 31, 31);
 $background: #383838;
+$containerBehind: rgba(255, 255, 255, 0.85);
+$containerFront: rgba(195, 207, 209, 0.75);
+
+$borderLine: 2px solid #383838;
 
 /* some constants */
 
@@ -26,9 +30,9 @@ $fontDefault: "M PLUS Rounded 1c", sans-serif;
 $fontMono: "Roboto Mono", monospace;
 
 /* a standard drop shadow */
-$dropShadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.5);
+$dropShadow: 0 0.3em 0.4em rgba(0, 0, 0, 0.4);
 
-$borderRadius: 0.75em;
+$borderRadius: 0.5em;
 
 /* mixins
 

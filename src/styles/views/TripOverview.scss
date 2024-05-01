@@ -7,13 +7,11 @@
   margin-top: 5%;
   margin-bottom: 10%;
   margin-left: auto;
-  padding-left: 15px;
   margin-right: auto;
-  padding-right: 15px;
   max-width: $DESKTOP_WIDTH;
   min-height: 800px;
-  background-color: rgba(18, 55, 42, 0.8);
-  border-radius: 20px;
+  background-color: $containerBehind;
+  border-radius: $borderRadius;
 
   .main-header {
     display: flex;
@@ -27,7 +25,7 @@
   .main-title {
     font-size: 1.6rem;
     font-weight: 600;
-    color: #fbfada;
+    color: $textColor;
     margin-right: 20px;
   }
 
@@ -36,16 +34,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(68, 106, 81, 0.8);
-    border-radius: 20px;
+    background-color: $containerFront;
+    border-radius: $borderRadius;
     width: 95%;
     margin: 0px 20px 30px 20px;
-    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+    box-shadow: $dropShadow;
 
     .trip-description {
       font-size: 1rem;
       font-weight: 500;
-      color: #fbfada;
+      color: $textColor;
       margin-top: 20px;
       margin-bottom: 10px;
       padding-left: 20px;
@@ -56,9 +54,9 @@
       display: flex;
       justify-content: space-around;
       width: 95%;
-      color: #fbfada;
+      color: $textColor;
       font-size: 0.9rem;
-      border-top: #fbfada 1px solid;
+      border-top: $borderLine;
       padding-top: 10px;
       padding-bottom: 20px;
       font-weight: 450;
@@ -70,17 +68,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(68, 106, 81, 0.8);
-    border-radius: 20px;
+    background-color: $containerFront;
+    border-radius: $borderRadius;
     width: 95%;
     margin: 0px 20px 30px 20px;
-    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+    box-shadow: $dropShadow;
 
     .current-locations-title {
       margin: 0;
       font-size: 1.3rem;
       font-weight: 600;
-      color: #fbfada;
+      color: $textColor;
       margin-top: 10px;
       margin-bottom: 20px;
     }
@@ -97,42 +95,38 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-image: linear-gradient(
-          to left,
-          rgba(18, 55, 42),
-          rgba(68, 106, 81)
-        ); // gradient background
-        border-radius: 7px;
-        margin-bottom: 20px; // spacing between items
-        box-shadow: inset 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+        background-color: rgba(162, 175, 187, 0.65);
+        border-radius: $borderRadius;
+        margin-bottom: 20px;
+        box-shadow: inset $dropShadow;
         padding: 10px;
 
         .connection-name {
           min-width: 170px;
           max-width: 170px;
           margin-right: 10px;
-          color: #fbfada;
+          color: $textColor;
           font-size: 1rem;
           font-weight: 500;
           overflow: hidden; /* Prevents text from flowing outside the box */
           white-space: nowrap; /* Keeps the text on a single line */
           text-overflow: ellipsis; /* Adds an ellipsis (...) at the end when text overflows */
-          border-right: 1px solid #fbfada;
+          border-right: $borderLine;
         }
 
         .start-text {
-          color: #fbfada;
+          color: $textColor;
           padding-right: 20px;
           min-width: 100px;
           font-size: 0.8rem;
         }
 
         .progress-bar {
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+          box-shadow: $dropShadow;
         }
 
         .arrival-text {
-          color: #fbfada;
+          color: $textColor;
           padding-left: 20px;
           min-width: 130px;
           font-size: 0.8rem;
@@ -154,11 +148,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #436850e6;
-    border-radius: 20px;
+    background-color: $containerFront;
+    border-radius: $borderRadius;
     width: 95%;
     margin: 0px 20px 30px 20px;
-    box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+    box-shadow: $dropShadow;
 
     .admin-buttons {
       display: flex;
@@ -175,8 +169,8 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 500;
-    color: #fbfada;
-    border-bottom: 1px solid #fbfada;
+    color: $textColor;
+    border-bottom: $borderLine;
     padding-bottom: 3px;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -186,7 +180,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    //align-items: flex-start; // align items to the start of the container
     flex-wrap: wrap;
     width: 95%;
     margin: 0px 20px 30px 20px;
@@ -197,14 +190,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-color: #436850e6;
-      border-radius: 20px;
-      width: calc(50% - 10px); // Adjust width here
-      box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.4);
+      background-color: $containerFront;
+      border-radius: $borderRadius;
+      width: calc(50% - 10px); 
+      box-shadow: $dropShadow;
     }
 
     .packing-lists-container {
-      background-color: #436850e6;
+      background-color: $containerFront;
     }
   }
 }
@@ -243,7 +236,8 @@
     .connections-list {
       padding-left: 0;
       padding-right: 0;
-      min-height: 300px;
+      min-height: 150px;
+      max-height: 500px;
 
       .connection-item {
         flex-direction: column;
@@ -254,7 +248,7 @@
           width: 100%;
           margin-right: 0 !important;
           border-right: none !important; 
-          border-bottom: 1px solid #fbfada;
+          border-bottom: $borderLine;
           margin-bottom: 10px;
         }
 
