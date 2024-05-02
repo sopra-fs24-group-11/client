@@ -388,7 +388,7 @@ const CreateTrip = ({alertUser}) => {
                     onMouseLeave={handleMouseLeave}
                     onClick={() => removeParticipant(parseInt(key))}
                   >
-                    X
+                    x
                   </label>
                 </div>
               ))}
