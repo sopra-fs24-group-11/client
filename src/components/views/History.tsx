@@ -9,6 +9,7 @@ import { Input } from "components/ui/input";
 import "../../styles/views/History.scss";
 import Heart from "components/ui/Heart"
 import PropTypes from "prop-types";
+import { HashLoader } from "react-spinners";
 
 const History = ({alertUser}) => {
   const navigate = useNavigate();
@@ -45,7 +46,11 @@ const History = ({alertUser}) => {
   }, []);
 
   if (isLoading) {
-    return <LinearIndeterminate />;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <HashLoader color="#001f33" size={250} />
+      </div>
+    );
   }
 
   return (

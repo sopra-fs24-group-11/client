@@ -9,6 +9,7 @@ import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
 import ConfirmPopup from "../ui/ConfirmPopup";
 import defaultImage from "../../graphics/Get-Together.png";
+import { HashLoader } from "react-spinners";
 
 // Main Profile component
 const ProfilePage: React.FC = ({alertUser}) => {
@@ -200,7 +201,11 @@ const ProfilePage: React.FC = ({alertUser}) => {
   };
 
   if (isLoading) {
-    return <LinearIndeterminate />;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <HashLoader color="#001f33" size={250} />
+      </div>
+    );
   }
 
   return (

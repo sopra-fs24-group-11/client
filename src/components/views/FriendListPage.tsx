@@ -25,6 +25,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
+import { HashLoader } from "react-spinners";
 
 const FriendListPage = ({alertUser}) => {
   const navigate = useNavigate();
@@ -204,7 +205,11 @@ const FriendListPage = ({alertUser}) => {
   }, []);
 
   if (isLoading) {
-    return <LinearIndeterminate/>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <HashLoader color="#001f33" size={250} />
+      </div>
+    );
   }
 
   return (

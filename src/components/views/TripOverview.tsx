@@ -23,6 +23,7 @@ import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { HashLoader } from "react-spinners";
 
 // ============== HELPER FUNCTIONS ==============
 
@@ -289,7 +290,7 @@ const TripOverview = ({alertUser}) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1200); // Show loader for x seconds
+    }, 2200); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);
@@ -314,7 +315,11 @@ const TripOverview = ({alertUser}) => {
   }, []);
 
   if (isLoading) {
-    return <LinearIndeterminate />;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <HashLoader color="#001f33" size={250} />
+      </div>
+    );
   }
 
   return (

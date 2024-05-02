@@ -9,6 +9,7 @@ import { Progress } from "../ui/progress";
 import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
 import Favourites from "components/ui/favourites";
+import { HashLoader } from "react-spinners";
 
 // Components
 const FriendList = ({ setIsLoading, alertUser }) => {
@@ -391,10 +392,14 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
 
   const handleAcceptInvitation = async (tripId) => {
     try {
-      await api.put(`/trips/${tripId}/invitation`,{},
-        {headers: { Authorization: token },}
+      await api.put(
+        `/trips/${tripId}/invitation`,
+        {},
+        { headers: { Authorization: token } }
       );
-      setTripInvitations(tripInvitations.filter((invitation) => invitation.id !== tripId));
+      setTripInvitations(
+        tripInvitations.filter((invitation) => invitation.id !== tripId)
+      );
 
       window.location.reload(); // I don't like this one, why not give down a "change" state (or rather setChange method) that you can increase here and in the dashboard, whenever the change changes, the whole dashboard fetches again?
     } catch (error) {
@@ -463,9 +468,7 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
 };
 
 const YourFavorites = ({ setIsLoading, alertUser }) => {
-  return (
-    <Favourites alertUser={alertUser}></Favourites>
-  );
+  return <Favourites alertUser={alertUser}></Favourites>;
 };
 
 const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
@@ -490,7 +493,8 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
         }
       }
       try {
-        const userdata = await api.get("/users", { // why this request?
+        const userdata = await api.get("/users", {
+          // why this request?
           headers: { Authorization: localStorage.getItem("token") },
         });
         setCurrentUser(userdata.data);
@@ -543,7 +547,7 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
               border: index < 3 ? "1px solid black" : "none", // Optional border for top 3
             }}
           >
-            {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) - {" "}
+            {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) -{" "}
             {friend.points} points
           </li>
         ))}
@@ -553,7 +557,7 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
 };
 
 // Main Dashboard component
-const Dashboard = ({alertUser}) => {
+const Dashboard = ({ alertUser }) => {
   const [isLoadingOld, setIsLoadingOld] = useState(true);
   const [isFriendListLoading, setIsFriendListLoading] = useState(true);
   const [isWelcomeMessageLoading, setIsWelcomeMessageLoading] = useState(true);
@@ -572,28 +576,44 @@ const Dashboard = ({alertUser}) => {
     //OLD LOADER
     const timer = setTimeout(() => {
       setIsLoadingOld(false);
-    }, 2000);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, []);
 
   if (isLoadingOld) {
-    return <LinearIndeterminate />;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <HashLoader color="#001f33" size={250} />
+      </div>
+    );
   }
 
   return true ? ( // REPLACE TRUE WITH allLoaded IF REAL LOADING IS IMPLEMENTED
     <div className="dashboard">
       <div className="column left">
-        <FriendList setIsLoading={setIsFriendListLoading} alertUser={alertUser}/>
-        <FriendLeaderboard  alertUser={alertUser}/>
+        <FriendList
+          setIsLoading={setIsFriendListLoading}
+          alertUser={alertUser}
+        />
+        <FriendLeaderboard alertUser={alertUser} />
       </div>
       <div className="column middle">
-        <WelcomeMessage setIsLoading={setIsWelcomeMessageLoading}  alertUser={alertUser}/>
-        <TripInvitations setIsLoading={setIsTripInvitationsLoading}  alertUser={alertUser}/>
+        <WelcomeMessage
+          setIsLoading={setIsWelcomeMessageLoading}
+          alertUser={alertUser}
+        />
+        <TripInvitations
+          setIsLoading={setIsTripInvitationsLoading}
+          alertUser={alertUser}
+        />
       </div>
       <div className="column right">
-        <NotificationsLog setIsLoading={setIsNotificationsLogLoading}  alertUser={alertUser}/>
-        <YourFavorites  alertUser={alertUser}/>
+        <NotificationsLog
+          setIsLoading={setIsNotificationsLogLoading}
+          alertUser={alertUser}
+        />
+        <YourFavorites alertUser={alertUser} />
       </div>
     </div>
   ) : (
@@ -635,4 +655,4 @@ export default Dashboard;
 
 Dashboard.propTypes = {
   alertUser: PropTypes.func,
-}
+};
