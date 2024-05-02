@@ -331,7 +331,7 @@ const CreateTrip = ({alertUser}) => {
                 <DialogHeader>
                   <DialogTitle>Add Friend to current Trip </DialogTitle>
                   <DialogDescription>
-                    Enter the username of the friend you want to add
+                    Enter the username of the friend you want to add:
                   </DialogDescription>
                 </DialogHeader>
                 <input
