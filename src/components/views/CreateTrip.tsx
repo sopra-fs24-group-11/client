@@ -19,6 +19,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
+import { HashLoader } from "react-spinners";
 
 const CreateTrip = ({alertUser}) => {
   // used to navigate
@@ -214,7 +215,11 @@ const CreateTrip = ({alertUser}) => {
   }, []);
 
   if (isLoading) {
-    return <LinearIndeterminate />;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <HashLoader color="#001f33" size={250} />
+      </div>
+    );
   }
   return (
     <BaseContainer>
