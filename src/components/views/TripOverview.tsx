@@ -44,9 +44,9 @@ const ConnectionItem = ({connection}) => {
     hours = parseInt(hours, 10);
     minutes = parseInt(minutes, 10);
 
-    if (period.toLowerCase() === 'pm' && hours !== 12) {
+    if (period.toLowerCase() === "pm" && hours !== 12) {
       hours += 12;
-    } else if (period.toLowerCase() === 'am' && hours === 12) {
+    } else if (period.toLowerCase() === "am" && hours === 12) {
       hours = 0;
     }
 
@@ -83,7 +83,7 @@ const ConnectionItem = ({connection}) => {
   return (
     <div className="connection-item">
       <h3 className="connection-name">{connection.username}</h3>
-      {showTimer && username === connection.username && connection.startTime !== 'N/A' &&
+      {showTimer && username === connection.username && connection.startTime !== "N/A" &&
           <p id="timer">Starts in:
             {`\n${Math.floor(timer / (60 * 60 * 24))}`.padStart(2, 0)}d
             {` ${Math.floor((timer % (60 * 60 * 24)) / (60 * 60))}`.padStart(2, 0)}h
