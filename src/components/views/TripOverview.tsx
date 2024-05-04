@@ -240,7 +240,7 @@ const TripOverview = ({alertUser}) => {
 
   const handleOpenLeaveDialog = () => {
     if (isAdmin) {
-      alertUser("error", "Please select a new admin before leaving the trip!");
+      alertUser("warning", "Please select a new admin before leaving the trip!");
     } else {
       setOpenLeaveDialog(true);
     }

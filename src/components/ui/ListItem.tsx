@@ -38,7 +38,7 @@ export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode}) =
         <>
           <div className="ListItem name">{item.item}</div>
           {editMode && 
-            <div className="item-icons">
+            <div className="item-icons-individual">
               <FontAwesomeIcon icon={faPencilAlt} className="edit-icon" onClick={() => setEditing(true)} />
               <FontAwesomeIcon icon={faTrash} className="trash-icon" onClick={() => handleDelete(item.id)}/>
             </div>

@@ -41,17 +41,17 @@ export const handleError = error => {
   }
 };
 
-export const handleError1 = (error, handleAlert, errorMessage) => {
+export const handleError1 = (error, handleAlert, errorMessage, severity) => {
   if (error === false) {
-    handleAlert(errorMessage);
+    handleAlert(errorMessage, severity);
     return;
   }
   if (error && error.message && error.message.match(/Network Error/)) {
-    handleAlert("No Internet Connection!");
+    handleAlert("No Internet Connection!", "error");
     return;
   }
   if (errorMessage === "") {
-    errorMessage = "There was an error"
+    errorMessage = "There was an error.";
   }
   const response = error.response;
 
@@ -63,17 +63,15 @@ export const handleError1 = (error, handleAlert, errorMessage) => {
       info += `\nstatus code: ${response.data.status}`;
       info += `\nerror: ${response.data.error}`;
       info += `\nerror message: ${response.data.message}`;
-      // if (response.status.toString().startsWith("4")) {
-      errorMessage = response.data.message; // Use Server error message instead of client-provided one.
-      // }
+      if (response.status.toString().startsWith("4")) {
+        errorMessage = response.data.message; // Use Server error message instead of client-provided one.
+      }
     } else {
       info += `\nstatus code: ${response.status}`;
       info += `\nerror message:\n${response.data}`;
     }
-    handleAlert(errorMessage)
-    console.log("The request was made and answered but was unsuccessful.", error.response);
-    
-    return info;
+    handleAlert(errorMessage, "info")
+    console.log("The request was made and answered but was unsuccessful:", error.response);
   } else {
     handleAlert("" + error)
     console.log("The request was made and answered but was unsuccessful.", error);

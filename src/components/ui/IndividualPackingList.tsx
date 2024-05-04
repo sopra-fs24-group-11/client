@@ -92,7 +92,7 @@ const IndividualPackingList = ({alertUser}) => {
     }
   };
   
-  let content = {};
+  let content = <h1 style={{textAlign:"center", paddingTop:"20px"}}>Hier gibt es noch keine Items. Fügen Sie doch welche hinzu!<br></br><br></br>Ebenfalls können Sie hier ihr Template importieren.</h1>
 
   if (list && list.length > 0) {
     content = (
@@ -113,8 +113,6 @@ const IndividualPackingList = ({alertUser}) => {
         </ul>
       </div>
     );
-  } else {
-    content = <h1 style={{textAlign:"center", paddingTop:"20px"}}>No Items yet, feel free to add some!</h1>
   }
 
   return (
@@ -137,7 +135,7 @@ const IndividualPackingList = ({alertUser}) => {
       </div>}
       {!isPopupOpen && <div className="Carousel button-holder">
         <Button  onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button  onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
+        <Button  onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
         <Button  onClick={() => {transferTemplate()}}>Transfer</Button>
       </div>}
       {!isPopupOpen && content}
