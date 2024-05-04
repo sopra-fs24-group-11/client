@@ -19,12 +19,12 @@ const App = () => {
   // how to call this in case of success: alertUser("success", "blabla")
   // how to call this in case of error: alertUser("error", "blabla", error)
   const alertUser = (severity, message="", error=false) => {
-    const handleAlert = (msg) => {
+    const handleAlert = (msg, sev) => {
       setSnackbarMessage(msg)
-      setSnackbarSeverity(severity);
+      setSnackbarSeverity(sev);
       setSnackbarOpen(true);
     }
-    handleError1(error, handleAlert, message);
+    handleError1(error, handleAlert, message, severity);
 
   }
 

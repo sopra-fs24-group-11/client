@@ -69,7 +69,7 @@ const ListTemplate = ({alertUser}) => {
     }
   };
 
-  let content = {};
+  let content = <h1 style={{textAlign:"center", paddingTop:"20px"}}>Hier gibt es noch keine Items. Fügen Sie doch welche hinzu!<br></br><br></br>Die Items sind exklusiv für Sie und können in jeden Trip importiert werden.</h1>
 
   if (list && list.length > 0) {
     content = (
@@ -89,8 +89,6 @@ const ListTemplate = ({alertUser}) => {
         </ul>
       </div>
     );
-  } else {
-    content = <h1>No Items yet, feel free to add some!</h1>
   }
 
   return (
@@ -113,7 +111,7 @@ const ListTemplate = ({alertUser}) => {
       </div>}
       {!isPopupOpen && <div className="ListTemplate button-holder">
         <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Normal" : "Edit"}</Button>
+        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
       </div>}
       {!isPopupOpen && content}
       </div>

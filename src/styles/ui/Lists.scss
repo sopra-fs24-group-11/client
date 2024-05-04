@@ -14,7 +14,7 @@
     min-height: 300px;
     @include center;
     flex-direction: column;
-    background:$background;
+    background-color: $containerFront;
     justify-content: start;
     padding: 5px;
     user-select: none;
