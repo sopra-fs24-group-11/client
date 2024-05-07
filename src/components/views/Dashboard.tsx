@@ -9,7 +9,7 @@ import { Progress } from "../ui/progress";
 import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
 import Favourites from "components/ui/favourites";
-import { HashLoader } from "react-spinners";
+import { FadeLoader, HashLoader, PacmanLoader } from "react-spinners";
 
 // Components
 const FriendList = ({ setIsLoading, alertUser }) => {
@@ -584,7 +584,13 @@ const Dashboard = ({ alertUser }) => {
   if (isLoadingOld) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250} />
+        <FadeLoader
+          color="#001f33"
+          height={40}
+          margin={20}
+          radius={20}
+          width={10}
+        />
       </div>
     );
   }

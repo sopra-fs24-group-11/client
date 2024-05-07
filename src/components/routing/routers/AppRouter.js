@@ -16,6 +16,7 @@ import TripOverview from "../../views/TripOverview";
 import CustomizeTrip from "../../views/CustomizeTrip";
 import ListTemplate from "../../views/ListTemplate";
 import PropTypes from "prop-types";
+import RegisterExampleNew from "../../views/RegisterExampleNew";
 
 const AppRouter = ({alertUser}) => {
   return (
@@ -35,6 +36,9 @@ const AppRouter = ({alertUser}) => {
         </Route>
 
         <Route path="/testpage" element={<TestPage />} />
+
+        <Route path="/registernew" element={<RegisterExampleNew />} />
+
         {/*---------------------------------------------- */}
         <Route path="/dashboard" element={<GameGuard />}>
           <Route path="" element={<Dashboard alertUser={alertUser}/>} />
