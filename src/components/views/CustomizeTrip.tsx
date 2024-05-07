@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Rating from "@mui/material/Rating";
 import { api } from "helpers/api";
 import User from "models/User";
 import { useNavigate, useParams } from "react-router-dom";
@@ -55,6 +56,9 @@ const CustomizeTrip = ({alertUser}) => {
 
   // used for both Pop-Ups
   const closeDialogRef = useRef(null);
+
+  // used for the Rating
+  const [value, setValue] = useState<number | null>(2);
 
 
   const fetchFriends = async () => {
@@ -260,7 +264,17 @@ const CustomizeTrip = ({alertUser}) => {
     <BaseContainer>
       <div className="flex container">
         <div className="flex outer-form">
-          <h1 className="text-3xl mb-5 font-bold"> Customize Trip</h1>
+          <h1 className="text-3xl mb-1 font-bold"> Customize Trip</h1>
+          <hr className="horizontal-line-decent" />
+          <div className="mb-2 mt-1">
+              <Rating
+                name="simple-controlled"
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+              />
+          </div>
           <div className="flex inner-form">
             <div className="flex row-form">
               <div className="flex box">
