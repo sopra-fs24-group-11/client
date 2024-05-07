@@ -87,6 +87,7 @@ const CustomizeTrip = ({alertUser}) => {
         stationName: response.data.meetUpPlace.stationName,
         stationCode: response.data.meetUpPlace.stationCode
       }));
+      setValue(response.data.rating);
 
     } catch (error) {
       alertUser("error", "Failed to fetch the trip.", error)
@@ -129,13 +130,15 @@ const CustomizeTrip = ({alertUser}) => {
 
   const saveChanges = async () => {
     try {
+      const rating = value;
       const participants: number[] = Object.keys(friends).map(Number);
       const requestBody = JSON.stringify({
         tripName,
         tripDescription,
         meetUpPlace,
         meetUpTime,
-        participants
+        participants,
+        rating,
       });
 
       const token = localStorage.getItem("token");
@@ -266,19 +269,17 @@ const CustomizeTrip = ({alertUser}) => {
         <div className="flex outer-form">
           <h1 className="text-3xl mb-1 font-bold"> Customize Trip</h1>
           <hr className="horizontal-line-decent" />
-          <div className="mb-2 mt-1">
-              <Rating
-                name="simple-controlled"
-                value={value}
-                onChange={(event, newValue) => {
-                  setValue(newValue);
-                }}
-              />
-          </div>
+          <Rating
+            className="mb-2 mt-1"
+            name="simple-controlled"
+            size="small"
+            value={value}
+            onChange={(event, newValue) => {setValue(newValue);}}
+          />
           <div className="flex inner-form">
             <div className="flex row-form">
               <div className="flex box">
-                <label>Trip Name:</label>
+                <label className="flex label">Trip Name:</label>
                 <input
                   className="input"
                   value={tripName}
@@ -289,7 +290,7 @@ const CustomizeTrip = ({alertUser}) => {
                 <Dialog>
                   <DialogTrigger asChild ref={dialogTriggerRef}>
                     <div>
-                      <label>Target Location:</label>
+                      <label className="flex label">Target Location:</label>
                       <input
                         className="flex input"
                         placeholder="enter..."
@@ -349,7 +350,7 @@ const CustomizeTrip = ({alertUser}) => {
                 </Dialog>
               </div>
               <div className="flex box">
-                <label>Trip Description:</label>
+                <label className="flex label">Trip Description:</label>
                 <textarea
                   className="flex input-large"
                   value={tripDescription}
@@ -359,7 +360,7 @@ const CustomizeTrip = ({alertUser}) => {
             </div>
             <div className="flex row-form">
               <div className="flex box-line">
-                <label>Date & Time of Arrival:</label>
+                <label className="flex label">Date & Time of Arrival:</label>
                 <input
                   className="flex date"
                   type="datetime-local"
@@ -424,7 +425,7 @@ const CustomizeTrip = ({alertUser}) => {
             </Dialog>
 
             <div className="flex box-line">
-              <label>Currently part of the Trip with you:</label>
+              <label className="flex label">Currently part of the Trip with you:</label>
               <hr className="horizontal-line" />
             </div>
 
