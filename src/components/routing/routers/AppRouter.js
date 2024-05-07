@@ -17,6 +17,7 @@ import CustomizeTrip from "../../views/CustomizeTrip";
 import ListTemplate from "../../views/ListTemplate";
 import History from "../../views/History";
 import PropTypes from "prop-types";
+import Feedback from "../../views/Feedback";
 
 const AppRouter = ({alertUser}) => {
   return (
@@ -55,6 +56,10 @@ const AppRouter = ({alertUser}) => {
 
         <Route path="/history" element={<GameGuard />}>
           <Route path="" element={<History alertUser={alertUser}/>} />
+        </Route>
+
+        <Route path="/feedback" element={<GameGuard />}>
+          <Route path="" element={<Feedback alertUser={alertUser}/>} />
         </Route>
 
         <Route path="/createTrip" element={<GameGuard />}>
