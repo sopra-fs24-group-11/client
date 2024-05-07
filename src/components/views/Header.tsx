@@ -58,7 +58,7 @@ const Header = ({alertUser}) => {
         alertUser("error", "Something went wrong.", error)
       }
     }
-    navigate("/login")
+    navigate("/registernew")
   };
 
   return (

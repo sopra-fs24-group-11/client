@@ -1,5 +1,14 @@
 import React from "react";
-function SignUpForm() {
+import { useNavigate } from "react-router-dom";
+import { api } from "helpers/api";
+import PropTypes from "prop-types";
+
+SignUpForm.propTypes = {
+  alertUser: PropTypes.func.isRequired,
+};
+
+function SignUpForm({ alertUser }) {
+  const navigate = useNavigate();
   const [state, setState] = React.useState({
     username: "",
     email: "",
@@ -9,6 +18,7 @@ function SignUpForm() {
   });
 
   const validatePassword = () => {
+    const { password, secondPassword } = state;
     if (password !== secondPassword) {
       throw new Error("Passwords do not match!");
     }
@@ -16,7 +26,10 @@ function SignUpForm() {
 
   const handleBirthdayChange = (event) => {
     const { value } = event.target;
-    setBirthday(value);
+    setState({
+      ...state,
+      birthday: value,
+    });
   };
 
   const handleChange = (evt) => {
@@ -45,8 +58,7 @@ function SignUpForm() {
       localStorage.setItem("token", response.data);
       navigate("/dashboard");
     } catch (error) {
-      alert("ERROR: " + error);
-      //alertUser("error", "", error);
+      alertUser("error", "", error);
     }
   };
 
