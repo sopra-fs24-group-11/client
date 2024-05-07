@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { api } from "helpers/api";
 import PropTypes from "prop-types";
 
+SignInForm.propTypes = {
+  alertUser: PropTypes.func.isRequired,
+};
 
-function SignInForm() {
+function SignInForm({ alertUser }) {
   const navigate = useNavigate();
   const [state, setState] = React.useState({
     username: "",
@@ -30,8 +33,8 @@ function SignInForm() {
       localStorage.setItem("token", response.data);
       navigate("/dashboard");
     } catch (error) {
-      alert("error", "username or password are wrong.", error);
-      //alertUser("error", "username or password are wrong.", error);
+      //alert("ERROR: "+ error);
+      alertUser("error", "username or password are wrong.", error);
     }
   };
 
