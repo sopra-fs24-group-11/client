@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import "../../styles/views/RegisterExampleNew.css";
-import SignInForm from "./SignIn";
+import SignInForm from "../ui/SignIn";
 import SignUpForm from "../ui/SignUp";
 
 export default function RegisterExampleNew() {
   const [type, setType] = useState("signIn");
-  const handleOnClick = text => {
+  const handleOnClick = (text) => {
     if (text !== type) {
       setType(text);
       return;
     }
   };
+
   const containerClass =
     "containertest " + (type === "signUp" ? "right-panel-active" : "");
+
   return (
     <div className="top-container">
       <div className={containerClass} id="containertest">
