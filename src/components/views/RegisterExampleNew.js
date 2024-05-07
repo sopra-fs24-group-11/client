@@ -14,8 +14,7 @@ export default function RegisterExampleNew() {
   const containerClass =
     "containertest " + (type === "signUp" ? "right-panel-active" : "");
   return (
-    <div className="App2">
-      <h2>Sign in/up Form</h2>
+    <div className="top-container">
       <div className={containerClass} id="containertest">
         <SignUpForm />
         <SignInForm />
