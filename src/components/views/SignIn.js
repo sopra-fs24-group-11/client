@@ -1,8 +1,14 @@
 import React from "react";
-function SignInForm() {
+import { useNavigate } from "react-router-dom";
+import { api } from "helpers/api";
+
+
+
+function SignInForm({alertUser}) {
+  const navigate = useNavigate();
   const [state, setState] = React.useState({
-    email: "",
-    password: ""
+    Username: "",
+    Password: ""
   });
   const handleChange = evt => {
     const value = evt.target.value;
@@ -12,17 +18,18 @@ function SignInForm() {
     });
   };
 
-  const handleOnSubmit = evt => {
+  const handleOnSubmit = async (evt) => {
     evt.preventDefault();
+    const { Username, Password } = state;
+    
+    try {
+      const requestBody = JSON.stringify({ Username, Password });
+      const response = await api.post("/users/login", requestBody);
 
-    const { email, password } = state;
-    alert(`You are login with email: ${email} and password: ${password}`);
-
-    for (const key in state) {
-      setState({
-        ...state,
-        [key]: ""
-      });
+      localStorage.setItem("token", response.data);
+      navigate("/dashboard");
+    } catch (error) {
+      alertUser("error", "Username or password are wrong.", error)
     }
   };
 
@@ -30,28 +37,16 @@ function SignInForm() {
     <div className="form-container sign-in-container">
       <form onSubmit={handleOnSubmit}>
         <h1>Sign in</h1>
-        <div className="social-container">
-          <a href="#" className="social">
-            <i className="fab fa-facebook-f" />
-          </a>
-          <a href="#" className="social">
-            <i className="fab fa-google-plus-g" />
-          </a>
-          <a href="#" className="social">
-            <i className="fab fa-linkedin-in" />
-          </a>
-        </div>
-        <span>or use your account</span>
         <input
           type="email"
-          placeholder="Email"
-          name="email"
+          placeholder="Username"
+          name="Username"
           value={state.email}
           onChange={handleChange}
         />
         <input
           type="password"
-          name="password"
+          name="Password"
           placeholder="Password"
           value={state.password}
           onChange={handleChange}
