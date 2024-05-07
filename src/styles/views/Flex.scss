@@ -25,7 +25,7 @@
   .inner-form {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content:space-around;
     align-items: center;
     width: 100%;
     background-color: #011a27;
@@ -116,6 +116,11 @@
     //margin: 5px 0; /* Anpassen des Abstands oberhalb und unterhalb der Linie */
     width: 80%;
     margin-top: 5px;
+  }
+  .horizontal-line-decent {
+    border-top: 5px solid #011a27;
+    width: 60%;
+    margin: 2px;
   }
 
   .names {
