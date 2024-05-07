@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import "../../styles/views/RegisterExampleNew.css";
 import SignInForm from "../ui/SignIn";
 import SignUpForm from "../ui/SignUp";
+import PropTypes from "prop-types";
 
-export default function RegisterExampleNew() {
+RegisterExampleNew.propTypes = {
+  alertUser: PropTypes.func.isRequired,
+};
+
+export default function RegisterExampleNew({ alertUser}) {
   const [type, setType] = useState("signIn");
   const handleOnClick = (text) => {
     if (text !== type) {
@@ -18,8 +23,8 @@ export default function RegisterExampleNew() {
   return (
     <div className="top-container">
       <div className={containerClass} id="containertest">
-        <SignUpForm />
-        <SignInForm />
+        <SignUpForm alertUser={alertUser}/>
+        <SignInForm alertUser={alertUser}/>
         <div className="overlay-container">
           <div className="overlay">
             <div className="overlay-panel overlay-left">
