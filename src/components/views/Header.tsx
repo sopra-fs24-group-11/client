@@ -40,6 +40,10 @@ const Header = ({alertUser}) => {
     navigate("/history");
   };
 
+  const goToFeedback = () => {
+    navigate("/feedback");
+  };
+
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -96,6 +100,7 @@ const Header = ({alertUser}) => {
         <MenuItem onClick={goToProfile}>Your Profile</MenuItem>
         <MenuItem onClick={goToFriends}>Your Friends</MenuItem>
         <MenuItem onClick={goToHistory}>Trip History</MenuItem>
+        <MenuItem onClick={goToFeedback}>Feedback</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
       <div className="train-container">
