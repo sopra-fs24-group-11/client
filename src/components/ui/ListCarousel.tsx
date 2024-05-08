@@ -19,28 +19,34 @@ export function ListCarousel({alertUser}) {
   const [userId, setUserId] = useState(0);
   const {tripId} = useParams();
 
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const userdata = await api.get("/users", {
+        headers: { Authorization: token },
+      });
+      setUserId(userdata.data.id);
+      const response = await api.get(`/trips/${tripId}/pictures`, {
+        headers: { Authorization: token }
+      });
+      const avatarArray = response.data.map(item => ({
+        userId: item.userId,
+        image: `data:image/jpeg;base64,${item.profilePicture}`
+    }));
+    setAvatar(avatarArray);
+    } catch (error) {
+      alertUser("error", "", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const userdata = await api.get("/users", {
-          headers: { Authorization: token },
-        });
-        setUserId(userdata.data.id);
-        const response = await api.get(`/trips/${tripId}/pictures`, {
-          headers: { Authorization: token }
-        });
-        const avatarArray = response.data.map(item => ({
-          userId: item.userId,
-          image: `data:image/jpeg;base64,${item.profilePicture}`
-      }));
-      setAvatar(avatarArray);
-      } catch (error) {
-        alertUser("error", "", error);
-      }
+    const fetchPeriodically = async () => {
+      await fetchData();
     };
-    fetchData();
-  }, [])
+    fetchPeriodically();
+    const intervalId = setInterval(fetchPeriodically, 60000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <Carousel className="w-full max-w-xxl Carousel container">
