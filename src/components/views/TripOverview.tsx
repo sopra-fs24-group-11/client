@@ -17,6 +17,8 @@ import ListItemText from "@mui/material/ListItemText";
 import {ListCarousel} from "../ui/ListCarousel";
 
 import "../../styles/views/TripOverview.scss";
+import "../../styles/views/Dashboard.scss";
+
 import LinearIndeterminate from "components/ui/loader";
 
 import {styled} from "@mui/material/styles";
@@ -24,6 +26,7 @@ import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import {HashLoader} from "react-spinners";
+import notificationLog from "../../graphics/notification_log.png";
 
 // ============== HELPER FUNCTIONS ==============
 
@@ -118,6 +121,69 @@ const calculateProgress = (departureTime, arrivalTime) => {
   return ((now - departure) / (arrival - departure)) * 100;
 };
 
+const TripLog = ({ setIsLoading, alertUser }) => {
+  const {tripId} = useParams();
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    let isComponentMounted = true;
+    const fetchNotifications = async () => {
+      try {
+        const response = await api.get("/trips/" + tripId + "/notifications", {
+          headers: { Authorization: localStorage.getItem("token") },
+        });
+        // Sort notifications by timeStamp in ascending order
+        const sortedNotifications = response.data.sort(
+          (a, b) =>
+            new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
+        );
+        console.log("NOTIFICATIONS:", sortedNotifications);
+        setNotifications(sortedNotifications);
+      } catch (error) {
+        alertUser("error", "", error);
+      } finally {
+        if (isComponentMounted) {
+          console.log("---- NOTIFICATIONS LOADED ----");
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchNotifications();
+
+    const intervalId = setInterval(fetchNotifications, 7000);
+
+    return () => {
+      isComponentMounted = false;
+      clearInterval(intervalId);
+    };
+  }, [setIsLoading]);
+
+  const formatDateTime = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString("de-DE", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  return (
+    <div className="notification-log component">
+      <h2>Notifications</h2>
+      <div className="notifications-log-list">
+        <ol>
+          {notifications.map((notification, index) => (
+            <li key={index}>
+              {formatDateTime(notification.timeStamp)} - {notification.message}
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  );
+};
+
 // ============== MAIN FUNCTION ==============
 const TripOverview = ({alertUser}) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -146,6 +212,8 @@ const TripOverview = ({alertUser}) => {
   const [openDialogNewAdmin, setOpenDialogNewAdmin] = useState(false);
   const [openLeaveDialog, setOpenLeaveDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [showLog, setShowLog] = useState<boolean>(false);
+  const [isTripLogLoading, setIsTripLogLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const {tripId} = useParams();
@@ -400,6 +468,17 @@ const TripOverview = ({alertUser}) => {
           onMouseDown={handleToFavourites}
           //onTouchStart={handleToFavourites}
         />
+        <div style={{position: "relative", top: "0%", marginLeft: "50px"}}>
+          <Button onClick={() => {
+            setShowLog(!showLog)
+          }} className="log-button">
+            <img
+              className="log-button icon"
+              src={notificationLog}
+              alt="trip notification log"/>
+          </Button>
+          {showLog && <TripLog setIsLoading={setIsTripLogLoading} alertUser={alertUser}/>}
+        </div>
       </div>
 
       <div className="trip-information-container">
@@ -629,6 +708,11 @@ const TripOverview = ({alertUser}) => {
       </Dialog>
     </div>
   );
+};
+
+TripLog.propTypes = {
+  setIsLoading: PropTypes.func.isRequired,
+  alertUser: PropTypes.func,
 };
 
 export default TripOverview;
