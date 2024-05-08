@@ -14,15 +14,10 @@ function SignUpForm({ alertUser }) {
     email: "",
     birthday: "",
     password: "",
-    secondPassword: "",
+    password2: "",
   });
 
-  const validatePassword = () => {
-    const { password, secondPassword } = state;
-    if (password !== secondPassword) {
-      throw new Error("Passwords do not match!");
-    }
-  };
+
 
   const handleBirthdayChange = (event) => {
     const { value } = event.target;
@@ -42,14 +37,14 @@ function SignUpForm({ alertUser }) {
 
   const handleOnSubmit = async (evt) => {
     evt.preventDefault();
-    const { username, email, birthday, password } = state;
+    const { username, email, birthday, password, password2 } = state;
 
     try {
-      validatePassword();
-
+      
       const requestBody = JSON.stringify({
         username,
         password,
+        password2,
         birthday,
         email,
       });
@@ -100,8 +95,8 @@ function SignUpForm({ alertUser }) {
         />
         <input
           type="password"
-          name="secondPassword"
-          value={state.secondPassword}
+          name="password2"
+          value={state.password2}
           onChange={handleChange}
           placeholder="Passwort bestätigen"
         />

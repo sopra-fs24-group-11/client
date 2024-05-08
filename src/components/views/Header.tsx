@@ -25,25 +25,7 @@ const Header = ({ alertUser }) => {
     setAnchorEl(null);
   };
 
-  const goToProfile = () => {
-    navigate("/profile");
-  };
 
-  const goToDashboard = () => {
-    navigate("/dashboard");
-  };
-
-  const goToFriends = () => {
-    navigate("/friends");
-  };
-
-  const goToHistory = () => {
-    navigate("/history");
-  };
-
-  const goToFeedback = () => {
-    navigate("/feedback");
-  };
 
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
@@ -70,7 +52,7 @@ const Header = ({ alertUser }) => {
     <div className="header cont">
       <div
         className="logo"
-        onClick={goToDashboard}
+        onClick={()=>{navigate("/dashboard");window.location.reload();}}
         style={{ cursor: "pointer" }}
       >
         <img src={logonew} alt="Get-Together" />
@@ -101,11 +83,12 @@ const Header = ({ alertUser }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={goToDashboard}>Dashboard</MenuItem>
-        <MenuItem onClick={goToProfile}>Your Profile</MenuItem>
-        <MenuItem onClick={goToFriends}>Your Friends</MenuItem>
-        <MenuItem onClick={goToHistory}>Trip History</MenuItem>
-        <MenuItem onClick={goToFeedback}>Feedback</MenuItem>
+        <MenuItem onClick={()=>navigate("/dashboard")}>Dashboard</MenuItem>
+        <MenuItem onClick={()=>navigate("/profile")}>Your Profile</MenuItem>
+        <MenuItem onClick={()=>navigate("/friends")}>Your Friends</MenuItem>
+        <MenuItem onClick={()=>navigate("/history")}>Trip History</MenuItem>
+        <MenuItem onClick={()=>navigate("/template")}>List Template</MenuItem>
+        <MenuItem onClick={()=>navigate("/feedback")}>Feedback</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
       <div className="train-container">

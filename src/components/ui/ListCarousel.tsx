@@ -31,7 +31,7 @@ export function ListCarousel({alertUser}) {
           headers: { Authorization: token }
         });
         const avatarArray = response.data.map(item => ({
-          userId: item.id,
+          userId: item.userId,
           image: `data:image/jpeg;base64,${item.profilePicture}`
       }));
       setAvatar(avatarArray);
