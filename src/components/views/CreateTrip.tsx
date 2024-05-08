@@ -225,24 +225,24 @@ const CreateTrip = ({alertUser}) => {
     <BaseContainer>
       <div className="flex container">
         <div className="flex outer-form">
-          <h1 className="text-3xl mb-5 font-bold"> Create New Trip</h1>
+          <h1 className="text-3xl mb-5 font-bold text-white"> Neue Reise erstellen</h1>
           <div className="flex inner-form">
             <div className="flex row-form">
               <div className="flex box">
-                <label>Trip Name:</label>
+                <label className="flex label">Name der Reise:</label>
                 <input
                   className="input"
-                  placeholder="enter..."
+                  placeholder="eingeben..."
                   onChange={(e) => setTripName(e.target.value)}
                 ></input>
                 <br></br>
                 <Dialog>
                   <DialogTrigger asChild ref={dialogTriggerRef}>
                     <div>
-                      <label>Target Location:</label>
+                      <label className="flex label">Zielort:</label>
                       <input
                         className="flex input"
-                        placeholder="enter..."
+                        placeholder="eingeben..."
                         value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
                         onFocus={handleInputFocus}
                       ></input>
@@ -250,14 +250,14 @@ const CreateTrip = ({alertUser}) => {
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle>Select Target Location</DialogTitle>
+                      <DialogTitle>Wähle einen Zielort:</DialogTitle>
                       <DialogDescription>
-                        Enter the Location where you want to get together:
+                        Suche einen Ort, an dem ihr euch treffen wollt:
                       </DialogDescription>
                     </DialogHeader>
                     <input
                       type="text"
-                      placeholder="Search..."
+                      placeholder="suchen..."
                       value={locationSearchTerm}
                       onChange={handleLocationSearchChange}
                     />
@@ -291,7 +291,7 @@ const CreateTrip = ({alertUser}) => {
                         onClick={handleLocationSubmit}
                         backgroundColor="#14AE5C"
                       >
-                        Select Target Location
+                        Wähle den Zielort:
                       </Button>
                     </DialogFooter>
                     <DialogClose ref={closeDialogRef} className="hidden" />
@@ -299,17 +299,17 @@ const CreateTrip = ({alertUser}) => {
                 </Dialog>
               </div>
               <div className="flex box">
-                <label>Trip Description:</label>
+                <label className="flex label">Reisebeschreibung:</label>
                 <textarea
                   className="flex input-large"
-                  placeholder="enter..."
+                  placeholder="eingeben..."
                   onChange={(e) => setTripDescription(e.target.value)}
                 ></textarea>
               </div>
             </div>
             <div className="flex row-form">
-              <div className="flex box">
-                <label>Date & Time of Arrival:</label>
+              <div className="flex box-line">
+                <label className="flex label">Datum & Zeit der Ankunft:</label>
                 <input
                   className="flex date"
                   type="datetime-local"
@@ -322,21 +322,21 @@ const CreateTrip = ({alertUser}) => {
               <DialogTrigger asChild>
                 <button className="flex bar">
                   <label className="add-friends-label">
-                    Add Friends to current Trip
+                    Füge Freund zur aktuellen Reise hinzu:
                   </label>
                   <img className="flex image" src={image} />
                 </button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add Friend to current Trip </DialogTitle>
+                  <DialogTitle>Füge einen Freund zur Reise hinzu: </DialogTitle>
                   <DialogDescription>
-                    Enter the username of the friend you want to add:
+                    Tippe den Benutzernamen des Freundes ein, den zu zur Reise hinzufügen willst:
                   </DialogDescription>
                 </DialogHeader>
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="suchen..."
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
@@ -366,7 +366,7 @@ const CreateTrip = ({alertUser}) => {
                     onClick={handleAddFriendSubmit}
                     backgroundColor="#14AE5C"
                   >
-                    Add Friend to Trip
+                    hinzufügen:
                   </Button>
                 </DialogFooter>
                 <DialogClose ref={closeDialogRef} className="hidden" />
@@ -374,7 +374,7 @@ const CreateTrip = ({alertUser}) => {
             </Dialog>
 
             <div className="flex box-line">
-              <label>Currently part of the Trip with you:</label>
+              <label className="flex label">Zurzeit auf der Reise mit dir:</label>
               <hr className="horizontal-line" />
             </div>
 
@@ -401,7 +401,7 @@ const CreateTrip = ({alertUser}) => {
                 color="#FFFFFF"
                 onClick={cancelTrip}
               >
-                CANCEL TRIP
+                REISE ABSAGEN
               </Button>
               <Button
                 width="200px"
@@ -409,7 +409,7 @@ const CreateTrip = ({alertUser}) => {
                 color="#FFFFFF"
                 onClick={createNewTrip}
               >
-                CREATE TRIP
+                REISE ERSTELLEN
               </Button>
             </div>
           </div>
