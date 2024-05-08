@@ -35,7 +35,7 @@ FormField.propTypes = {
 const Register = ({alertUser}) => {
   const navigate = useNavigate();
   const [password, setPassword] = useState<string>(null);
-  const [secondPassword, setSecondPassword] = useState<string>(null);
+  const [password2, setPassword2] = useState<string>(null);
   const [username, setUsername] = useState<string>(null);
   const [birthday, setBirthday] = useState<string>(null);
   const [email, setMail] = useState<string>(null);
@@ -46,19 +46,13 @@ const Register = ({alertUser}) => {
     setBirthday(value);
   };
 
-  const validatePassword = () => {
-    if (password !== secondPassword) {
-      throw new Error("Passwords do not match!");
-    }
-  }; 
 
   const doRegister = async () => {
     try {
-      validatePassword();
-
       const requestBody = JSON.stringify({
         username,
         password,
+        password2,
         birthday,
         email,
       });
@@ -104,14 +98,14 @@ const Register = ({alertUser}) => {
           />
           <FormField
             label="Re-Enter Password"
-            value={secondPassword}
+            value={password2}
             isPassword
-            onChange={(n) => setSecondPassword(n)}
+            onChange={(n) => setPassword2(n)}
           />
           <div className="register button-container ">
             <Button
               disabled={
-                !username || !password || !secondPassword || !email || !birthday
+                !username || !password || !password2 || !email || !birthday
               }
               width="100%"
               onClick={() => doRegister()}
