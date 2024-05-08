@@ -550,7 +550,7 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
             }}
           >
             {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) -{" "}
-            {friend.points} points
+            {friend.points} Punkte
           </li>
         ))}
       </ol>
