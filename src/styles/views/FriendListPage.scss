@@ -1,9 +1,11 @@
+@import "../theme";
+
 .friend-list-page {
   max-width: 600px; // or the max width you prefer
   margin: 50px auto;
   padding: 20px;
   background: rgba(255, 255, 255, 0.9); // semi-transparent white
-  border-radius: 15px;
+  border-radius: $borderRadius;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 
   h1 {
