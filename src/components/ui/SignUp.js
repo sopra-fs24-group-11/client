@@ -38,7 +38,6 @@ function SignUpForm({ alertUser }) {
     const { username, email, birthday, password, password2 } = state;
 
     try {
-      
       const requestBody = JSON.stringify({
         username,
         password,
@@ -58,13 +57,14 @@ function SignUpForm({ alertUser }) {
   return (
     <div className="form-container sign-up-container">
       <form onSubmit={handleOnSubmit}>
-        <h1>Create Account</h1>
+        <h1 className="h1_reg">Create Account</h1>
 
-        <span>
+        <span className="span_reg">
           Bitte fülle das untenstehende Formular aus um einen Account zu
           erstellen.
         </span>
         <input
+          className="inputreg"
           type="text"
           name="username"
           value={state.username}
@@ -72,6 +72,7 @@ function SignUpForm({ alertUser }) {
           placeholder="Benutzername"
         />
         <input
+          className="inputreg"
           type="email"
           name="email"
           value={state.email}
@@ -79,12 +80,14 @@ function SignUpForm({ alertUser }) {
           placeholder="Email-Adresse"
         />
         <input
+          className="inputreg"
           type="date"
           placeholder="enter here.."
           value={state.birthday}
           onChange={handleBirthdayChange}
         />
         <input
+          className="inputreg"
           type="password"
           name="password"
           value={state.password}
@@ -92,13 +95,14 @@ function SignUpForm({ alertUser }) {
           placeholder="Passwort"
         />
         <input
+          className="inputreg"
           type="password"
           name="password2"
           value={state.password2}
           onChange={handleChange}
           placeholder="Passwort bestätigen"
         />
-        <button>Sign Up</button>
+        <button className="buttonreg">Sign Up</button>
       </form>
     </div>
   );
