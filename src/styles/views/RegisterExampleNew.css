@@ -13,12 +13,13 @@
     box-sizing: border-box;
   }
   
-  h1 {
+  .h1_reg {
+    font-size: 24px;
     font-weight: bold;
     margin: 0;
   }
   
-  p {
+  .p_reg {
     font-size: 14px;
     /* font-weight: 100; */
     line-height: 20px;
@@ -26,18 +27,18 @@
     margin: 20px 0 30px;
   }
   
-  span {
+  .span_reg {
     font-size: 12px;
   }
   
-  a {
+  .a_reg {
     color: #333;
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
   }
   
-  button {
+  .buttonreg {
     border-radius: 20px;
     border: 1px solid #ff4b2b;
     background-color: #ff4b2b;
@@ -50,15 +51,15 @@
     transition: transform 80ms ease-in;
   }
   
-  button:active {
+  .buttonreg:active {
     transform: scale(0.95);
   }
   
-  button:focus {
+  .buttonreg:focus {
     outline: none;
   }
   
-  button.ghost {
+  .ghost {
     background-color: transparent;
     border-color: #ffffff;
   }
@@ -74,7 +75,7 @@
     text-align: center;
   }
   
-  input {
+  .inputreg {
     background-color: #eee;
     border: none;
     padding: 12px 15px;

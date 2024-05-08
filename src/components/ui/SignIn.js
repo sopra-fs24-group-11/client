@@ -41,8 +41,9 @@ function SignInForm({ alertUser }) {
   return (
     <div className="form-container sign-in-container">
       <form onSubmit={handleOnSubmit}>
-        <h1>Sign in</h1>
+        <h1 className="h1_reg">Sign in</h1>
         <input
+          className="inputreg"
           type="text"
           placeholder="Benutzername"
           name="username"
@@ -50,14 +51,15 @@ function SignInForm({ alertUser }) {
           onChange={handleChange}
         />
         <input
+          className="inputreg"
           type="password"
           name="password"
           placeholder="Passwort"
           value={state.password}
           onChange={handleChange}
         />
-        <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <a className="a_reg" href="#" onClick={() => alertUser("warning", "Passwort kann nicht zurückgesetzt werden. Erstellen Sie einen neuen Account.")}>Forgot your password?</a>
+        <button className="buttonreg">Sign In</button>
       </form>
     </div>
   );
