@@ -25,8 +25,6 @@ const Header = ({ alertUser }) => {
     setAnchorEl(null);
   };
 
-
-
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
     if (token) {

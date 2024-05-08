@@ -17,8 +17,6 @@ function SignUpForm({ alertUser }) {
     password2: "",
   });
 
-
-
   const handleBirthdayChange = (event) => {
     const { value } = event.target;
     setState({
