@@ -51,7 +51,10 @@ const Header = ({ alertUser }) => {
     <div className="header cont">
       <div
         className="logo"
-        onClick={()=>{navigate("/dashboard");window.location.reload();}}
+        onClick={() => {
+          navigate("/dashboard");
+          window.location.reload();
+        }}
         style={{ cursor: "pointer" }}
       >
         <img src={logonew} alt="Get-Together" />
@@ -82,12 +85,12 @@ const Header = ({ alertUser }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={()=>navigate("/dashboard")}>Dashboard</MenuItem>
-        <MenuItem onClick={()=>navigate("/profile")}>Your Profile</MenuItem>
-        <MenuItem onClick={()=>navigate("/friends")}>Your Friends</MenuItem>
-        <MenuItem onClick={()=>navigate("/history")}>Trip History</MenuItem>
-        <MenuItem onClick={()=>navigate("/template")}>List Template</MenuItem>
-        <MenuItem onClick={()=>navigate("/feedback")}>Feedback</MenuItem>
+        <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
+        <MenuItem onClick={() => navigate("/profile")}>Your Profile</MenuItem>
+        <MenuItem onClick={() => navigate("/friends")}>Your Friends</MenuItem>
+        <MenuItem onClick={() => navigate("/history")}>Trip History</MenuItem>
+        <MenuItem onClick={() => navigate("/template")}>List Template</MenuItem>
+        <MenuItem onClick={() => navigate("/feedback")}>Feedback</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
       <div className="train-container">
@@ -96,10 +99,11 @@ const Header = ({ alertUser }) => {
           // <div className="rails"></div>
         }
       </div>
-      
-        <img src={signalImage} alt="Signal" className="signal" />
-        <img src={stationImage} alt="Station" className="station" />
-      
+
+      <img src={signalImage} alt="Signal" className="signal" />
+      {
+        //<img src={stationImage} alt="Station" className="station" />
+      }
     </div>
   );
 };
