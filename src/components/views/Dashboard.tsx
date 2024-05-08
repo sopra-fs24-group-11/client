@@ -109,7 +109,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
 
   return (
     <div className="friends component">
-      <h2>Friend list</h2>
+      <h2>Freundesliste</h2>
       {friendList.length > 0 ? (
         <ul className="friend-list">
           {friendList.map((friend, index) => (
@@ -123,12 +123,13 @@ const FriendList = ({ setIsLoading, alertUser }) => {
         </ul>
       ) : (
         <div className="no-friends-message">
-          No friends yet. Click on show details to invite some friends!
+          Noch keine Freunde. Klicken Sie auf zeige Details, um Freunde
+          einzuladen!
         </div>
       )}
 
       <div className="requests">
-        <h2>New friend requests</h2>
+        <h2>Neue Freundschaftsanfragen</h2>
         {friendRequests.length > 0 ? (
           <div className="request-list">
             {friendRequests.map((request, index) => (
@@ -142,7 +143,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
                     backgroundColor="#82FF6D"
                     onClick={() => handleAcceptFriendRequest(request.friendId)}
                   >
-                    Accept
+                    Annehmen
                   </Button>
                   <Button
                     className="deny-button"
@@ -150,14 +151,14 @@ const FriendList = ({ setIsLoading, alertUser }) => {
                     height="35px"
                     onClick={() => handleDenyFriendRequest(request.friendId)}
                   >
-                    Deny
+                    Ablehnen
                   </Button>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="no-requests-message">No new requests.</div>
+          <div className="no-requests-message">Keine neuen Anfragen.</div>
         )}
 
         <div className="show-details-button-container">
@@ -166,7 +167,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
             width="150px"
             backgroundColor="#FFB703"
           >
-            Show Details
+            Zeige Details
           </Button>
         </div>
       </div>
@@ -225,9 +226,9 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
   return (
     <div className="welcome component">
       <h1 className="welcome-title">
-        Welcome back, {currentUser ? currentUser.username : "loading..."}!
+        Willkommen zurück, {currentUser ? currentUser.username : "loading..."}!
       </h1>
-      <p className="font-bold text-lg ">Your progress</p>
+      <p className="font-bold text-lg ">Dein Levelfortschritt</p>
       <div className="mb-8">
         <Progress
           style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.6)" }}
@@ -235,9 +236,9 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
         />
         <p className="mt-2">
           Level: {currentUser ? Math.floor(currentUser.level) : "loading..."},
-          gain{" "}
+          sammle{" "}
           {currentUser ? Math.round((1 - (currentUser.level % 1)) * 100) : 0}{" "}
-          points for the next level.
+          Punkte für das nächste Level.
         </p>
       </div>
 
@@ -278,7 +279,8 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
             ))
           ) : (
             <div className="no-trips-message">
-              No current trips. Create one or let your friends invite you!
+              Keine aktuellen Reisen. Erstelle eine oder lass dich von deinen
+              Freunden einladen!
             </div>
           )}
         </div>
@@ -290,7 +292,7 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
           backgroundColor="#FB8500"
           onClick={handleCreateTrip}
         >
-          CREATE TRIP
+          Reise erstellen
         </Button>
       </div>
     </div>
@@ -345,7 +347,7 @@ const NotificationsLog = ({ setIsLoading, alertUser }) => {
 
   return (
     <div className="notifications-log component">
-      <h2>Notifications</h2>
+      <h2>Mitteilungen</h2>
       <div className="notifications-log-list">
         <ol>
           {notifications.map((notification, index) => (
@@ -423,13 +425,13 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
 
   return (
     <div className="trip-invitations component">
-      <h2>Trip Invitations</h2>
+      <h2>Reiseeinladungen</h2>
       <div className="trip-invitation-list">
         {tripInvitations.length > 0 ? (
           tripInvitations.map((invitation) => (
             <div key={invitation.id} className="trip-invitation">
               <div>
-                Invitation to &quot;{invitation.tripName}&quot; on{" "}
+                Einladung zu &quot;{invitation.tripName}&quot; am{" "}
                 {new Date(invitation.meetUpTime).toLocaleDateString("de-DE", {
                   day: "2-digit",
                   month: "2-digit",
@@ -443,7 +445,7 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
                 backgroundColor="#82FF6D"
                 onClick={() => handleAcceptInvitation(invitation.id)}
               >
-                Accept
+                Annehmen
               </Button>
               <Button
                 className="deny-button"
@@ -452,14 +454,14 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
                 backgroundColor="red"
                 onClick={() => handleDenyInvitation(invitation.id)}
               >
-                Deny
+                Ablehnen
               </Button>
             </div>
           ))
         ) : (
           <div className="no-current-trip-invitations">
-            No current trip invitations: create one or let your friends invite
-            you!
+            Keine aktuellen Reiseeinladungen: Erstellen Sie eine oder lassen Sie
+            sich von Ihren Freunden einladen!
           </div>
         )}
       </div>
@@ -531,7 +533,7 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
 
   return (
     <div className="friend-leaderboard component">
-      <h2>Your Top-Friends</h2>
+      <h2>Deine besten Freunde</h2>
       <ol className="leaderboard-list">
         {leaderboard.map((friend, index) => (
           <li
@@ -548,7 +550,7 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
             }}
           >
             {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) -{" "}
-            {friend.points} points
+            {friend.points} Punkte
           </li>
         ))}
       </ol>
