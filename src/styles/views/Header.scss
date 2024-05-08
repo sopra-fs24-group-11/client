@@ -7,12 +7,13 @@
     box-shadow: $dropShadow;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(90deg, #001f33 30%, #999da1 90%);
-    height: 100px;
+    background-color: #ffffff;
+    //background: linear-gradient(90deg, #001f33 30%, #999da1 90%);
+    height: 80px;
     position: relative;
 
     .logo img {
-      height: 90px;
+      height: 70px;
     }
 
     .menu-icon {
@@ -25,7 +26,7 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: 10; // Make sure it is above other positioned elements
-      height: 45px; // Match the height of your signal image
+      height: 60px; // Match the height of your signal image
     }
   }
 
@@ -41,7 +42,7 @@
 
     .train {
       position: absolute;
-      bottom: 1px; // Align the bottom of the train image with the bottom of its container
+      bottom: 0px; // Align the bottom of the train image with the bottom of its container
       height: 100%; // Ensure the train takes full height of the container
       animation: moveTrain 17s linear infinite;
     }
