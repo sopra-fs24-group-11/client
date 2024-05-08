@@ -76,7 +76,7 @@ const Favourites = ({ alertUser }) => {
 
   return (
     <div className="component">
-      <h2>Your Favourites</h2>
+      <h2>Deine Lieblingsreisen</h2>
       {favTrips.length > 0 ? (
         <div className="favourites-log-list">
           <ol>
@@ -89,11 +89,11 @@ const Favourites = ({ alertUser }) => {
         </div>
       ) : (
         <div className="no-friends-message">
-        No trips selected as favourites yet!
+        Noch keine Reise als Favorit ausgewählt.
         </div>
       )}
       <div className ="show-details-button-container">
-        <Button onClick={() => navigate("/history")} width="150px" backgroundColor="#FFB703">Trip History</Button>
+        <Button onClick={() => navigate("/history")} width="150px" backgroundColor="#FFB703">Letzte Reisen</Button>
       </div>
       
     </div>
