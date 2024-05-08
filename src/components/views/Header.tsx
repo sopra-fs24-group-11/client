@@ -10,6 +10,7 @@ import logo from "../../graphics/Get-Together.png";
 import logonew from "../../graphics/Get-Together-new.png";
 import trainImage from "../../graphics/train2.png";
 import signalImage from "../../graphics/signal.png";
+import stationImage from "../../graphics/station.png";
 import rails from "../../graphics/rails.png";
 import "../../styles/views/Header.scss";
 
@@ -95,9 +96,10 @@ const Header = ({ alertUser }) => {
           // <div className="rails"></div>
         }
       </div>
-      {
-        //<img src={signalImage} alt="Signal" className="signal" />
-      }
+      
+        <img src={signalImage} alt="Signal" className="signal" />
+        <img src={stationImage} alt="Station" className="station" />
+      
     </div>
   );
 };

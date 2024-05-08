@@ -24,21 +24,29 @@
     .signal {
       position: absolute;
       bottom: 0; // Adjust based on the bottom position of the signal within the header
-      left: 50%;
+      left: 64%;
       transform: translateX(-50%);
       z-index: 10; // Make sure it is above other positioned elements
-      height: 60px; // Match the height of your signal image
+      height: 50px; // Match the height of your signal image
+    }
+
+    .station {
+      position: absolute;
+      bottom: 0; // Adjust based on the bottom position of the station within the header
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5; // Below the signal, but above the train
+      height: 70px; // Match the height of your station image
     }
   }
 
   .train-container {
     position: absolute;
-    bottom: 0; // Aligns the bottom of the train container to the bottom of the header
+    bottom: 0; 
     left: 0;
     width: 100%;
     overflow: hidden;
     height: 25px;
-    // This container should be the same height as the train image for proper alignment
     z-index: 2;
 
     .train {

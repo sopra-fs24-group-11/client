@@ -57,7 +57,7 @@ function SignUpForm({ alertUser }) {
   return (
     <div className="form-container sign-up-container">
       <form onSubmit={handleOnSubmit}>
-        <h1 className="h1_reg">Create Account</h1>
+        <h1 className="h1_reg">Account erstellen</h1>
 
         <span className="span_reg">
           Bitte fülle das untenstehende Formular aus um einen Account zu
@@ -102,7 +102,7 @@ function SignUpForm({ alertUser }) {
           onChange={handleChange}
           placeholder="Passwort bestätigen"
         />
-        <button className="buttonreg">Sign Up</button>
+        <button className="buttonreg">Jetzt registrieren</button>
       </form>
     </div>
   );

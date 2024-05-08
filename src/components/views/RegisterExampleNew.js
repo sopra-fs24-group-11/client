@@ -28,27 +28,27 @@ export default function RegisterExampleNew({ alertUser}) {
         <div className="overlay-container">
           <div className="overlay">
             <div className="overlay-panel overlay-left">
-              <h1 className="h1_reg">Welcome Back!</h1>
+              <h1 className="h1_reg">Willkommen zurück!</h1>
               <p className="p_reg">
-                To keep connected with us please login with your personal info
+                Schön, dass du wieder da bist! Melde dich an und schau dir den Fortschritt deiner Kollegen an!
               </p>
               <button
                 className="ghost buttonreg"
                 id="signIn"
                 onClick={() => handleOnClick("signIn")}
               >
-                Sign In
+                Anmelden
               </button>
             </div>
             <div className="overlay-panel overlay-right">
-              <h1 className="h1_reg">Hello, Friend!</h1>
-              <p className="p_reg">Enter your personal details and start journey with us</p>
+              <h1 className="h1_reg">Hallo, Freund!</h1>
+              <p className="p_reg">Gib deine Angaben ein und beginne deine Reise mit Kollegen!</p>
               <button
                 className="ghost buttonreg"
                 id="signUp"
                 onClick={() => handleOnClick("signUp")}
               >
-                Sign Up
+                Registrieren
               </button>
             </div>
           </div>
