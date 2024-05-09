@@ -110,8 +110,8 @@ const ListTemplate = ({alertUser}) => {
         </div>
       </div>}
       {!isPopupOpen && <div className="ListTemplate button-holder">
-        <Button backgroundColor={"white"} onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button backgroundColor={"white"} onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
+        <Button onClick={() => {setPopupOpen(true)}}>Add Item</Button>
+        <Button onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
       </div>}
       {!isPopupOpen && content}
       </div>
