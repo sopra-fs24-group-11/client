@@ -92,10 +92,11 @@
       overflow-y:auto;
       overflow-x:hidden;
       margin-right:auto;
-      max-width:230px;
+      max-width:360px;
       display:block;
       text-wrap: pretty;
       hyphens: auto;
+      word-wrap: break-word;
     }
     .item-icons {
       display:flex;
@@ -175,8 +176,7 @@
     }
   }
 }
-
-@media (min-width:400px) and (max-width:450px) {
+@media (min-width:401px) and (max-width:450px) {
   .ListItem {
     &.container{
       .name {
@@ -185,7 +185,72 @@
     }
   }
 }
-@media (min-width:450px) and (max-width:500px) {
+@media (min-width:451px) and (max-width:500px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 210px;
+      }
+    }
+  }
+}
+
+@media (min-width:501px) and (max-width:550px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 260px;
+      }
+    }
+  }
+}
+@media (min-width:551px) and (max-width:600px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 310px;
+      }
+    }
+  }
+}
+
+@media (min-width:601px) and (max-width:641px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 360px;
+      }
+    }
+  }
+}
+@media (min-width:642px) and (max-width:671px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 140px;
+      }
+    }
+  }
+}
+@media (min-width:672px) and (max-width:710px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 160px;
+      }
+    }
+  }
+}
+@media (min-width:711px) and (max-width:740px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 180px;
+      }
+    }
+  }
+}
+@media (min-width:741px) and (max-width:768px) {
   .ListItem {
     &.container{
       .name {
@@ -194,30 +259,74 @@
     }
   }
 }
-
-@media (min-width:500px) and (max-width:671px) {
+@media (min-width: 769px) and (max-width:851px) {
   .ListItem {
     &.container{
       .name {
-        max-width: 230px;
+        max-width: 500px;
       }
     }
   }
 }
-@media (min-width:672px) and (max-width:768px) {
+@media (min-width: 852px) and (max-width:900px) {
   .ListItem {
     &.container{
       .name {
-        max-width: 130px;
+        max-width: 220px;
       }
     }
   }
 }
-@media (min-width: 769px) and (max-width:945px) {
+@media (min-width: 901px) and (max-width:950px) {
   .ListItem {
     &.container{
       .name {
-        max-width: 400px;
+        max-width: 240px;
+      }
+    }
+  }
+}
+@media (min-width: 951px) and (max-width:1000px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 270px;
+      }
+    }
+  }
+}
+@media (min-width: 1001px) and (max-width:1050px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 300px;
+      }
+    }
+  }
+}
+@media (min-width: 1051px) and (max-width:1100px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 325px;
+      }
+    }
+  }
+}
+@media (min-width: 1101px) and (max-width:1150px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 350px;
+      }
+    }
+  }
+}
+@media (min-width: 1151px) and (max-width:1200px) {
+  .ListItem {
+    &.container{
+      .name {
+        max-width: 375px;
       }
     }
   }

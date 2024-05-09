@@ -23,7 +23,10 @@ const ProfilePage: React.FC = ({alertUser}) => {
     username: "",
     email: "",
     birthday: "",
+  });
+  const [passwords, setPasswords] = useState({
     password: "",
+    password2: "",
   });
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [isDeleted, setDeleted] = useState<boolean>(false);
@@ -47,7 +50,6 @@ const ProfilePage: React.FC = ({alertUser}) => {
           username: user.username,
           email: user.email,
           birthday: user.birthday || "",
-          password: user.password,
         });
         console.log("USER FROM BACKEND:", user);
 
@@ -74,6 +76,10 @@ const ProfilePage: React.FC = ({alertUser}) => {
     } catch (error) {
       alertUser("error", "Couldn't receive avatar.", error)
     }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPasswords((old) => ({...old, [e.target.name]: e.target.value }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +161,6 @@ const ProfilePage: React.FC = ({alertUser}) => {
       username: editedUser.username,
       email: editedUser.email,
       birthday: editedUser.birthday,
-      password: editedUser.password, 
     };
 
     try {
@@ -172,6 +177,22 @@ const ProfilePage: React.FC = ({alertUser}) => {
     }
   };
 
+  const handleNewPasswordSubmit = async () => {
+
+    try {
+      const token = localStorage.getItem("token");
+      await api.put("/password", passwords, {
+        headers: { Authorization: token },
+      });
+      setPasswords({password:"", password2:""});
+      setEditMode(false);
+      alertUser("success", "Password updated successfully.");
+    } catch (error) {
+      alertUser("error", "Couldn't update the password.", error);
+      
+    }
+  };
+
   const handleCancel = () => {
     setSelectedFileName("");
     setEditMode(false);
@@ -179,8 +200,8 @@ const ProfilePage: React.FC = ({alertUser}) => {
       username: user?.username || "",
       email: user?.email || "",
       birthday: user?.birthday || "",
-      password: user?.password || "",
     });
+    setPasswords({password:"", password2:""})
   };
 
   const handleProfileDelete = async () => {
@@ -207,7 +228,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
       </div>
     );
   }
-
+  
   return (
     <div className="profile-page-container">
       <div className="avatar-and-text">
@@ -247,7 +268,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
           </div>
         )}
         <div className="text">
-          <h1 className="title font-extrabold text-3xl">Profile</h1>
+          {/* <h1 className="title font-extrabold text-3xl">Profile</h1> */}
           {editMode ? (
             <>
               <Label className="label">Username</Label>
@@ -274,14 +295,38 @@ const ProfilePage: React.FC = ({alertUser}) => {
                 name="birthday"
                 onChange={handleChange}
               />
-              <Label className="label">Password</Label>
+              <div className="buttons-container">
+                <Button backgroundColor={"#FFB703"} onClick={handleSubmit}>
+                  Save Changes
+                </Button>
+                <Button backgroundColor={"#E63946"} onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </div>
+              <Label className="label">New Password</Label>
               <input
               className="input-password"
                 type="text"
-                value={editedUser.password}
+                value={passwords.password}
                 name="password"
-                onChange={handleChange}
+                onChange={handlePasswordChange}
               />
+              <Label className="label">Confirm Password</Label>
+              <input
+              className="input-password"
+                type="text"
+                value={passwords.password2}
+                name="password2"
+                onChange={handlePasswordChange}
+              />
+              <div className="buttons-container">
+                <Button backgroundColor={"#FFB703"} onClick={handleNewPasswordSubmit}>
+                  Save New Password
+                </Button>
+                <Button backgroundColor={"#E63946"} onClick={handleCancel}>
+                  Cancel
+                </Button>
+              </div>
             </>
           ) : (
             <>
@@ -293,26 +338,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
               <p>{user.birthday}</p>
               <Label className="label">Creation Date</Label>
               <p>{user.creationDate}</p>
-            </>
-          )}
-          <div className="buttons-container">
-            {editMode ? (
-              <>
-                <Button backgroundColor={"#FFB703"} onClick={handleSubmit}>
-                  Save Changes
-                </Button>
-                <Button backgroundColor={"#E63946"} onClick={handleCancel}>
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <>
-              <Button
-                  backgroundColor={"#FB8500"}
-                  onClick={() => navigate("/Dashboard")}
-                >
-                  Back to Dashboard
-                </Button>
+              <div className="buttons-container">
                 <Button
                   backgroundColor={"#FFB703"}
                   onClick={() => setEditMode(true)}
@@ -365,16 +391,9 @@ const ProfilePage: React.FC = ({alertUser}) => {
                     Return to Login
                   </button>
                 </ConfirmPopup>
-                <Button
-                  backgroundColor={"green"}
-                  onClick={() => navigate("/template")}
-                >
-                  Go To List Template
-                </Button>
-                
-              </>
-            )}
-          </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

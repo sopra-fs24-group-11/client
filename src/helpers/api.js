@@ -70,7 +70,7 @@ export const handleError1 = (error, handleAlert, errorMessage, severity) => {
       info += `\nstatus code: ${response.status}`;
       info += `\nerror message:\n${response.data}`;
     }
-    handleAlert(errorMessage, "info")
+    handleAlert(errorMessage, "warning")
     console.log("The request was made and answered but was unsuccessful:", error.response);
   } else {
     handleAlert("" + error)

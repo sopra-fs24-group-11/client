@@ -2,7 +2,7 @@
 
 .Carousel{
   &.container {
-    width:90%;
+    width:95%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,16 +26,19 @@
 }
 @media (max-width: 768px) {
   .Carousel{
-    &.container {
-      width:95%;
-      overflow-x: hidden; // hide left and right buttons
-    }
     &.title {
       font-size: 1rem;
       font-weight: 500;
     }
     &.button-holder {
       justify-content: space-around;
+    }
+  }
+}
+@media (max-width: 1200px) {
+  .Carousel{
+    &.container {
+      overflow-x: hidden; // hide left and right buttons
     }
   }
 }
