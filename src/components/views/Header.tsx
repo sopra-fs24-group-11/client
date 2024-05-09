@@ -86,9 +86,9 @@ const Header = ({ alertUser }) => {
         onClose={handleClose}
       >
         <MenuItem onClick={() => navigate("/dashboard")}>Dashboard</MenuItem>
-        <MenuItem onClick={() => navigate("/profile")}>Your Profile</MenuItem>
-        <MenuItem onClick={() => navigate("/friends")}>Your Friends</MenuItem>
-        <MenuItem onClick={() => navigate("/history")}>Trip History</MenuItem>
+        <MenuItem onClick={() => navigate("/profile")}>Profil</MenuItem>
+        <MenuItem onClick={() => navigate("/friends")}>Freunde</MenuItem>
+        <MenuItem onClick={() => navigate("/history")}>Vergangene Reisen</MenuItem>
         <MenuItem onClick={() => navigate("/template")}>List Template</MenuItem>
         <MenuItem onClick={() => navigate("/feedback")}>Feedback</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
