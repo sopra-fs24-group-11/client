@@ -160,8 +160,8 @@ const ChooseConnection = ({alertUser}) => {
 
 
   return (
-    <BaseContainer>
-      <div className="connection container">
+    <BaseContainer id="baseContainerChooseConnection">
+      <div className="connection container" id="secondContainer">
         <div className="connection outer-form">
           <h1 className="text-3xl mb-5 font-bold"> Choose Connection</h1>
           <div className="connection inner-form">

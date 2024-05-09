@@ -47,21 +47,21 @@
   }
 
   #startCircle {
-    left: 18%;
+    left: 20%;
   }
 
   #endCircle {
-    left: 77%;
+    left: 75%;
   }
 
   .tripLine {
     border: none;
     border-top: 5px solid #28344c;
     //margin: 5px 0; /* Anpassen des Abstands oberhalb und unterhalb der Linie */
-    width: 58%;
+    width: 55%;
     position: absolute;
     top: 50%;
-    left: 20%;
+    left: 22%;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2); /* Shadow on the right side */
   }
 
@@ -85,5 +85,14 @@
   .time {
     color: black;
     position: absolute;
+  }
+}
+
+@media (max-width: 650px) {
+  .connectionContainer {
+    .box {
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 }

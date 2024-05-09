@@ -60,7 +60,6 @@
     //padding: 20px;
     flex-basis: auto;
     //background-color: bisque;
-    position: relative;
     height: auto;
   }
 
@@ -162,8 +161,8 @@
   .button {
     cursor: pointer; // change to finger pointer
     width: 150px;
-    height:75px;
-    color:white;
+    height: 75px;
+    color: white;
     bottom: 0;
     transform: translate(0, 50%);
     position: absolute;
@@ -227,9 +226,11 @@
   }
 
   #results {
-    position: relative;
     left: 10%;
     width: 80%;
+    position: absolute;
+    top: 25%;
+    padding: 10px;
   }
 
   #destinationBlock::placeholder {
@@ -251,7 +252,7 @@
     animation: spin 1s ease infinite;
     align-self: center;
   }
-  
+
   @keyframes spin {
     0% {
       transform: rotate(0deg);
@@ -261,3 +262,47 @@
     }
   }
 }
+
+@media (max-width: 650px) {
+  #baseContainerChooseConnection {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #secondContainer {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .connection {
+    .outer-form {
+      padding: 10px;
+    }
+
+    .inner-form {
+      padding: 10px
+    }
+
+    #results {
+      left: 0;
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 437px) {
+  .connection {
+    #first.black-circle {
+      top: 90px
+    }
+
+    #second.black-circle {
+      top: 160px;
+    }
+
+    .connector {
+      top: 95px;
+    }
+  }
+}
+
