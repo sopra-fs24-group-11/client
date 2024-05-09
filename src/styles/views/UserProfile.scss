@@ -24,9 +24,10 @@
     border-radius: 30px;
     width: 100%;
     //animation: gradientAnimation 10s ease infinite;
-    background: linear-gradient(-45deg, #e7e7e7, #c4c4c4, #3d3d3d, #929292);
+    background-color: rgba(230, 230, 255, 1);
+    // background: linear-gradient(-45deg, #e7e7e7, #c4c4c4, #3d3d3d, #929292);
     background-size: 400% 400%;
-    color: rgb(255, 255, 255);
+    color: black;
     border-radius: 20px; /* Adjust as necessary */
 
     @media (max-width: 768px) {
@@ -62,7 +63,7 @@
           font-weight: 700;
           background-image: linear-gradient(to bottom, #00e0c6, #0095b3);
           box-shadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.7);
-          color: rgb(0, 0, 0);
+          color: black;
           border: none;
           padding: 10px 20px;
           border-radius: 4px;
