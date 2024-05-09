@@ -306,7 +306,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
               <Label className="label">New Password</Label>
               <input
               className="input-password"
-                type="text"
+                type="password"
                 value={passwords.password}
                 name="password"
                 onChange={handlePasswordChange}
@@ -314,7 +314,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
               <Label className="label">Confirm Password</Label>
               <input
               className="input-password"
-                type="text"
+                type="password"
                 value={passwords.password2}
                 name="password2"
                 onChange={handlePasswordChange}
