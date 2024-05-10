@@ -138,8 +138,6 @@ const FriendList = ({ setIsLoading, alertUser }) => {
                 <div className="acceptdeny-buttons">
                   <Button
                     className="accept-button"
-                    width="80px"
-                    height="35px"
                     backgroundColor="#82FF6D"
                     onClick={() => handleAcceptFriendRequest(request.friendId)}
                   >
@@ -148,7 +146,6 @@ const FriendList = ({ setIsLoading, alertUser }) => {
                   <Button
                     className="deny-button"
                     backgroundColor={"red"}
-                    height="35px"
                     onClick={() => handleDenyFriendRequest(request.friendId)}
                   >
                     Ablehnen
