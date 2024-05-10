@@ -1,14 +1,14 @@
 // =================================================================
 
-import React, {useState, useEffect, useRef} from "react";
-import {api} from "helpers/api";
-import {useNavigate} from "react-router-dom";
-import {Button} from "components/ui/Button";
-import {Progress} from "../ui/progress";
+import React, { useState, useEffect, useRef } from "react";
+import { api } from "helpers/api";
+import { useNavigate } from "react-router-dom";
+import { Button } from "components/ui/Button";
+import { Progress } from "../ui/progress";
 import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
-import {Input} from "components/ui/input";
+import { Input } from "components/ui/input";
 import {
   Dialog as DialogSCN,
   DialogContent as DialogContentSCN,
@@ -27,7 +27,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { HashLoader } from "react-spinners";
 
-const FriendListPage = ({alertUser}) => {
+const FriendListPage = ({ alertUser }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [friendList, setFriendList] = useState([]);
@@ -43,10 +43,12 @@ const FriendListPage = ({alertUser}) => {
   const fetchFriends = async () => {
     try {
       const response = await api.get("/users/friends", {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
 
-      let x = response.data.sort((a, b) => a.username.localeCompare(b.username));
+      let x = response.data.sort((a, b) =>
+        a.username.localeCompare(b.username)
+      );
 
       setFriendList(x);
       console.log("Friend list: ", x);
@@ -58,7 +60,7 @@ const FriendListPage = ({alertUser}) => {
   const fetchFriendRequests = async () => {
     try {
       const response = await api.get("/users/friends/requests", {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
       setFriendRequests(response.data); // Assuming this is an array of friend requests
     } catch (error) {
@@ -72,7 +74,7 @@ const FriendListPage = ({alertUser}) => {
         `/users/friends/${friendRequestId}`,
         {},
         {
-          headers: {Authorization: token},
+          headers: { Authorization: token },
         }
       );
       alertUser("success", "Friend request accepted.");
@@ -89,7 +91,7 @@ const FriendListPage = ({alertUser}) => {
   const handleDenyFriendRequest = async (friendRequestId) => {
     try {
       await api.delete(`/users/friends/${friendRequestId}`, {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
       alertUser("success", "Friend request denied.");
       await fetchFriends();
@@ -111,7 +113,7 @@ const FriendListPage = ({alertUser}) => {
         const response = await api.get(
           `/users/search?name=${event.target.value}`,
           {
-            headers: {Authorization: token},
+            headers: { Authorization: token },
           }
         );
         setSuggestions(response.data); // Assuming this is an array of user objects
@@ -141,7 +143,7 @@ const FriendListPage = ({alertUser}) => {
     if (friendToDelete) {
       try {
         await api.delete(`/users/friends/${friendToDelete}`, {
-          headers: {Authorization: token},
+          headers: { Authorization: token },
         });
         alertUser("success", "Friend removed.");
         // Remove the friend from the friendList in the UI after successful deletion
@@ -165,7 +167,7 @@ const FriendListPage = ({alertUser}) => {
           `/users/friends/${selectedFriend.id}`,
           {},
           {
-            headers: {Authorization: token},
+            headers: { Authorization: token },
           }
         );
         alertUser("success", "Friend request sent.");
@@ -215,13 +217,13 @@ const FriendListPage = ({alertUser}) => {
   return (
     <>
       <div className="friend-list-page">
-        <h1>Your Friend List</h1>
+        <h1>Deine Freundesliste</h1>
         {friendList.length > 0 ? (
           <ul className="friend-list">
             {friendList.map((friend) => (
               <li key={friend.friendId} className="friend">
                 <span className="name">{friend.username}</span>
-                <Progress className="progress-bar" value={friend.points}/>
+                <Progress className="progress-bar" value={friend.points} />
                 <div className="stage">Level: {Math.floor(friend.level)}</div>
                 <Button
                   className="remove-friend"
@@ -244,33 +246,33 @@ const FriendListPage = ({alertUser}) => {
                   }}
                 >
                   <DialogTitle id="delete-dialog-title">
-                    Confirm Deletion
+                  Bestätigen Sie die Löschung
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="delete-dialog-description">
-                      Are you sure you want to delete this friend?
+                      Sind Sie sicher, dass Sie diesen Freund löschen wollen?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
                     <Button
                       onClick={handleCloseDeleteDialog}
-                      style={{backgroundColor: "#BCFFE3", color: "black"}}
+                      style={{ backgroundColor: "#BCFFE3", color: "black" }}
                       width={null}
                       height={null}
                       backgroundColor={null}
                       color={null}
                       className={null}
                     >
-                      Cancel
+                      Abbrechen
                     </Button>
                     <Button
                       onClick={() => {
                         handleRemoveFriend();
                         handleCloseDeleteDialog();
                       }}
-                      style={{backgroundColor: "#FF7070", color: "black"}}
+                      style={{ backgroundColor: "#FF7070", color: "black" }}
                     >
-                      Delete
+                      Löschen
                     </Button>
                   </DialogActions>
                 </Dialog>
@@ -279,11 +281,12 @@ const FriendListPage = ({alertUser}) => {
           </ul>
         ) : (
           <div className="no-friends-message">
-            No friends yet. Click on add new friend to send a request!
+            Noch keine Freunde. Klicken Sie auf Neuen Freund hinzufügen, um eine
+            Anfrage zu senden!
           </div>
         )}
 
-        <h1>Friend Requests</h1>
+        <h1>Freundschaftsanfragen</h1>
         {friendRequests.length > 0 ? (
           <ul className="friend-requests">
             {friendRequests.map((request) => (
@@ -295,14 +298,14 @@ const FriendListPage = ({alertUser}) => {
                     backgroundColor="#82FF6D"
                     onClick={() => handleAcceptFriendRequest(request.friendId)}
                   >
-                    Accept
+                    Annehmen
                   </Button>
                   <Button
                     className="deny-request"
                     backgroundColor={"red"}
                     onClick={() => handleDenyFriendRequest(request.friendId)}
                   >
-                    Deny
+                    Ablehnen
                   </Button>
                 </div>
               </li>
@@ -310,7 +313,8 @@ const FriendListPage = ({alertUser}) => {
           </ul>
         ) : (
           <div className="no-requests-message">
-            No friend requests. Check back later or send your own requests!
+            Keine Freundschaftsanfragen. Schauen Sie später wieder vorbei oder
+            schicken Sie Ihre eigenen Anfragen!
           </div>
         )}
 
@@ -321,7 +325,7 @@ const FriendListPage = ({alertUser}) => {
             color="black"
             onClick={() => navigate("/dashboard")}
           >
-            Back to Dashboard
+            Zurück zum Dashboard
           </Button>
           <DialogSCN>
             <DialogTriggerSCN asChild>
@@ -330,14 +334,15 @@ const FriendListPage = ({alertUser}) => {
                 backgroundColor="#FB8500"
                 color="black"
               >
-                Add new Friend
+                Neuen Freund hinzufügen
               </Button>
             </DialogTriggerSCN>
             <DialogContentSCN>
               <DialogHeaderSCN>
                 <DialogTitle>Add New Friend</DialogTitle>
                 <DialogDescriptionSCN>
-                  Enter the username of the friend you want to add.
+                  Geben Sie den Benutzernamen des Freundes ein, den Sie
+                  hinzufügen möchten.
                 </DialogDescriptionSCN>
               </DialogHeaderSCN>
               <input
@@ -364,10 +369,10 @@ const FriendListPage = ({alertUser}) => {
                   onClick={handleAddFriendSubmit}
                   backgroundColor="#14AE5C"
                 >
-                  Send Friend Request
+                  Freundschaftsanfrage senden
                 </Button>
               </DialogFooterSCN>
-              <DialogCloseSCN ref={closeDialogRef} className="hidden"/>
+              <DialogCloseSCN ref={closeDialogRef} className="hidden" />
             </DialogContentSCN>
           </DialogSCN>
         </div>
