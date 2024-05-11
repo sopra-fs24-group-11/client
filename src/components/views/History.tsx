@@ -11,6 +11,8 @@ import Heart from "components/ui/Heart"
 import PropTypes from "prop-types";
 import { HashLoader } from "react-spinners";
 
+// Das ist ein Test
+
 const History = ({alertUser}) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
