@@ -21,6 +21,8 @@ import {
 } from "components/ui/dialog";
 import {HashLoader} from "react-spinners";
 import locationIcon from "../../graphics/location_icon.png"
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 const CreateTrip = ({alertUser}) => {
   // used to navigate
@@ -222,6 +224,18 @@ const CreateTrip = ({alertUser}) => {
       </div>
     );
   }
+
+  function startGeolocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log("!! COORDINATES !!");
+        console.log(position.coords.latitude, position.coords.longitude);
+      })
+    } else {
+      alertUser("error", "Geolocation is currently not available.")
+    }
+  }
+
   return (
     <BaseContainer>
       <div className="flex container">
@@ -272,7 +286,7 @@ const CreateTrip = ({alertUser}) => {
                         <li
                           key={"userLocation"}
                           onClick={() => {
-
+                              startGeolocation()
                             }
                           }
                           onMouseEnter={() =>
