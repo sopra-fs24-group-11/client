@@ -1,0 +1,35 @@
+// Theme Colors
+$accent: #b9ffd4;
+$accentDark: #123597;
+$textColor: white;
+$background: #383838;
+
+// Constants
+$borderRadius: 0.75em;
+$dropShadow: 0 0.5em 0.55em rgba(0, 0, 0, 0.5);
+
+// Popup Styles
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $background;
+  color: $textColor;
+  border-radius: $borderRadius;
+  padding: 20px;
+  box-shadow: $dropShadow;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: $accentDark;
+  cursor: pointer;
+}
+
+.popup-content {
+  // Add your content styles here
+}
