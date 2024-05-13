@@ -63,7 +63,7 @@ const Feedback = ({alertUser}) => {
       <h1>Feedback</h1>
       {!hasSubmitted &&
           <div>
-              <h3>Feel free to give feedback to the Get-Together Team! &lt;3</h3><textarea
+              <h3>Geben Sie gerne ein Feedback an das Get-Together-Team! &lt;3</h3><textarea
               className="flex input-large"
               placeholder="enter..."
               onChange={(e) => setFeedbackText(e.target.value)}
@@ -94,8 +94,8 @@ const Feedback = ({alertUser}) => {
 
       {hasSubmitted &&
           <div>
-              <h2>Thank you!</h2>
-              <h3>We will take your feedback into consideration.</h3>
+              <h2>Dankeschön!</h2>
+              <h3>Wir werden Ihr Feedback berücksichtigen.</h3>
           </div>
       }
 
