@@ -13,7 +13,6 @@ const ToDoList = ({avatars, userId, alertUser}) => {
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [change, setChange] = useState(1);
 
   useEffect(() => {
     const fetchPeriodically = async () => {
@@ -29,25 +28,15 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       const response = await api.get(`/trips/${tripId}/todos`, {
         headers: { Authorization: token },
       });
-      setList(response.data)
+      setList(response.data.sort((a, b) => a.id - b.id))
     } catch (error) {
       alertUser("error", "", error);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/trips/${tripId}/todos`, {
-          headers: { Authorization: token },
-        });
-        setList(response.data)
-      } catch (error) {
-        alertUser("error", "", error);
-      }
-    };
-    fetchData();
-  }, [change]);
+    fetchList();
+  }, []);
 
   const addItem = async (item) => {
     try {
@@ -69,8 +58,8 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       await api.delete(`/trips/${tripId}/todos/${item.id}`, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
       alertUser("success", "Item deleted.");
+      fetchList();
     } catch (error) {
       alertUser("error", "Item couldn't be deleted.", error);
     }
@@ -82,7 +71,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       await api.put(`/trips/${tripId}/todos/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
+      fetchList();
     } catch (error) {
       alertUser("error", "Item couldn't be completed.", error);
     }
@@ -94,7 +83,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
         await api.put(`/trips/${tripId}/todos/${item.id}/responsible`, {}, {
           headers: { Authorization: token },
         });
-        setChange(old => old + 1);
+        fetchList();
       } catch (error) {
         alertUser("error", "Item couldn't be selected.", error);
       }
@@ -103,7 +92,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
         await api.delete(`/trips/${tripId}/todos/${item.id}/responsible`, {
           headers: { Authorization: token },
         });
-        setChange(old => old + 1);
+        fetchList();
       } catch (error) {
         alertUser("error", "Item couldn't be deselected.", error);
       }
@@ -116,7 +105,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       await api.put(`/trips/${tripId}/todos/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
+      fetchList();
       alertUser("success", "Item updated.");
     } catch (error) {
       alertUser("error", "Item couldn't be updated.", error);
@@ -158,7 +147,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
             className="List popup-input11"
             type="text"
             value={newItemName}
-            placeholder={"Next Item "}
+            placeholder={"Nächstes Item "}
             onChange={(e) => setNewItemName(e.target.value)}
           />
           <div className="List popup-buttons11">

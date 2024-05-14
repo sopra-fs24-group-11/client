@@ -12,21 +12,21 @@ const IndividualPackingList = ({alertUser}) => {
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [change, setChange] = useState(1);
+
+  const fetchData = async () => {
+        try {
+          const response = await api.get(`/trips/${tripId}/individualPackings`, {
+            headers: { Authorization: token },
+          });
+          setList(response.data.sort((a, b) => a.id - b.id))
+        } catch (error) {
+          alertUser("error", "", error);
+        }
+      };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/trips/${tripId}/individualPackings`, {
-          headers: { Authorization: token },
-        });
-        setList(response.data)
-      } catch (error) {
-        alertUser("error", "", error);
-      }
-    };
     fetchData();
-  }, [change]);
+  }, []);
 
   const addItem = async (item) => {
     try {
@@ -48,8 +48,8 @@ const IndividualPackingList = ({alertUser}) => {
       await api.post(`/trips/${tripId}/transfer/packings`, {}, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
       alertUser("success", "Template transferred.");
+      fetchData();
     } catch (error) {
       alertUser("error", "Template couldn't be transferred.", error);
     }
@@ -61,7 +61,7 @@ const IndividualPackingList = ({alertUser}) => {
       await api.put(`/trips/${tripId}/individualPackings/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
+      fetchData();
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -73,8 +73,8 @@ const IndividualPackingList = ({alertUser}) => {
       await api.put(`/trips/${tripId}/individualPackings/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
       alertUser("success", "Item updated.");
+      fetchData();
     } catch (error) {
       alertUser("error", "Item couldn't be updated.", error);
     }
@@ -85,8 +85,8 @@ const IndividualPackingList = ({alertUser}) => {
       await api.delete(`/trips/${tripId}/individualPackings/${item.id}`, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
       alertUser("success", "Item deleted.");
+      fetchData();
     } catch (error) {
       alertUser("error", "Item couldn't be deleted.", error);
     }
@@ -124,7 +124,7 @@ const IndividualPackingList = ({alertUser}) => {
             className="List popup-input11"
             type="text"
             value={newItemName}
-            placeholder={"Next Item "}
+            placeholder={"Nächstes Item "}
             onChange={(e) => setNewItemName(e.target.value)}
           />
           <div className="List popup-buttons11">
