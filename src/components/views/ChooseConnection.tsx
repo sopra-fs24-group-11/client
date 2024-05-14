@@ -17,6 +17,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
+import locationIcon from "../../graphics/location_icon.png"
 
 
 const ChooseConnection = ({alertUser}) => {
@@ -48,7 +49,7 @@ const ChooseConnection = ({alertUser}) => {
   const [tempLocation, setTempLocation] = useState("");
 
   // used for displaying UI
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState<string>("");
 
   const handleLocationSearchChange = async (event) => {
     setLocationSearchTerm(event.target.value);
@@ -140,6 +141,17 @@ const ChooseConnection = ({alertUser}) => {
 
   };
 
+  function startGeolocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log("!! COORDINATES !!");
+        console.log(position.coords.latitude, position.coords.longitude);
+      })
+    } else {
+      alertUser("error", "Geolocation is currently not available.")
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -192,29 +204,80 @@ const ChooseConnection = ({alertUser}) => {
                     value={locationSearchTerm}
                     onChange={handleLocationSearchChange}
                   />
-                  {locationSuggestions.length > 0 && (
-                    <ul className="suggestions-list bg-gray-100">
-                      {locationSuggestions.map((suggestion) => (
-                        <li
-                          key={suggestion.stationCode}
-                          onClick={() =>
-                            handleLocationSuggestionSelect(suggestion)
-                          }
-                          onMouseEnter={() =>
-                            setIsHovered(suggestion.stationCode)
-                          }
-                          onMouseLeave={() => setIsHovered(null)}
-                          style={{
-                            cursor: "pointer",
-                            textShadow:
-                              isHovered === suggestion.stationCode
-                                ? "2px 2px 4px #000"
-                                : "none",
-                          }}
-                        >
-                          {suggestion.stationName}
-                        </li>
-                      ))}
+                  {(
+                    <ul className="suggestions-list bg-gray-100"
+                        style={{
+                          borderRadius: "5px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                        }}>
+                      <li
+                        key={"userLocation"}
+                        onClick={() => {
+                          startGeolocation()
+                        }
+                        }
+                        onMouseEnter={() =>
+                          setIsHovered("userLocation")
+                        }
+                        onMouseLeave={() => setIsHovered(null)}
+                        style={{
+                          cursor: "pointer",
+                          textShadow:
+                            isHovered === "userLocation"
+                              ? "2px 2px 4px #000"
+                              : "none",
+                          paddingBottom: "5px",
+                          paddingTop: "5px",
+                        }}>
+                        <img src={locationIcon} alt="location icon"
+                             style={{
+                               position: "absolute",
+                               width: "20px",
+                               height: "20px",
+                               marginRight: "10px",
+                               marginTop: "2px",
+                             }}
+                        />
+                        <div style={{
+                          paddingLeft: "20px",
+                        }}>Jetztiger Standort
+                        </div>
+                      </li>
+                      {locationSuggestions.length > 0 && (
+                        <>
+                          <li>
+                            <div style={{
+                              width: "100%",
+                              height: "1px",
+                              backgroundColor: "lightgrey",
+                              marginBottom: "2px",
+                            }}/>
+                          </li>
+                          {locationSuggestions.map((suggestion) => (
+                            <li
+                              key={suggestion.stationCode}
+                              onClick={() =>
+                                handleLocationSuggestionSelect(suggestion)
+                              }
+                              onMouseEnter={() =>
+                                setIsHovered(suggestion.stationCode)
+                              }
+                              onMouseLeave={() => setIsHovered(null)}
+                              style={{
+                                cursor: "pointer",
+                                textShadow:
+                                  isHovered === suggestion.stationCode
+                                    ? "2px 2px 4px #000"
+                                    : "none",
+                                paddingLeft: "5px"
+                              }}
+                            >
+                              {suggestion.stationName}
+                            </li>
+                          ))}
+                        </>
+                      )}
                     </ul>
                   )}
                   <DialogFooter>

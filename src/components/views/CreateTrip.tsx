@@ -20,7 +20,6 @@ import {
   DialogTrigger,
 } from "components/ui/dialog";
 import {HashLoader} from "react-spinners";
-import locationIcon from "../../graphics/location_icon.png"
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
 
@@ -225,16 +224,6 @@ const CreateTrip = ({alertUser}) => {
     );
   }
 
-  function startGeolocation() {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log("!! COORDINATES !!");
-        console.log(position.coords.latitude, position.coords.longitude);
-      })
-    } else {
-      alertUser("error", "Geolocation is currently not available.")
-    }
-  }
 
   return (
     <BaseContainer>
@@ -276,53 +265,13 @@ const CreateTrip = ({alertUser}) => {
                       value={locationSearchTerm}
                       onChange={handleLocationSearchChange}
                     />
-                    {locationSuggestions.length > -1 && (
+                    {locationSuggestions.length > 0 && (
                       <ul className="suggestions-list bg-gray-100"
                           style={{
                             borderRadius: "5px",
                             paddingTop: "5px",
                             paddingBottom: "5px",
                       }}>
-                        <li
-                          key={"userLocation"}
-                          onClick={() => {
-                              startGeolocation()
-                            }
-                          }
-                          onMouseEnter={() =>
-                            setIsHovered("userLocation")
-                          }
-                          onMouseLeave={() => setIsHovered(null)}
-                          style={{
-                            cursor: "pointer",
-                            textShadow:
-                              isHovered === "userLocation"
-                                ? "2px 2px 4px #000"
-                                : "none",
-                            paddingBottom: "5px",
-                            paddingTop: "5px",
-                          }}>
-                          <img src={locationIcon} alt="location icon"
-                               style={{
-                                position: "absolute",
-                                width: "20px",
-                                height: "20px",
-                                marginRight: "10px",
-                                marginTop: "2px",
-                              }}
-                               />
-                          <div style={{
-                            paddingLeft: "20px",
-                          }}>Jetztiger Standort</div>
-                        </li>
-                        <li>
-                          <div style={{
-                            width: "100%",
-                            height: "1px",
-                            backgroundColor: "lightgrey",
-                            marginBottom: "2px",
-                          }}/>
-                        </li>
                         {locationSuggestions.map((suggestion) => (
                           <li
                             key={suggestion.stationCode}
