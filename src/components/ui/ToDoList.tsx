@@ -151,7 +151,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
 
   return (
     <div className="Carousel-List-Container">
-      <h1 className="font-semibold Carousel title">To Do List</h1>
+      <h1 className="font-semibold Carousel title">To Do Liste</h1>
       {isPopupOpen && <div className="List popup-container11">
         <div className="List popup11">
           <input
@@ -162,14 +162,14 @@ const ToDoList = ({avatars, userId, alertUser}) => {
             onChange={(e) => setNewItemName(e.target.value)}
           />
           <div className="List popup-buttons11">
-            <Button backgroundColor={"beige"} onClick={() => {addItem(newItemName)}}>Save</Button>
-            <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false)}}>Close</Button>
+            <Button backgroundColor={"beige"} onClick={() => {addItem(newItemName)}}>Sichern</Button>
+            <Button backgroundColor={"beige"} onClick={() => {setPopupOpen(false)}}>Schliessen</Button>
           </div>
         </div>
       </div>}
       {!isPopupOpen && <div className="Carousel button-holder">
-        <Button onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
+        <Button onClick={() => {setPopupOpen(true)}}>Item hinzufügen</Button>
+        <Button onClick={() => {setEditMode(old => !old)}}>{editMode ? "Editor schliessen" : "Editieren"}</Button>
       </div>}
       {!isPopupOpen && content}
     </div>
