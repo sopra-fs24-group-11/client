@@ -143,10 +143,19 @@ const ChooseConnection = ({alertUser}) => {
 
   function startGeolocation() {
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        try {
+          const response = await api.get("/trips/" + tripId + "/geoLocation?x=" + position.coords.latitude + "&y=" + position.coords.longitude + "&isLate=false",
+            {headers: {Authorization: token}});
+          setSelectedLocation(response.data[0][0].departurePoint);
+          handleLocationSubmit();
+        } catch (error) {
+          alertUser("error", "Geolocation failed.", error);
+        }
+
         console.log("!! COORDINATES !!");
         console.log(position.coords.latitude, position.coords.longitude);
-      })
+      });
     } else {
       alertUser("error", "Geolocation is currently not available.")
     }
