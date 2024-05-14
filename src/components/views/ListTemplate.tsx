@@ -12,22 +12,21 @@ const ListTemplate = ({alertUser}) => {
   const [editMode, setEditMode] = useState(false); // edit mode for all items
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
-  const [change, setChange] = useState(1);
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get("/users/packings", {
+        headers: { Authorization: token },
+      });
+      setList(response.data.sort((a, b) => a.id - b.id))
+    } catch (error) {
+      alertUser("error", "Couldn't fetch the list.", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/users/packings", {
-          headers: { Authorization: token },
-        });
-        
-        setList(response.data)
-      } catch (error) {
-        alertUser("error", "Couldn't fetch the list.", error);
-      }
-    };
     fetchData();
-  }, [change]);
+  }, []);
 
   const addItem = async (item) => {
     try {
@@ -50,7 +49,7 @@ const ListTemplate = ({alertUser}) => {
         headers: { Authorization: token },
       });
       alertUser("success", "Item deleted.");
-      setChange(old => old + 1);
+      fetchData();
     } catch (error) {
       alertUser("error", "Couldn't delete the item.", error);
     }
@@ -62,8 +61,8 @@ const ListTemplate = ({alertUser}) => {
       await api.put(`/users/packings/${itemId}`, requestBody, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Item updated.");
-      setChange(old => old + 1);
+      alertUser("success", "Item updated."); 
+      fetchData();
     } catch (error) {
       alertUser("error", "Couldn't update the item.", error);
     }
@@ -100,7 +99,7 @@ const ListTemplate = ({alertUser}) => {
             className="List popup-input11"
             type="text"
             value={newItemName}
-            placeholder={"Next Item "}
+            placeholder={"Nächstes Item "}
             onChange={(e) => setNewItemName(e.target.value)}
           />
           <div className="List popup-buttons11">
@@ -111,7 +110,7 @@ const ListTemplate = ({alertUser}) => {
       </div>}
       {!isPopupOpen && <div className="ListTemplate button-holder">
         <Button onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
+        <Button onClick={() => {setEditMode(old => !old)}}>{editMode ? "Editor schliessen" : "Editieren"}</Button>
       </div>}
       {!isPopupOpen && content}
       </div>

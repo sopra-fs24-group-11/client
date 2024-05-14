@@ -18,7 +18,7 @@ export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode}) =
   };  
   return(
     <div className="ListItem container">
-      {editing ? (
+      {editMode && editing ? (
         <form 
           className="ListItem form"
           onSubmit={(event) => handleSubmit(event, item, updateItemName)}>
@@ -30,7 +30,7 @@ export const TemplateListItem = ({item, handleDelete, handleUpdate, editMode}) =
             onChange={(e) => setUpdateItemName(e.target.value)}
             style={{ color: "black" }}
           />
-          <button type="submit" className="ListItem update-button">
+          <button type="submit" className="ListItem update-icon">
             <FontAwesomeIcon icon={faCheck} />
           </button>
         </form>
@@ -82,7 +82,7 @@ export const GroupListItem = ({item, editMode, handleComplete, handleDelete, han
 
   return(
     <div className="ListItem container">
-      {editing ? 
+      {editMode && editing ? 
       <form 
       className="ListItem form"
       onSubmit={(event) => handleSubmit(event, item, updateItemName)}>
@@ -94,7 +94,7 @@ export const GroupListItem = ({item, editMode, handleComplete, handleDelete, han
           onChange={(e) => setUpdateItemName(e.target.value)}
           style={{ color: "black" }}
         />
-        <button type="submit" className="ListItem update-button">
+        <button type="submit" className="ListItem update-icon">
           <FontAwesomeIcon icon={faCheck} />
         </button>
       </form>
@@ -148,7 +148,7 @@ export const IndividualListItem = ({item, editMode, handleComplete, handleDelete
   };
   return(
     <div className="ListItem container">
-      {editing ? 
+      {editMode && editing ? 
       <form 
       className="ListItem form"
       onSubmit={(event) => handleSubmit(event, item, updateItemName)}>
@@ -160,7 +160,7 @@ export const IndividualListItem = ({item, editMode, handleComplete, handleDelete
           onChange={(e) => setUpdateItemName(e.target.value)}
           style={{ color: "black" }}
         />
-        <button type="submit" className="ListItem update-button">
+        <button type="submit" className="ListItem update-icon">
           <FontAwesomeIcon icon={faCheck} />
         </button>
       </form>

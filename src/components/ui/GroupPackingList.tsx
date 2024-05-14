@@ -12,7 +12,6 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [newItemName, setNewItemName] = useState("");
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [change, setChange] = useState(1);
 
   useEffect(() => {
     const fetchPeriodically = async () => {
@@ -28,25 +27,15 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
       const response = await api.get(`/trips/${tripId}/groupPackings`, {
         headers: { Authorization: token },
       });
-      setList(response.data)
+      setList(response.data.sort((a, b) => a.id - b.id))
     } catch (error) {
       alertUser("error", "", error);
     }
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(`/trips/${tripId}/groupPackings`, {
-          headers: { Authorization: token },
-        });
-        setList(response.data)
-      } catch (error) {
-        alertUser("error", "", error);
-      }
-    };
-    fetchData();
-  }, [change]);
+    fetchList();
+  }, []);
 
   const addItem = async (item) => {
     try {
@@ -68,8 +57,8 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
       await api.delete(`/trips/${tripId}/groupPackings/${item.id}`, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
       alertUser("success", "Item deleted.");
+      fetchList();
     } catch (error) {
       alertUser("error", "Item couldn't be deleted.", error);
     }
@@ -81,7 +70,7 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
       await api.put(`/trips/${tripId}/groupPackings/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
+      fetchList();
     } catch (error) {
       alertUser("error", "Item couldn't be completed.", error);
     }
@@ -93,7 +82,7 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
         await api.put(`/trips/${tripId}/groupPackings/${item.id}/responsible`, {}, {
           headers: { Authorization: token },
         });
-        setChange(old => old + 1);
+        fetchList();
       } catch (error) {
         alertUser("error", "Item couldn't be selected.", error);
       }
@@ -102,7 +91,7 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
         await api.delete(`/trips/${tripId}/groupPackings/${item.id}/responsible`, {
           headers: { Authorization: token },
         });
-        setChange(old => old + 1);
+        fetchList();
       } catch (error) {
         alertUser("error", "Item couldn't be deselected.", error);
       }
@@ -115,8 +104,8 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
       await api.put(`/trips/${tripId}/groupPackings/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      setChange(old => old + 1);
       alertUser("success", "Item updated.");
+      fetchList();
     } catch (error) {
       alertUser("error", "Item couldn't be updated.", error);
     }
@@ -158,7 +147,7 @@ const GroupPackingList = ({avatars, userId, alertUser}) => {
             className="List popup-input11"
             type="text"
             value={newItemName}
-            placeholder={"Next Item "}
+            placeholder={"Nächstes Item "}
             onChange={(e) => setNewItemName(e.target.value)}
           />
           <div className="List popup-buttons11">
