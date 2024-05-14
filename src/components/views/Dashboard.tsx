@@ -123,8 +123,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
         </ul>
       ) : (
         <div className="no-friends-message">
-          Noch keine Freunde. Klicken Sie auf zeige Details, um Freunde
-          einzuladen!
+          Noch keine Freunde. Klicke auf &quot;Zeige Details&quot; um Freunde hinzuzufügen.
         </div>
       )}
 
@@ -240,7 +239,7 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
       </div>
 
       <div className="current-trips component">
-        <h2>Current Trips</h2>
+        <h2>Aktuelle Reisen</h2>
         <div className="trip-container">
           {currentTrips.length > 0 ? (
             currentTrips.map((trip, index) => (
@@ -457,8 +456,7 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
           ))
         ) : (
           <div className="no-current-trip-invitations">
-            Keine aktuellen Reiseeinladungen: Erstellen Sie eine oder lassen Sie
-            sich von Ihren Freunden einladen!
+            Keine aktuellen Reiseeinladungen: Erstellen eine Reise oder lass dich von deinen Freunden einladen!
           </div>
         )}
       </div>

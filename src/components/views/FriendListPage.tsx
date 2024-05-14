@@ -246,11 +246,11 @@ const FriendListPage = ({ alertUser }) => {
                   }}
                 >
                   <DialogTitle id="delete-dialog-title">
-                  Bestätigen Sie die Löschung
+                    Bestätige die Löschung
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="delete-dialog-description">
-                      Sind Sie sicher, dass Sie diesen Freund löschen wollen?
+                      Bist du sicher, dass du diesen Freund löschen willst?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
@@ -281,8 +281,8 @@ const FriendListPage = ({ alertUser }) => {
           </ul>
         ) : (
           <div className="no-friends-message">
-            Noch keine Freunde. Klicken Sie auf Neuen Freund hinzufügen, um eine
-            Anfrage zu senden!
+            Noch keine Freunde. Klicke auf &quot;Neuen Freund hinzufügen&quot;,
+            um eine Anfrage zu senden!
           </div>
         )}
 
@@ -313,8 +313,8 @@ const FriendListPage = ({ alertUser }) => {
           </ul>
         ) : (
           <div className="no-requests-message">
-            Keine Freundschaftsanfragen. Schauen Sie später wieder vorbei oder
-            schicken Sie Ihre eigenen Anfragen!
+            Keine Freundschaftsanfragen. Schaue später wieder vorbei oder
+            schicke deine eigenen Anfragen!
           </div>
         )}
 
@@ -341,8 +341,7 @@ const FriendListPage = ({ alertUser }) => {
               <DialogHeaderSCN>
                 <DialogTitle>Add New Friend</DialogTitle>
                 <DialogDescriptionSCN>
-                  Geben Sie den Benutzernamen des Freundes ein, den Sie
-                  hinzufügen möchten.
+                  Gebe den Benutzernamen deines Freundes ein, um eine Anfrage zu senden.
                 </DialogDescriptionSCN>
               </DialogHeaderSCN>
               <input

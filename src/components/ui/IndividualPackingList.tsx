@@ -117,7 +117,7 @@ const IndividualPackingList = ({alertUser}) => {
 
   return (
     <div className="Carousel-List-Container">
-      <h1 className=" font-semibold Carousel title">Individual Packing List</h1>
+      <h1 className=" font-semibold Carousel title">Individuelle Packliste</h1>
       {isPopupOpen && <div className="List popup-container11">
         <div className="List popup11">
           <input
@@ -134,9 +134,9 @@ const IndividualPackingList = ({alertUser}) => {
         </div>
       </div>}
       {!isPopupOpen && <div className="Carousel button-holder">
-        <Button  onClick={() => {setPopupOpen(true)}}>Add Item</Button>
-        <Button  onClick={() => {setEditMode(old => !old)}}>{editMode ? "Close Edit" : "Edit"}</Button>
-        <Button  onClick={() => {transferTemplate()}}>Transfer</Button>
+        <Button  onClick={() => {setPopupOpen(true)}}>Item hinzufügen</Button>
+        <Button  onClick={() => {setEditMode(old => !old)}}>{editMode ? "Editor schliessen" : "Editieren"}</Button>
+        <Button  onClick={() => {transferTemplate()}}>Template importieren</Button>
       </div>}
       {!isPopupOpen && content}
     </div>
