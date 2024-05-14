@@ -145,10 +145,24 @@ const ChooseConnection = ({alertUser}) => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
+          setTempLocation("Suche deinen Standort...");
+          if (closeDialogRef.current) {
+            closeDialogRef.current.click();
+          }
+          setShowSpinner(true);
+
           const response = await api.get("/trips/" + tripId + "/geoLocation?x=" + position.coords.latitude + "&y=" + position.coords.longitude + "&isLate=false",
             {headers: {Authorization: token}});
-          setSelectedLocation(response.data[0][0].departurePoint);
-          handleLocationSubmit();
+
+          const departurePoint = response.data[0][0].departurePoint;
+          setSelectedLocation(departurePoint);
+
+          setTemporaryMeetUpCode(departurePoint.stationCode);
+          setTempLocation(departurePoint.stationName);
+          setLocationSearchTerm("");
+
+          await renderConnectionContainers(departurePoint.stationCode);
+
         } catch (error) {
           alertUser("error", "Geolocation failed.", error);
         }
