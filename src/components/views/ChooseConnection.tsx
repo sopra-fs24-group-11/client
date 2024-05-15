@@ -142,14 +142,14 @@ const ChooseConnection = ({alertUser}) => {
   };
 
   function startGeolocation() {
+    setTempLocation("Suche deinen Standort...");
+    if (closeDialogRef.current) {
+      closeDialogRef.current.click();
+    }
+    setShowSpinner(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
-          setTempLocation("Suche deinen Standort...");
-          if (closeDialogRef.current) {
-            closeDialogRef.current.click();
-          }
-          setShowSpinner(true);
 
           const response = await api.get("/trips/" + tripId + "/geoLocation?x=" + position.coords.latitude + "&y=" + position.coords.longitude + "&isLate=false",
             {headers: {Authorization: token}});
@@ -167,10 +167,10 @@ const ChooseConnection = ({alertUser}) => {
           alertUser("error", "Geolocation failed.", error);
         }
 
-        console.log("!! COORDINATES !!");
-        console.log(position.coords.latitude, position.coords.longitude);
       });
     } else {
+      setTempLocation("");
+      setShowSpinner(false);
       alertUser("error", "Geolocation is currently not available.")
     }
   }
