@@ -167,12 +167,24 @@ const ChooseConnection = ({alertUser}) => {
           alertUser("error", "Geolocation failed.", error);
         }
 
+      },
+        function(error) {
+        if (error.code === error.PERMISSION_DENIED) {
+          resetLocationLoadingView();
+          alertUser("error", "Bitte erlauben Sie die Verwendung von Standortdiensten in ihrem Browser.");
+        }
       });
     } else {
-      setTempLocation("");
-      setShowSpinner(false);
+      resetLocationLoadingView();
       alertUser("error", "Geolocation is currently not available.")
     }
+  }
+
+  function resetLocationLoadingView() {
+    setTempLocation("");
+    const inputField = document.getElementById("startLocation") as HTMLInputElement;
+    inputField.value = "";
+    setShowSpinner(false);
   }
 
   useEffect(() => {
