@@ -232,12 +232,12 @@ const ChooseConnection = ({alertUser}) => {
 
 
   return (
-    <BaseContainer id="baseContainerChooseConnection">
-      <div className="connection container" id="secondContainer">
-        <div className="connection outer-form">
+    <BaseContainer id="baseContainerChooseConnection" style={{height: "auto"}}>
+      <div className="connection container" id="secondContainer" style={{height: "auto"}}>
+        <div className="connection outer-form" style={{height: "auto"}}>
           <h1 className="text-3xl mb-5 font-bold"> Choose Connection</h1>
-          <div className="connection inner-form">
-            <div className="connection locations_container">
+          <div className="connection inner-form" style={{height: "auto"}}>
+            <div className="connection locations_container" style={{height: "auto"}}>
               <Dialog>
                 <DialogTrigger asChild>
                   <div style={{width: "100%"}}>
@@ -366,13 +366,13 @@ const ChooseConnection = ({alertUser}) => {
             ) : (
               <div id="results" className="connection box">
                 <h2 className="text-2xl mb-2">Select Your Connection:</h2>
-                <div className="connectionContainer" style={{height: 0}}>
+                <div className="connectionContainer">
                   {/* {connections} */}
                   {content}
                 </div>
               </div>
             )}
-            <div className="box-row">
+            <div style={{position: "relative", alignSelf: "center", alignContent: "center"}}>
               <Button className="button" id="cancelButton" onClick={() => navigate(`/tripOverview/${tripId}`)}>
                 BACK
               </Button>
