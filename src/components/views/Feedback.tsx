@@ -11,6 +11,7 @@ import Heart from "components/ui/Heart"
 import PropTypes from "prop-types";
 import {HashLoader} from "react-spinners";
 import "styles/views/Flex.scss";
+import {Fireworks, FireworksHandlers} from "@fireworks-js/react";
 
 const Feedback = ({alertUser}) => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Feedback = ({alertUser}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [feedbackText, setFeedbackText] = useState<string>("");
+  const fireworks = useRef<FireworksHandlers>(null);
 
 
   const handleBackClick = () => {
@@ -39,6 +41,10 @@ const Feedback = ({alertUser}) => {
 
     setHasSubmitted(true);
 
+    //starts and stops fireworks after submitting
+    fireworks.current.start();
+    setTimeout(() => fireworks.current.waitStop(), 5000);
+
     return () => clearTimeout(timer);
   }
 
@@ -47,7 +53,7 @@ const Feedback = ({alertUser}) => {
   };
 
   useEffect(() => {
-
+    fireworks.current.stop();
   }, []);
 
   if (isLoading) {
@@ -88,7 +94,6 @@ const Feedback = ({alertUser}) => {
                     </Button>
                 </div>
             }
-
           </div>
       }
 
@@ -108,9 +113,23 @@ const Feedback = ({alertUser}) => {
           Back to Dashboard
         </Button>
       </div>
+      <Fireworks
+        ref={fireworks}
+        options={{opacity: 0.1}}
+        style={{
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          position: "fixed",
+          background: {
+            opacity: 0
+          },
+          pointerEvents: "none",
+        }}
+      />
     </div>
-  )
-    ;
+  );
 };
 
 export default Feedback;

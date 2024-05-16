@@ -6,6 +6,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@files-ui/react": "^1.2.4",
+    "@fireworks-js/react": "^2.10.7",
     "@fortawesome/free-solid-svg-icons": "",
     "@fortawesome/react-fontawesome": "",
     "@mui/icons-material": "^5.15.14",
