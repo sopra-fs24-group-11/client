@@ -215,7 +215,7 @@ const ChooseConnection = ({alertUser}) => {
       try {
         const response = await api.get(`/trips/${tripId}`, {
           headers: {Authorization: token},
-        });
+        }); 
 
         console.log(response.data.meetUpPlace);
 
