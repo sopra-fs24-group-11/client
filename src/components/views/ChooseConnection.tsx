@@ -51,6 +51,8 @@ const ChooseConnection = ({alertUser}) => {
   // used for displaying UI
   const [isHovered, setIsHovered] = useState<string>("");
 
+  const [connectionAlreadyExists, setConnectionAlreadyExists] = useState<boolean>(false);
+
   const handleLocationSearchChange = async (event) => {
     setLocationSearchTerm(event.target.value);
     if (event.target.value.trim() === "") {
@@ -131,6 +133,15 @@ const ChooseConnection = ({alertUser}) => {
   const handleConnectionSubmit = async () => {
     const requestBody = JSON.stringify(chosenConnection);
     try {
+
+      if (connectionAlreadyExists) { // remove old connection if one exists
+        await api.delete(`/trips/${tripId}/connection`, {
+          headers: {Authorization: token},
+        });
+      }
+
+      console.log(connectionAlreadyExists);
+
       await api.post(`/trips/${tripId}/connection`, requestBody, {
         headers: {Authorization: token},
       });
@@ -149,31 +160,31 @@ const ChooseConnection = ({alertUser}) => {
     setShowSpinner(true);
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(async (position) => {
-        try {
+          try {
 
-          const response = await api.get("/trips/" + tripId + "/geoLocation?x=" + position.coords.latitude + "&y=" + position.coords.longitude + "&isLate=false",
-            {headers: {Authorization: token}});
+            const response = await api.get("/trips/" + tripId + "/geoLocation?x=" + position.coords.latitude + "&y=" + position.coords.longitude + "&isLate=false",
+              {headers: {Authorization: token}});
 
-          const departurePoint = response.data[0][0].departurePoint;
-          setSelectedLocation(departurePoint);
+            const departurePoint = response.data[0][0].departurePoint;
+            setSelectedLocation(departurePoint);
 
-          setTemporaryMeetUpCode(departurePoint.stationCode);
-          setTempLocation(departurePoint.stationName);
-          setLocationSearchTerm("");
+            setTemporaryMeetUpCode(departurePoint.stationCode);
+            setTempLocation(departurePoint.stationName);
+            setLocationSearchTerm("");
 
-          await renderConnectionContainers(departurePoint.stationCode);
+            await renderConnectionContainers(departurePoint.stationCode);
 
-        } catch (error) {
-          alertUser("error", "Geolocation failed.", error);
-        }
+          } catch (error) {
+            alertUser("error", "Geolocation failed.", error);
+          }
 
-      },
-        function(error) {
-        if (error.code === error.PERMISSION_DENIED) {
-          resetLocationLoadingView();
-          alertUser("error", "Bitte erlauben Sie die Verwendung von Standortdiensten in ihrem Browser.");
-        }
-      });
+        },
+        function (error) {
+          if (error.code === error.PERMISSION_DENIED) {
+            resetLocationLoadingView();
+            alertUser("error", "Bitte erlauben Sie die Verwendung von Standortdiensten in ihrem Browser.");
+          }
+        });
     } else {
       resetLocationLoadingView();
       alertUser("error", "Geolocation is currently not available.")
@@ -187,6 +198,18 @@ const ChooseConnection = ({alertUser}) => {
     setShowSpinner(false);
   }
 
+  async function checkConnectionAlreadyExisting() {
+    const currentConnection = await api.get("/trips/" + tripId + "/connection", {
+      headers: {Authorization: token},
+    });
+
+    if (!currentConnection.data) { // check if connection already exists
+      setConnectionAlreadyExists(false);
+    } else {
+      setConnectionAlreadyExists(true);
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -196,6 +219,8 @@ const ChooseConnection = ({alertUser}) => {
 
         console.log(Object.keys(response.data));
         console.log(response.data.meetUpPlace);
+
+        await checkConnectionAlreadyExisting();
 
         setDestination(response.data.meetUpPlace.stationName);
       } catch (error) {
