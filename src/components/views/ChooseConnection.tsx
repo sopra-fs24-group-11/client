@@ -217,7 +217,6 @@ const ChooseConnection = ({alertUser}) => {
           headers: {Authorization: token},
         });
 
-        console.log(Object.keys(response.data));
         console.log(response.data.meetUpPlace);
 
         await checkConnectionAlreadyExisting();

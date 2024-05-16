@@ -3,12 +3,26 @@ import PropTypes from "prop-types";
 import "../../styles/ui/ConnectionContainer.scss";
 import picture from "../../graphics/infoIcon.jpeg";
 import DataTable from "react-data-table-component";
+import trainIcon from "../../graphics/connectionContainerIcons/train.png";
+import shipIcon from "../../graphics/connectionContainerIcons/ship-icon.png";
+import tramIcon from "../../graphics/connectionContainerIcons/tram_icon.png";
+import busIcon from "../../graphics/connectionContainerIcons/bus-icon.png";
+import cablewayIcon from "../../graphics/connectionContainerIcons/Cableway_icon.png";
+
 
 interface ConnectionContainerProps {
   children?: React.ReactNode;
   departureTime: string;
   arrivalTime: string;
   key: number;
+}
+
+const whichIcon = {
+  "TRAM": tramIcon,
+  "TRAIN": trainIcon,
+  "SHIP": shipIcon,
+  "BUS": busIcon,
+  "CABLEWAY": cablewayIcon,
 }
 
 function timeDifference(date1, date2) {
@@ -54,14 +68,33 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
     const [changePoints, setChangePoints] = useState([]);
     const [showAdditionalInfo, setShowAdditionalInfo] = useState<boolean>(null);
     const [tripInformation, setTripInformation] = useState([]);
+    const [connectionType, setConnectionType] = useState<string>(null);
+    const [connectionName, setConnectionName] = useState<string>(null);
 
     function getInfoOfTrip() {
+
+      const firstConnection = wholeTrip[0];
+      const type = firstConnection.connectionType;
+      let name = firstConnection.connectionName;
+
+      // save connection type and name of first connection
+      setConnectionType(type);
+
+      // connection names sometimes have a lot of unneeded zeros, we remove them
+      name = name.split("000").length > 1 ? name.split("000").join("") : name;
+
+      setConnectionName(name);
+
+
+      console.log(wholeTrip)
       let x = [];
       for (const el of wholeTrip) {
+
         let temp = {
           to: el.arrivalPoint.stationName,
           from: el.departurePoint.stationName,
           type: el.connectionType,
+
           name: el.connectionName,
           departureTime: returnTime(el.departureTime),
           arrivalTime: returnTime(el.arrivalTime)
@@ -123,17 +156,29 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
             ></div>
             <div id="endCircle" className="connectionContainer black-circle"></div>
             <div className="tripLine"></div>
-            <p
-              style={{
-                position: "absolute",
-                top: 2,
-                left: 5,
-                color: "black",
-                fontSize: "10pt",
-              }}
-            >
-              {wholeTrip[0].connectionName}
+            <p style={{
+              position: "absolute",
+              top: 2,
+              left: 5,
+              display: "inline-block"
+            }}>
+              <img alt="icon of connection type" src={whichIcon[connectionType]} style={{
+              height: "5%",
+              width: "5%",
+              display: "inline-block"
+            }}/>
+              <span
+                style={{
+                  color: "black",
+                  fontSize: "10pt",
+
+                }}
+              >
+                {connectionName}
+              </span>
+
             </p>
+
             {changePoints}
             <p id="travelTime" className="time">
               {timeDifference(arrivalTime, departureTime)}
