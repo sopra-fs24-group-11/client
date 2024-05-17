@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
-import { Progress } from "../ui/progress";
 import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
@@ -26,6 +25,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { HashLoader, ScaleLoader } from "react-spinners";
+import ProgressHearts from "components/ui/ProgressHearts";
 
 const FriendListPage = ({ alertUser }) => {
   const navigate = useNavigate();
@@ -229,7 +229,7 @@ const FriendListPage = ({ alertUser }) => {
             {friendList.map((friend) => (
               <li key={friend.friendId} className="friend">
                 <span className="name">{friend.username}</span>
-                <Progress className="progress-bar" value={friend.points} />
+                <ProgressHearts points={friend.points}/>
                 <div className="stage">Level: {Math.floor(friend.level)}</div>
                 <Button
                   className="remove-friend"
