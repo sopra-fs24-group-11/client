@@ -9,7 +9,7 @@ import { Progress } from "../ui/progress";
 import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
 import Favourites from "components/ui/favourites";
-import { FadeLoader, HashLoader, PacmanLoader } from "react-spinners";
+import { FadeLoader, HashLoader, PacmanLoader, ScaleLoader } from "react-spinners";
 
 // Components
 const FriendList = ({ setIsLoading, alertUser }) => {
@@ -123,7 +123,8 @@ const FriendList = ({ setIsLoading, alertUser }) => {
         </ul>
       ) : (
         <div className="no-friends-message">
-          Noch keine Freunde. Klicke auf &quot;Zeige Details&quot; um Freunde hinzuzufügen.
+          Noch keine Freunde. Klicke auf &quot;Zeige Details&quot; um Freunde
+          hinzuzufügen.
         </div>
       )}
 
@@ -452,7 +453,8 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
           ))
         ) : (
           <div className="no-current-trip-invitations">
-            Keine aktuellen Reiseeinladungen: Erstellen eine Reise oder lass dich von deinen Freunden einladen!
+            Keine aktuellen Reiseeinladungen: Erstellen eine Reise oder lass
+            dich von deinen Freunden einladen!
           </div>
         )}
       </div>
@@ -577,12 +579,12 @@ const Dashboard = ({ alertUser }) => {
   if (isLoadingOld) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <FadeLoader
-          color="#001f33"
-          height={40}
-          margin={20}
-          radius={20}
-          width={10}
+        <ScaleLoader
+          color="hsla(227, 0%, 100%, 1)"
+          height={50}
+          margin={4}
+          radius={40}
+          width={8}
         />
       </div>
     );

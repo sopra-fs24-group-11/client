@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useRef} from "react";
-import {api} from "helpers/api";
+import React, { useState, useEffect, useRef } from "react";
+import { api } from "helpers/api";
 import User from "models/User";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import image from "../../graphics/add.png";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 import "styles/views/Flex.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
@@ -19,11 +19,11 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
-import {HashLoader} from "react-spinners";
-import {Simulate} from "react-dom/test-utils";
+import { HashLoader, ScaleLoader } from "react-spinners";
+import { Simulate } from "react-dom/test-utils";
 import error = Simulate.error;
 
-const CreateTrip = ({alertUser}) => {
+const CreateTrip = ({ alertUser }) => {
   // used to navigate
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const CreateTrip = ({alertUser}) => {
   const [friends, setFriends] = useState<Record<number, string>>({});
   const [meetUpPlace, setMeetUpPlace] = useState({
     stationName: "",
-    stationCode: ""
+    stationCode: "",
   });
   const [meetUpTime, setMeetUpTime] = useState<string>("");
 
@@ -63,11 +63,11 @@ const CreateTrip = ({alertUser}) => {
     const token = localStorage.getItem("token");
     try {
       const response = await api.get("/users/friends ", {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
       setAllFriends(response.data);
     } catch (error) {
-      alertUser("error", "Couldn't fetch the friends.", error)
+      alertUser("error", "Couldn't fetch the friends.", error);
     }
   };
 
@@ -81,7 +81,7 @@ const CreateTrip = ({alertUser}) => {
   };
 
   const removeParticipant = (key: number) => {
-    const {[key]: deletedUser, ...rest} = friends;
+    const { [key]: deletedUser, ...rest } = friends;
     setFriends(rest);
   };
 
@@ -97,17 +97,17 @@ const CreateTrip = ({alertUser}) => {
         tripDescription,
         meetUpPlace,
         meetUpTime,
-        participants
+        participants,
       });
 
       const token = localStorage.getItem("token");
       const response = await api.post("/trips/new", requestBody, {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
       alertUser("success", "Trip created!");
       navigate("/tripOverview/" + response.data);
     } catch (error) {
-      alertUser("error", "Trip creation failed.", error)
+      alertUser("error", "Trip creation failed.", error);
     }
   };
 
@@ -123,12 +123,12 @@ const CreateTrip = ({alertUser}) => {
         const response = await api.get(
           `/trips/searchStation?start=${event.target.value}`,
           {
-            headers: {Authorization: token},
+            headers: { Authorization: token },
           }
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        alertUser("error", "Query Error. Try again.", error)
+        alertUser("error", "Query Error. Try again.", error);
       }
     }
   };
@@ -141,11 +141,10 @@ const CreateTrip = ({alertUser}) => {
 
   const handleLocationSubmit = () => {
     if (selectedLocation) {
-
-      setMeetUpPlace(prevState => ({
+      setMeetUpPlace((prevState) => ({
         ...prevState,
         stationName: selectedLocation.stationName,
-        stationCode: selectedLocation.stationCode
+        stationCode: selectedLocation.stationCode,
       }));
 
       setLocationSearchTerm("");
@@ -219,17 +218,25 @@ const CreateTrip = ({alertUser}) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250}/>
+        <ScaleLoader
+          color="hsla(227, 0%, 100%, 1)"
+          height={50}
+          margin={4}
+          radius={40}
+          width={8}
+        />
       </div>
     );
   }
-
 
   return (
     <BaseContainer>
       <div className="flex container">
         <div className="flex outer-form">
-          <h1 className="text-3xl mb-5 font-bold text-white"> Neue Reise erstellen</h1>
+          <h1 className="text-3xl mb-5 font-bold text-white">
+            {" "}
+            Neue Reise erstellen
+          </h1>
           <div className="flex inner-form">
             <div className="flex row-form">
               <div className="flex box">
@@ -247,7 +254,11 @@ const CreateTrip = ({alertUser}) => {
                       <input
                         className="flex input"
                         placeholder="eingeben..."
-                        value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
+                        value={
+                          meetUpPlace.stationName === ""
+                            ? undefined
+                            : meetUpPlace.stationName
+                        }
                         onFocus={handleInputFocus}
                       ></input>
                     </div>
@@ -266,12 +277,14 @@ const CreateTrip = ({alertUser}) => {
                       onChange={handleLocationSearchChange}
                     />
                     {locationSuggestions.length > 0 && (
-                      <ul className="suggestions-list bg-gray-100"
-                          style={{
-                            borderRadius: "5px",
-                            paddingTop: "5px",
-                            paddingBottom: "5px",
-                      }}>
+                      <ul
+                        className="suggestions-list bg-gray-100"
+                        style={{
+                          borderRadius: "5px",
+                          paddingTop: "5px",
+                          paddingBottom: "5px",
+                        }}
+                      >
                         {locationSuggestions.map((suggestion) => (
                           <li
                             key={suggestion.stationCode}
@@ -288,7 +301,7 @@ const CreateTrip = ({alertUser}) => {
                                 isHovered === suggestion.stationCode
                                   ? "2px 2px 4px #000"
                                   : "none",
-                              paddingLeft: "5px"
+                              paddingLeft: "5px",
                             }}
                           >
                             {suggestion.stationName}
@@ -304,7 +317,7 @@ const CreateTrip = ({alertUser}) => {
                         Wähle den Zielort:
                       </Button>
                     </DialogFooter>
-                    <DialogClose ref={closeDialogRef} className="hidden"/>
+                    <DialogClose ref={closeDialogRef} className="hidden" />
                   </DialogContent>
                 </Dialog>
               </div>
@@ -334,14 +347,15 @@ const CreateTrip = ({alertUser}) => {
                   <label className="add-friends-label">
                     Füge Freund zur aktuellen Reise hinzu:
                   </label>
-                  <img className="flex image" src={image}/>
+                  <img className="flex image" src={image} />
                 </button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Füge einen Freund zur Reise hinzu: </DialogTitle>
                   <DialogDescription>
-                    Tippe den Benutzernamen des Freundes ein, den zu zur Reise hinzufügen willst:
+                    Tippe den Benutzernamen des Freundes ein, den zu zur Reise
+                    hinzufügen willst:
                   </DialogDescription>
                 </DialogHeader>
                 <input
@@ -379,13 +393,15 @@ const CreateTrip = ({alertUser}) => {
                     hinzufügen:
                   </Button>
                 </DialogFooter>
-                <DialogClose ref={closeDialogRef} className="hidden"/>
+                <DialogClose ref={closeDialogRef} className="hidden" />
               </DialogContent>
             </Dialog>
 
             <div className="flex box-line">
-              <label className="flex label">Zurzeit auf der Reise mit dir:</label>
-              <hr className="horizontal-line"/>
+              <label className="flex label">
+                Zurzeit auf der Reise mit dir:
+              </label>
+              <hr className="horizontal-line" />
             </div>
 
             <div className="flex names">
@@ -433,4 +449,4 @@ export default CreateTrip;
 
 CreateTrip.propTypes = {
   alertUser: PropTypes.func,
-}
+};

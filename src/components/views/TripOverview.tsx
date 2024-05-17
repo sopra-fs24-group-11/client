@@ -25,7 +25,7 @@ import { styled } from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { HashLoader } from "react-spinners";
+import { HashLoader, ScaleLoader } from "react-spinners";
 import notificationLog from "../../graphics/notification_log.png";
 
 // ============== HELPER FUNCTIONS ==============
@@ -495,7 +495,13 @@ const TripOverview = ({ alertUser }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250} />
+        <ScaleLoader
+          color="hsla(227, 0%, 100%, 1)"
+          height={50}
+          margin={4}
+          radius={40}
+          width={8}
+        />
       </div>
     );
   }
