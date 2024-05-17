@@ -25,7 +25,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import { HashLoader } from "react-spinners";
+import { HashLoader, ScaleLoader } from "react-spinners";
 
 const FriendListPage = ({ alertUser }) => {
   const navigate = useNavigate();
@@ -209,7 +209,13 @@ const FriendListPage = ({ alertUser }) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250} />
+        <ScaleLoader
+          color="hsla(227, 0%, 100%, 1)"
+          height={50}
+          margin={4}
+          radius={40}
+          width={8}
+        />
       </div>
     );
   }
@@ -341,7 +347,8 @@ const FriendListPage = ({ alertUser }) => {
               <DialogHeaderSCN>
                 <DialogTitle>Add New Friend</DialogTitle>
                 <DialogDescriptionSCN>
-                  Gebe den Benutzernamen deines Freundes ein, um eine Anfrage zu senden.
+                  Gebe den Benutzernamen deines Freundes ein, um eine Anfrage zu
+                  senden.
                 </DialogDescriptionSCN>
               </DialogHeaderSCN>
               <input

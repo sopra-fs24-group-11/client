@@ -20,9 +20,9 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
-import { HashLoader } from "react-spinners";
+import { HashLoader, ScaleLoader } from "react-spinners";
 
-const CustomizeTrip = ({alertUser}) => {
+const CustomizeTrip = ({ alertUser }) => {
   // used to navigate
   const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const CustomizeTrip = ({alertUser}) => {
   const [meetUpTime, setMeetUpTime] = useState<string>("");
   const [meetUpPlace, setMeetUpPlace] = useState({
     stationName: "",
-    stationCode: ""
+    stationCode: "",
   });
 
   // used for Friend Pop-Up
@@ -60,7 +60,6 @@ const CustomizeTrip = ({alertUser}) => {
   // used for the Rating
   const [value, setValue] = useState<number | null>(2);
 
-
   const fetchFriends = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -69,7 +68,7 @@ const CustomizeTrip = ({alertUser}) => {
       });
       setAllFriends(response.data);
     } catch (error) {
-      alertUser("error", "Failed to fetch the friends.", error)
+      alertUser("error", "Failed to fetch the friends.", error);
     }
   };
 
@@ -85,12 +84,11 @@ const CustomizeTrip = ({alertUser}) => {
       setMeetUpPlace((prevState) => ({
         ...prevState,
         stationName: response.data.meetUpPlace.stationName,
-        stationCode: response.data.meetUpPlace.stationCode
+        stationCode: response.data.meetUpPlace.stationCode,
       }));
       setValue(response.data.rating);
-
     } catch (error) {
-      alertUser("error", "Failed to fetch the trip.", error)
+      alertUser("error", "Failed to fetch the trip.", error);
     }
   };
 
@@ -106,7 +104,7 @@ const CustomizeTrip = ({alertUser}) => {
       });
       setFriends(tempObject);
     } catch (error) {
-      alertUser("error", "Failed to fetch the participants.", error)
+      alertUser("error", "Failed to fetch the participants.", error);
     }
   };
 
@@ -145,10 +143,10 @@ const CustomizeTrip = ({alertUser}) => {
       await api.put(`/trips/${tripId}`, requestBody, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Trip updated.")
+      alertUser("success", "Trip updated.");
       navigate(`/tripOverview/${tripId}`);
     } catch (error) {
-      alertUser("error", "Failed to update trip.", error)
+      alertUser("error", "Failed to update trip.", error);
     }
   };
 
@@ -169,7 +167,7 @@ const CustomizeTrip = ({alertUser}) => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        alertUser("error", "Query Error. Try again.", error)
+        alertUser("error", "Query Error. Try again.", error);
       }
     }
   };
@@ -184,9 +182,9 @@ const CustomizeTrip = ({alertUser}) => {
     if (selectedLocation) {
       setMeetUpPlace({
         stationName: selectedLocation.stationName,
-        stationCode: selectedLocation.stationCode
+        stationCode: selectedLocation.stationCode,
       });
-      setLocationSearchTerm(""); 
+      setLocationSearchTerm("");
     }
     if (closeDialogRef.current) {
       closeDialogRef.current.click();
@@ -239,7 +237,7 @@ const CustomizeTrip = ({alertUser}) => {
 
   const handleInputFocus = () => {
     if (dialogTriggerRef.current) {
-      dialogTriggerRef.current.click(); 
+      dialogTriggerRef.current.click();
     }
   };
 
@@ -259,7 +257,13 @@ const CustomizeTrip = ({alertUser}) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250} />
+        <ScaleLoader
+          color="hsla(227, 0%, 100%, 1)"
+          height={50}
+          margin={4}
+          radius={40}
+          width={8}
+        />
       </div>
     );
   }
@@ -267,14 +271,19 @@ const CustomizeTrip = ({alertUser}) => {
     <BaseContainer>
       <div className="flex container">
         <div className="flex outer-form">
-          <h1 className="text-3xl mb-1 font-bold text-white"> Reise anpassen</h1>
+          <h1 className="text-3xl mb-1 font-bold text-white">
+            {" "}
+            Reise anpassen
+          </h1>
           <hr className="horizontal-line-decent" />
           <Rating
             className="mb-2 mt-1"
             name="simple-controlled"
             size="large"
             value={value}
-            onChange={(event, newValue) => {setValue(newValue);}}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
           />
           <div className="flex inner-form">
             <div className="flex row-form">
@@ -286,7 +295,7 @@ const CustomizeTrip = ({alertUser}) => {
                   onChange={(e) => setTripName(e.target.value)}
                 ></input>
                 <br></br>
-                
+
                 <Dialog>
                   <DialogTrigger asChild ref={dialogTriggerRef}>
                     <div>
@@ -294,7 +303,11 @@ const CustomizeTrip = ({alertUser}) => {
                       <input
                         className="flex input"
                         placeholder="eingeben..."
-                        value={meetUpPlace.stationName === "" ? undefined : meetUpPlace.stationName}
+                        value={
+                          meetUpPlace.stationName === ""
+                            ? undefined
+                            : meetUpPlace.stationName
+                        }
                         onFocus={handleInputFocus}
                       ></input>
                     </div>
@@ -382,7 +395,8 @@ const CustomizeTrip = ({alertUser}) => {
                 <DialogHeader>
                   <DialogTitle>Füge einen Freund zur Reise hinzu: </DialogTitle>
                   <DialogDescription>
-                    Tippe den Benutzernamen des Freundes ein, den zu zur Reise hinzufügen willst:
+                    Tippe den Benutzernamen des Freundes ein, den zu zur Reise
+                    hinzufügen willst:
                   </DialogDescription>
                 </DialogHeader>
                 <input
@@ -425,7 +439,9 @@ const CustomizeTrip = ({alertUser}) => {
             </Dialog>
 
             <div className="flex box-line">
-              <label className="flex label">Zurzeit auf der Reise mit dir:</label>
+              <label className="flex label">
+                Zurzeit auf der Reise mit dir:
+              </label>
               <hr className="horizontal-line" />
             </div>
 
@@ -474,4 +490,4 @@ export default CustomizeTrip;
 
 CustomizeTrip.propTypes = {
   alertUser: PropTypes.func,
-}
+};

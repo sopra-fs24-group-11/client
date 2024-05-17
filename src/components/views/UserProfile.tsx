@@ -9,10 +9,10 @@ import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
 import ConfirmPopup from "../ui/ConfirmPopup";
 import defaultImage from "../../graphics/Get-Together.png";
-import { HashLoader } from "react-spinners";
+import { HashLoader, ScaleLoader } from "react-spinners";
 
 // Main Profile component
-const ProfilePage: React.FC = ({alertUser}) => {
+const ProfilePage: React.FC = ({ alertUser }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User>({}); // Hier ist das Problem: ihr setzt user = null und React versucht unten user.username etc. zu rendern. ==> Error
@@ -55,7 +55,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
 
         getAvatar();
       } catch (error) {
-        alertUser("error", "Something went wrong.", error)
+        alertUser("error", "Something went wrong.", error);
       }
     };
     fetchData();
@@ -74,12 +74,12 @@ const ProfilePage: React.FC = ({alertUser}) => {
         avatar: imageUrl,
       }));
     } catch (error) {
-      alertUser("error", "Couldn't receive avatar.", error)
+      alertUser("error", "Couldn't receive avatar.", error);
     }
   };
 
   const handlePasswordChange = (e) => {
-    setPasswords((old) => ({...old, [e.target.name]: e.target.value }));
+    setPasswords((old) => ({ ...old, [e.target.name]: e.target.value }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +100,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
 
   const handleAvatarUpload = async () => {
     if (!avatar) {
-      alertUser("error", "Choose a file first!");     
+      alertUser("error", "Choose a file first!");
       return;
     }
 
@@ -150,7 +150,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
       }
       getAvatar();
       setSelectedFileName("");
-      alertUser("success", "Avatar deleted and new default avatar created.");;
+      alertUser("success", "Avatar deleted and new default avatar created.");
     } catch (error) {
       alertUser("error", "Couldn't delete the image.", error);
     }
@@ -173,23 +173,20 @@ const ProfilePage: React.FC = ({alertUser}) => {
       alertUser("success", "Profile updated successfully.");
     } catch (error) {
       alertUser("error", "Couldn't update the information.", error);
-      
     }
   };
 
   const handleNewPasswordSubmit = async () => {
-
     try {
       const token = localStorage.getItem("token");
       await api.put("/password", passwords, {
         headers: { Authorization: token },
       });
-      setPasswords({password:"", password2:""});
+      setPasswords({ password: "", password2: "" });
       setEditMode(false);
       alertUser("success", "Password updated successfully.");
     } catch (error) {
       alertUser("error", "Couldn't update the password.", error);
-      
     }
   };
 
@@ -201,7 +198,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
       email: user?.email || "",
       birthday: user?.birthday || "",
     });
-    setPasswords({password:"", password2:""})
+    setPasswords({ password: "", password2: "" });
   };
 
   const handleProfileDelete = async () => {
@@ -224,17 +221,27 @@ const ProfilePage: React.FC = ({alertUser}) => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250} />
+        <ScaleLoader
+          color="hsla(227, 0%, 100%, 1)"
+          height={50}
+          margin={4}
+          radius={40}
+          width={8}
+        />
       </div>
     );
   }
-  
+
   return (
     <div className="profile-page-container">
       <div className="avatar-and-text">
         {user && (
           <div className="avatar-and-buttons">
-            {user.avatar ? <img className="avatar" src={user.avatar} alt="User Avatar" /> : <img className="avatar" src={defaultImage} />}
+            {user.avatar ? (
+              <img className="avatar" src={user.avatar} alt="User Avatar" />
+            ) : (
+              <img className="avatar" src={defaultImage} />
+            )}
             {editMode && (
               <div className="avatar-buttons">
                 <div className="file-upload-container">
@@ -273,7 +280,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
             <>
               <Label className="label">Username</Label>
               <input
-              className="input-username"
+                className="input-username"
                 type="text"
                 value={editedUser.username}
                 name="username"
@@ -281,7 +288,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
               />
               <Label className="label">Email</Label>
               <input
-              className="input-email"
+                className="input-email"
                 type="email"
                 value={editedUser.email}
                 name="email"
@@ -289,7 +296,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
               />
               <Label className="label">Birthday</Label>
               <input
-              className="input-birthday"
+                className="input-birthday"
                 type="date"
                 value={editedUser.birthday}
                 name="birthday"
@@ -305,7 +312,7 @@ const ProfilePage: React.FC = ({alertUser}) => {
               </div>
               <Label className="label">New Password</Label>
               <input
-              className="input-password"
+                className="input-password"
                 type="password"
                 value={passwords.password}
                 name="password"
@@ -313,14 +320,17 @@ const ProfilePage: React.FC = ({alertUser}) => {
               />
               <Label className="label">Confirm Password</Label>
               <input
-              className="input-password"
+                className="input-password"
                 type="password"
                 value={passwords.password2}
                 name="password2"
                 onChange={handlePasswordChange}
               />
               <div className="buttons-container">
-                <Button backgroundColor={"#FFB703"} onClick={handleNewPasswordSubmit}>
+                <Button
+                  backgroundColor={"#FFB703"}
+                  onClick={handleNewPasswordSubmit}
+                >
                   Save New Password
                 </Button>
                 <Button backgroundColor={"#E63946"} onClick={handleCancel}>
