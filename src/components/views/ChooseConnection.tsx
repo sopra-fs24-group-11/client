@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef} from "react";
-import {api} from "helpers/api";
+import React, { useState, useEffect, useRef } from "react";
+import { api } from "helpers/api";
 import PropTypes from "prop-types";
-import {useNavigate, useParams} from "react-router-dom";
-import {Button} from "components/ui/Button";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
 import DateTimePicker from "react-datetime-picker";
 import "styles/views/Connections.scss";
@@ -17,14 +17,13 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
-import locationIcon from "../../graphics/location_icon.png"
+import locationIcon from "../../graphics/location_icon.png";
 
-
-const ChooseConnection = ({alertUser}) => {
+const ChooseConnection = ({ alertUser }) => {
   const navigate = useNavigate();
   const [destination, setDestination] = useState<string>("");
   const token = localStorage.getItem("token");
-  const {tripId} = useParams();
+  const { tripId } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
   const [departureTime, setDepartureTime] = useState<string>("");
@@ -51,7 +50,8 @@ const ChooseConnection = ({alertUser}) => {
   // used for displaying UI
   const [isHovered, setIsHovered] = useState<string>("");
 
-  const [connectionAlreadyExists, setConnectionAlreadyExists] = useState<boolean>(false);
+  const [connectionAlreadyExists, setConnectionAlreadyExists] =
+    useState<boolean>(false);
 
   const handleLocationSearchChange = async (event) => {
     setLocationSearchTerm(event.target.value);
@@ -62,12 +62,12 @@ const ChooseConnection = ({alertUser}) => {
         const response = await api.get(
           `/trips/searchStation?start=${event.target.value}`,
           {
-            headers: {Authorization: token},
+            headers: { Authorization: token },
           }
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        alertUser("error", "Query Error. Try again.", error)
+        alertUser("error", "Query Error. Try again.", error);
       }
     }
   };
@@ -84,15 +84,22 @@ const ChooseConnection = ({alertUser}) => {
       setShowSpinner(true);
 
       const possibleConnections = await api.get(
-        "/trips/" + tripId + "/startPoint?start=" + locationCode + "&isLate=" + "false",
-        {headers: {Authorization: token}}
+        "/trips/" +
+          tripId +
+          "/startPoint?start=" +
+          locationCode +
+          "&isLate=" +
+          "false",
+        { headers: { Authorization: token } }
       );
-      let filteredList = possibleConnections.data.filter(sublist => sublist.length > 0);
+      let filteredList = possibleConnections.data.filter(
+        (sublist) => sublist.length > 0
+      );
       setConnections(filteredList);
       setShowConnections(true);
       console.log(possibleConnections);
     } catch (error) {
-      alertUser("error", "Couldn't render the connection.", error)
+      alertUser("error", "Couldn't render the connection.", error);
     }
   };
 
@@ -129,27 +136,25 @@ const ChooseConnection = ({alertUser}) => {
     }
   };
 
-
   const handleConnectionSubmit = async () => {
     const requestBody = JSON.stringify(chosenConnection);
     try {
-
-      if (connectionAlreadyExists) { // remove old connection if one exists
+      if (connectionAlreadyExists) {
+        // remove old connection if one exists
         await api.delete(`/trips/${tripId}/connection`, {
-          headers: {Authorization: token},
+          headers: { Authorization: token },
         });
       }
 
       console.log(connectionAlreadyExists);
 
       await api.post(`/trips/${tripId}/connection`, requestBody, {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
-      navigate(`/tripOverview/${tripId}`)
+      navigate(`/tripOverview/${tripId}`);
     } catch (error) {
-      alertUser("error", "Choosing the connection failed.", error)
+      alertUser("error", "Choosing the connection failed.", error);
     }
-
   };
 
   function startGeolocation() {
@@ -159,11 +164,19 @@ const ChooseConnection = ({alertUser}) => {
     }
     setShowSpinner(true);
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
           try {
-
-            const response = await api.get("/trips/" + tripId + "/geoLocation?x=" + position.coords.latitude + "&y=" + position.coords.longitude + "&isLate=false",
-              {headers: {Authorization: token}});
+            const response = await api.get(
+              "/trips/" +
+                tripId +
+                "/geoLocation?x=" +
+                position.coords.latitude +
+                "&y=" +
+                position.coords.longitude +
+                "&isLate=false",
+              { headers: { Authorization: token } }
+            );
 
             const departurePoint = response.data[0][0].departurePoint;
             setSelectedLocation(departurePoint);
@@ -173,37 +186,45 @@ const ChooseConnection = ({alertUser}) => {
             setLocationSearchTerm("");
 
             await renderConnectionContainers(departurePoint.stationCode);
-
           } catch (error) {
             alertUser("error", "Geolocation failed.", error);
           }
-
         },
         function (error) {
           if (error.code === error.PERMISSION_DENIED) {
             resetLocationLoadingView();
-            alertUser("error", "Bitte erlauben Sie die Verwendung von Standortdiensten in ihrem Browser.");
+            alertUser(
+              "error",
+              "Bitte erlauben Sie die Verwendung von Standortdiensten in ihrem Browser."
+            );
           }
-        });
+        }
+      );
     } else {
       resetLocationLoadingView();
-      alertUser("error", "Geolocation is currently not available.")
+      alertUser("error", "Geolocation is currently not available.");
     }
   }
 
   function resetLocationLoadingView() {
     setTempLocation("");
-    const inputField = document.getElementById("startLocation") as HTMLInputElement;
+    const inputField = document.getElementById(
+      "startLocation"
+    ) as HTMLInputElement;
     inputField.value = "";
     setShowSpinner(false);
   }
 
   async function checkConnectionAlreadyExisting() {
-    const currentConnection = await api.get("/trips/" + tripId + "/connection", {
-      headers: {Authorization: token},
-    });
+    const currentConnection = await api.get(
+      "/trips/" + tripId + "/connection",
+      {
+        headers: { Authorization: token },
+      }
+    );
 
-    if (!currentConnection.data) { // check if connection already exists
+    if (!currentConnection.data) {
+      // check if connection already exists
       setConnectionAlreadyExists(false);
     } else {
       setConnectionAlreadyExists(true);
@@ -214,8 +235,8 @@ const ChooseConnection = ({alertUser}) => {
     const fetchData = async () => {
       try {
         const response = await api.get(`/trips/${tripId}`, {
-          headers: {Authorization: token},
-        }); 
+          headers: { Authorization: token },
+        });
 
         console.log(response.data.meetUpPlace);
 
@@ -223,28 +244,37 @@ const ChooseConnection = ({alertUser}) => {
 
         setDestination(response.data.meetUpPlace.stationName);
       } catch (error) {
-        alertUser("error", "Couldn't fetch the trip's destination.", error)
+        alertUser("error", "Couldn't fetch the trip's destination.", error);
       }
     };
     fetchData();
   }, []);
 
-
   return (
-    <BaseContainer id="baseContainerChooseConnection" style={{height: "auto"}}>
-      <div className="connection container" id="secondContainer" style={{height: "auto"}}>
-        <div className="connection outer-form" style={{height: "auto"}}>
-          <h1 className="text-3xl mb-5 font-bold"> Choose Connection</h1>
-          <div className="connection inner-form" style={{height: "auto"}}>
-            <div className="connection locations_container" style={{height: "auto"}}>
+    <BaseContainer
+      id="baseContainerChooseConnection"
+      style={{ height: "auto" }}
+    >
+      <div
+        className="connection container"
+        id="secondContainer"
+        style={{ height: "auto" }}
+      >
+        <div className="connection outer-form" style={{ height: "auto" }}>
+          <h1 className="text-3xl mb-5 font-bold"> Wähle die Reiseverbindung</h1>
+          <div className="connection inner-form" style={{ height: "auto" }}>
+            <div
+              className="connection locations_container"
+              style={{ height: "auto" }}
+            >
               <Dialog>
                 <DialogTrigger asChild>
-                  <div style={{width: "100%"}}>
-                    <h2 className="text-2xl mb-5">Starting Location:</h2>
+                  <div style={{ width: "100%" }}>
+                    <h2 className="text-2xl mb-5">Startort:</h2>
                     <textarea
                       id="startLocation"
                       className="connection input"
-                      placeholder="Select start location..."
+                      placeholder="Wähle Startpunkt..."
                       value={tempLocation === "" ? undefined : tempLocation}
                       //onChange={(e) => setTemporaryMeetUpPlace(e.target.value)}
                     ></textarea>
@@ -252,9 +282,9 @@ const ChooseConnection = ({alertUser}) => {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Select Starting Location</DialogTitle>
+                    <DialogTitle>Wähle Startpunkt für die Reise</DialogTitle>
                     <DialogDescription>
-                      Enter the Location where you want to start your Trip:
+                      Wähle den Ort an dem du die Reise starten willst:
                     </DialogDescription>
                   </DialogHeader>
                   <input
@@ -263,22 +293,21 @@ const ChooseConnection = ({alertUser}) => {
                     value={locationSearchTerm}
                     onChange={handleLocationSearchChange}
                   />
-                  {(
-                    <ul className="suggestions-list bg-gray-100"
-                        style={{
-                          borderRadius: "5px",
-                          paddingTop: "5px",
-                          paddingBottom: "5px",
-                        }}>
+                  {
+                    <ul
+                      className="suggestions-list bg-gray-100"
+                      style={{
+                        borderRadius: "5px",
+                        paddingTop: "5px",
+                        paddingBottom: "5px",
+                      }}
+                    >
                       <li
                         key={"userLocation"}
                         onClick={() => {
-                          startGeolocation()
-                        }
-                        }
-                        onMouseEnter={() =>
-                          setIsHovered("userLocation")
-                        }
+                          startGeolocation();
+                        }}
+                        onMouseEnter={() => setIsHovered("userLocation")}
                         onMouseLeave={() => setIsHovered(null)}
                         style={{
                           cursor: "pointer",
@@ -288,30 +317,38 @@ const ChooseConnection = ({alertUser}) => {
                               : "none",
                           paddingBottom: "5px",
                           paddingTop: "5px",
-                        }}>
-                        <img src={locationIcon} alt="location icon"
-                             style={{
-                               position: "absolute",
-                               width: "20px",
-                               height: "20px",
-                               marginRight: "10px",
-                               marginTop: "2px",
-                             }}
+                        }}
+                      >
+                        <img
+                          src={locationIcon}
+                          alt="location icon"
+                          style={{
+                            position: "absolute",
+                            width: "20px",
+                            height: "20px",
+                            marginRight: "10px",
+                            marginTop: "2px",
+                          }}
                         />
-                        <div style={{
-                          paddingLeft: "20px",
-                        }}>Jetztiger Standort
+                        <div
+                          style={{
+                            paddingLeft: "20px",
+                          }}
+                        >
+                          Jetztiger Standort
                         </div>
                       </li>
                       {locationSuggestions.length > 0 && (
                         <>
                           <li>
-                            <div style={{
-                              width: "100%",
-                              height: "1px",
-                              backgroundColor: "lightgrey",
-                              marginBottom: "2px",
-                            }}/>
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "1px",
+                                backgroundColor: "lightgrey",
+                                marginBottom: "2px",
+                              }}
+                            />
                           </li>
                           {locationSuggestions.map((suggestion) => (
                             <li
@@ -329,7 +366,7 @@ const ChooseConnection = ({alertUser}) => {
                                   isHovered === suggestion.stationCode
                                     ? "2px 2px 4px #000"
                                     : "none",
-                                paddingLeft: "5px"
+                                paddingLeft: "5px",
                               }}
                             >
                               {suggestion.stationName}
@@ -338,16 +375,16 @@ const ChooseConnection = ({alertUser}) => {
                         </>
                       )}
                     </ul>
-                  )}
+                  }
                   <DialogFooter>
                     <Button
                       onClick={handleLocationSubmit}
                       backgroundColor="#14AE5C"
                     >
-                      Select Starting Location
+                      Startpunkt auswählen
                     </Button>
                   </DialogFooter>
-                  <DialogClose ref={closeDialogRef} className="hidden"/>
+                  <DialogClose ref={closeDialogRef} className="hidden" />
                 </DialogContent>
               </Dialog>
               <textarea
@@ -361,7 +398,11 @@ const ChooseConnection = ({alertUser}) => {
               <div id="second" className="black-circle"></div>
             </div>
             {!showConnections ? (
-              showSpinner ? <div className="spinner"></div> : <div></div>
+              showSpinner ? (
+                <div className="spinner"></div>
+              ) : (
+                <div></div>
+              )
             ) : (
               <div id="results" className="connection box">
                 <h2 className="text-2xl mb-2">Select Your Connection:</h2>
@@ -371,16 +412,26 @@ const ChooseConnection = ({alertUser}) => {
                 </div>
               </div>
             )}
-            <div style={{position: "relative", alignSelf: "center", alignContent: "center"}}>
-              <Button className="button" id="cancelButton" onClick={() => navigate(`/tripOverview/${tripId}`)}>
-                BACK
-              </Button>
+            <div
+              style={{
+                position: "relative",
+                alignSelf: "center",
+                alignContent: "center",
+                justifyContent: "center",
+                display: "flex",
+                gap: "30px"
+              }}
+            >
               <Button
-                id="confirmButton"
-                className="button"
-                onClick={handleConnectionSubmit}
+                id="cancelButton"
+                backgroundColor={"#FFB703"}
+                onClick={() => navigate(`/tripOverview/${tripId}`)}
               >
-                CONFIRM
+                Zurück
+              </Button>
+              <Button backgroundColor="#14AE5C"
+               id="confirmButton" onClick={handleConnectionSubmit}>
+                Bestätigen
               </Button>
             </div>
           </div>
@@ -394,4 +445,4 @@ export default ChooseConnection;
 
 ChooseConnection.propTypes = {
   alertUser: PropTypes.func,
-}
+};
