@@ -436,8 +436,6 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
               </div>
               <Button
                 className="accept-button"
-                width="80px"
-                height="35px"
                 backgroundColor="#82FF6D"
                 onClick={() => handleAcceptInvitation(invitation.id)}
               >
@@ -445,8 +443,6 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
               </Button>
               <Button
                 className="deny-button"
-                width="80px"
-                height="35px"
                 backgroundColor="red"
                 onClick={() => handleDenyInvitation(invitation.id)}
               >

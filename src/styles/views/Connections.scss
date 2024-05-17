@@ -18,7 +18,7 @@
     width: 100%;
     max-width: 800px;
     border-radius: 0.75em;
-    background-color: rgba(#011a27, 0.5);
+    background-color: $containerBehind;
     padding: 40px;
   }
 
@@ -27,7 +27,7 @@
     flex-direction: column;
     justify-content: space-around;
     width: 100%;
-    background-color: #597487;
+    background-color: $containerFront;
     border-radius: 0.75em;
     padding: 30px;
     min-height: 900px;
