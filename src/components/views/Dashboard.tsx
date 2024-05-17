@@ -96,7 +96,6 @@ const FriendList = ({ setIsLoading, alertUser }) => {
     }
   };
 
-  // Function to determine the status class
   const getStatusClass = (status) => {
     return status.toLowerCase() === "online"
       ? "status online"
