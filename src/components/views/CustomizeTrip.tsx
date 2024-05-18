@@ -32,6 +32,7 @@ const CustomizeTrip = ({ alertUser }) => {
 
   // used to manage trip
   const [allFriends, setAllFriends] = useState<User[]>([]);
+  const [originalFriends, setOriginalFriends] = useState<User[]>([]);
   const { tripId } = useParams();
 
   // used to send to backend
@@ -66,7 +67,12 @@ const CustomizeTrip = ({ alertUser }) => {
       const response = await api.get("/users/friends ", {
         headers: { Authorization: token },
       });
-      setAllFriends(response.data);
+      const tempFriends = response.data;
+      const toBeDeleted = Object.keys(friends).map(Number);
+      const updatedFriends = tempFriends.filter(friend => !toBeDeleted.includes(friend.friendId));
+      setAllFriends(updatedFriends);
+      setSuggestions(updatedFriends);
+      setOriginalFriends(response.data);
     } catch (error) {
       alertUser("error", "Failed to fetch the friends.", error);
     }
@@ -115,13 +121,19 @@ const CustomizeTrip = ({ alertUser }) => {
       ...prevDictionary,
       [key]: value,
     }));
+    const updatedFriends = allFriends.filter(friend => friend.friendId !== key);
+    setAllFriends(updatedFriends);
   };
 
   const removeParticipant = (key: number) => {
     const { [key]: deletedUser, ...rest } = friends;
     setFriends(rest);
+    const friendToAdd = originalFriends.find(friend => friend.friendId === key);
+    if (friendToAdd) {
+      setAllFriends([...allFriends, friendToAdd]);
+    }
   };
-
+  
   const discardChanges = () => {
     navigate(`/tripOverview/${tripId}`);
   };
@@ -143,10 +155,10 @@ const CustomizeTrip = ({ alertUser }) => {
       await api.put(`/trips/${tripId}`, requestBody, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Trip updated.");
+      alertUser("success", "Reise erfolgreich bearbeitet.");
       navigate(`/tripOverview/${tripId}`);
     } catch (error) {
-      alertUser("error", "Failed to update trip.", error);
+      alertUser("error", "Reise konnte nicht bearbeitet werden.", error);
     }
   };
 
@@ -196,7 +208,7 @@ const CustomizeTrip = ({ alertUser }) => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     if (event.target.value.trim() === "") {
-      setSuggestions([]);
+      setSuggestions(allFriends);
     } else {
       const filtered = allFriends.filter((friend) =>
         friend.username.startsWith(event.target.value)
@@ -215,6 +227,7 @@ const CustomizeTrip = ({ alertUser }) => {
     if (selectedFriend) {
       addParticipant(selectedFriend.friendId, selectedFriend.username);
       setSearchTerm("");
+      setSuggestions(allFriends);
     }
     if (closeDialogRef.current) {
       closeDialogRef.current.click();
@@ -249,10 +262,20 @@ const CustomizeTrip = ({ alertUser }) => {
   }, []);
 
   useEffect(() => {
-    fetchTrip();
-    fetchParticipants();
-    fetchFriends();
+    setSuggestions(allFriends);
+  }, [allFriends]);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      await fetchTrip(); 
+      fetchParticipants(); 
+    };
+    fetchAllData();
   }, []);
+
+  useEffect(() => {
+    fetchFriends();
+  }, [friends]);
 
   if (isLoading) {
     return (
@@ -405,9 +428,9 @@ const CustomizeTrip = ({ alertUser }) => {
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
-                {suggestions.length > 0 && (
+                <div className="suggestions-container" style={{ maxHeight: "7.5em", overflowY: "auto" }}> 
                   <ul className="suggestions-list bg-gray-100">
-                    {suggestions.map((suggestion) => (
+                    {suggestions.sort((a, b) => a.username.localeCompare(b.username)).map((suggestion) => (
                       <li
                         key={suggestion.friendId}
                         onClick={() => handleSuggestionSelect(suggestion)}
@@ -425,7 +448,7 @@ const CustomizeTrip = ({ alertUser }) => {
                       </li>
                     ))}
                   </ul>
-                )}
+                </div>
                 <DialogFooter>
                   <Button
                     onClick={handleAddFriendSubmit}

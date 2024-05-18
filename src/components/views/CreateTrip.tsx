@@ -33,6 +33,7 @@ const CreateTrip = ({ alertUser }) => {
 
   // used to manage trip
   const [allFriends, setAllFriends] = useState<User[]>([]);
+  const [originalFriends, setOriginalFriends] = useState<User[]>([]);
 
   // used to send to backend
   const [tripName, setTripName] = useState<string>("");
@@ -66,6 +67,8 @@ const CreateTrip = ({ alertUser }) => {
         headers: { Authorization: token },
       });
       setAllFriends(response.data);
+      setSuggestions(response.data);
+      setOriginalFriends(response.data);
     } catch (error) {
       alertUser("error", "Couldn't fetch the friends.", error);
     }
@@ -78,11 +81,18 @@ const CreateTrip = ({ alertUser }) => {
       ...prevDictionary,
       [key]: value,
     }));
+    const updatedFriends = allFriends.filter(friend => friend.friendId !== key);
+    setAllFriends(updatedFriends);
   };
 
   const removeParticipant = (key: number) => {
     const { [key]: deletedUser, ...rest } = friends;
     setFriends(rest);
+    const friendToAdd = originalFriends.find(friend => friend.friendId === key);
+    if (friendToAdd) {
+      setAllFriends([...allFriends, friendToAdd]);
+    }
+    
   };
 
   const cancelTrip = () => {
@@ -159,7 +169,7 @@ const CreateTrip = ({ alertUser }) => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     if (event.target.value.trim() === "") {
-      setSuggestions([]);
+      setSuggestions(allFriends);
     } else {
       const filtered = allFriends.filter((friend) =>
         friend.username.startsWith(event.target.value)
@@ -178,6 +188,7 @@ const CreateTrip = ({ alertUser }) => {
     if (selectedFriend) {
       addParticipant(selectedFriend.friendId, selectedFriend.username);
       setSearchTerm("");
+      setSuggestions(allFriends);
     }
     if (closeDialogRef.current) {
       closeDialogRef.current.click();
@@ -214,6 +225,10 @@ const CreateTrip = ({ alertUser }) => {
   useEffect(() => {
     fetchFriends();
   }, []);
+
+  useEffect(() => {
+    setSuggestions(allFriends);
+  }, [allFriends]);
 
   if (isLoading) {
     return (
@@ -364,9 +379,9 @@ const CreateTrip = ({ alertUser }) => {
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
-                {suggestions.length > 0 && (
+                <div className="suggestions-container" style={{ maxHeight: "7.5em", overflowY: "auto" }}> 
                   <ul className="suggestions-list bg-gray-100">
-                    {suggestions.map((suggestion) => (
+                    {suggestions.sort((a, b) => a.username.localeCompare(b.username)).map((suggestion) => (
                       <li
                         key={suggestion.friendId}
                         onClick={() => handleSuggestionSelect(suggestion)}
@@ -384,7 +399,7 @@ const CreateTrip = ({ alertUser }) => {
                       </li>
                     ))}
                   </ul>
-                )}
+                </div>
                 <DialogFooter>
                   <Button
                     onClick={handleAddFriendSubmit}
