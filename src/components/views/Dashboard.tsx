@@ -250,9 +250,9 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
                 style={{ cursor: "pointer" }}
               >
                 <div>
-                  {`"${trip.tripName}" to "${
+                  {`"${trip.tripName}" nach "${
                     trip.meetUpPlace.stationName
-                  }" on ${new Date(trip.meetUpTime).toLocaleDateString(
+                  }" am ${new Date(trip.meetUpTime).toLocaleDateString(
                     "de-DE",
                     {
                       day: "2-digit",
