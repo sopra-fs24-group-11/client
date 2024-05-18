@@ -18,6 +18,7 @@ import History from "../../views/History";
 import PropTypes from "prop-types";
 import Feedback from "../../views/Feedback";
 import RegisterExampleNew from "../../views/RegisterExampleNew";
+import NotFound from "../../ui/NotFound";
 
 const AppRouter = ({ alertUser }) => {
   return (
@@ -81,6 +82,11 @@ const AppRouter = ({ alertUser }) => {
         </Route>
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        <Route path="*" element={<GameGuard />}>
+          <Route path="" element={<NotFound />} />
+        </Route>
+        
       </Routes>
     </BrowserRouter>
   );

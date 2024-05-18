@@ -51,7 +51,7 @@ export const handleError1 = (error, handleAlert, errorMessage, severity) => {
     return;
   }
   if (errorMessage === "") {
-    errorMessage = "There was an error.";
+    errorMessage = "Es gab einen Fehler.";
   }
   const response = error.response;
 

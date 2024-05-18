@@ -56,7 +56,7 @@ function SignUpForm({ alertUser }) {
 
   return (
     <div className="form-container sign-up-container">
-      <form onSubmit={handleOnSubmit}>
+      <form className="Register-Login-form" onSubmit={handleOnSubmit}>
         <h1 className="h1_reg">Account erstellen</h1>
 
         <span className="span_reg">

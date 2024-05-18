@@ -26,6 +26,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import { HashLoader, ScaleLoader } from "react-spinners";
 import ProgressHearts from "components/ui/ProgressHearts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const FriendListPage = ({ alertUser }) => {
   const navigate = useNavigate();
@@ -298,21 +300,9 @@ const FriendListPage = ({ alertUser }) => {
             {friendRequests.map((request) => (
               <li key={request.id} className="friend-request">
                 <span className="name">{request.username}</span>
-                <div className="accept-deny-buttons">
-                  <Button
-                    className="accept-request"
-                    backgroundColor="#82FF6D"
-                    onClick={() => handleAcceptFriendRequest(request.friendId)}
-                  >
-                    Annehmen
-                  </Button>
-                  <Button
-                    className="deny-request"
-                    backgroundColor={"red"}
-                    onClick={() => handleDenyFriendRequest(request.friendId)}
-                  >
-                    Ablehnen
-                  </Button>
+                <div className="acceptdeny-buttons">
+                  <FontAwesomeIcon icon={faCheck} className="accept-request-icon" onClick={() => handleAcceptFriendRequest(request.friendId)} />
+                  <FontAwesomeIcon icon={faXmark} className="deny-request-icon" onClick={() => handleDenyFriendRequest(request.friendId)} />
                 </div>
               </li>
             ))}

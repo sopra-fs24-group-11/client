@@ -38,12 +38,12 @@ const Header = ({ alertUser }) => {
             headers: { Authorization: token },
           }
         );
-        handleClose();
         alertUser("success", "Logout successful.");
       } catch (error) {
-        alertUser("error", "Something went wrong.", error);
+        alertUser("error", "Etwas ging schief.", error);
       }
     }
+    handleClose();
     navigate("/registernew");
   };
 
@@ -59,7 +59,7 @@ const Header = ({ alertUser }) => {
       >
         <img src={logonew} alt="Get-Together" />
       </div>
-      <IconButton
+      {localStorage.getItem("token") && <><IconButton
         edge="end"
         color="inherit"
         aria-label="menu"
@@ -92,9 +92,9 @@ const Header = ({ alertUser }) => {
         <MenuItem onClick={() => navigate("/template")}>List Template</MenuItem>
         <MenuItem onClick={() => navigate("/feedback")}>Feedback</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
-      </Menu>
+      </Menu></>}
       <div className="train-container">
-        <img src={trainImage} alt="Animated Train" className="train" />
+        <img src={trainImage} alt="Animierter Zug" className="train" />
         {
           // <div className="rails"></div>
         }
