@@ -428,7 +428,7 @@ const CustomizeTrip = ({ alertUser }) => {
                   value={searchTerm}
                   onChange={handleSearchChange}
                 />
-                <div className="suggestions-container" style={{ maxHeight: '7.5em', overflowY: 'auto' }}> 
+                <div className="suggestions-container" style={{ maxHeight: "7.5em", overflowY: "auto" }}> 
                   <ul className="suggestions-list bg-gray-100">
                     {suggestions.sort((a, b) => a.username.localeCompare(b.username)).map((suggestion) => (
                       <li
