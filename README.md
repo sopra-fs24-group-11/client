@@ -1,13 +1,13 @@
-
 # **Get-Together - Client**
 
-<img src=https://github.com/sopra-fs24-group-11/client/blob/main/src/graphics/Get-Together.png />
+<img src="https://github.com/sopra-fs24-group-11/client/assets/120049684/1144ddc0-64e8-46fd-8ad7-16a8040692d7" alt="Get-Together Logo" style="width: 50%;" />
 
 ## Table of Content
 
 - [Introduction](#introduction)
 - [Technologies Used](#technologies-used)
 - [Main Components](#main-components)
+- [Screenshots](#screenshots)
 - [Launch & Deployment](#launch--deployment)
 - [Roadmap](#roadmap)
 - [Authors and Acknowledgment](#authors-and-acknowledgment)
@@ -56,6 +56,15 @@ Welcome to Get-Together! Our platform revolutionizes trip planning by providing 
 - **Main File**: [FriendListPage.tsx](https://github.com/sopra-fs24-group-11/client/blob/main/src/components/views/FriendListPage.tsx)
 - **Correlation**: Supports social aspects of the app, facilitating trip invitations and collaborative planning.
 
+## Screenshots
+
+<div style="display: flex; flex-wrap: wrap;">
+    <img src="https://github.com/sopra-fs24-group-11/client/assets/120049684/4fcedda2-454d-4db6-b0f0-5f3de9bc0de5" alt="Screenshot 1" style="width: 49%; margin: 1%;">
+    <img src="https://github.com/sopra-fs24-group-11/client/assets/120049684/0b3fc648-52d7-4316-8f84-b8b1f638bae9" alt="Screenshot 2" style="width: 49%; margin: 1%;">
+    <img src="https://github.com/sopra-fs24-group-11/client/assets/120049684/18631aed-87cf-41ff-a306-2070c20eeab1" alt="Screenshot 3" style="width: 49%; margin: 1%;">
+    <img src="https://github.com/sopra-fs24-group-11/client/assets/120049684/10c8500e-8b87-474a-94bf-2a9346a9a1f6" alt="Screenshot 4" style="width: 49%; margin: 1%;">
+</div>
+
 ## Launch & Deployment
 ### Prerequisites
 Install [Node.js](https://nodejs.org/) (v20.11.0) which comes with npm.
@@ -63,44 +72,44 @@ Install [Node.js](https://nodejs.org/) (v20.11.0) which comes with npm.
 ### Clone Repository
 Clone the client-repository onto your local machine with Git.
 
-\`\`\`bash
+```bash
 git clone https://github.com/sopra-fs24-group-11/client.git
-\`\`\`
+```
 
 ### Install Dependencies
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 ### Run
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 You can verify that the client is running by visiting \`http://localhost:3000\` in your browser.
 
 ### Test
 
-\`\`\`bash
+```bash
 npm run test
-\`\`\`
+```
 We also recommend using [Postman](https://www.getpostman.com) to test your API endpoints.
 
 ### Build
 
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 ### Deployment
 The main branch is automatically mirrored onto Google Cloud App Engine via GitHub workflow, each time you push onto the main branch.
 
 ## Roadmap
 Potentially interesting additions to our project could be:
-- Add secure connection (https instead of http).
-- Adding car, bike, and other transportation options.
-- Make the app responsive for mobile screens.
+- Show some complex current location according to GPS or similar for each trip participant in the tripOverview.
+- Adding car, bike, and other transportation options which are not covered in public transport.
+- Make the app even more responsive for mobile screens.
 
 ## Authors and Acknowledgment
 
