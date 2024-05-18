@@ -2,11 +2,9 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { GameGuard } from "../routeProtectors/GameGuard";
 import { LoginGuard } from "../routeProtectors/LoginGuard";
-import Login from "../../views/Login";
 import Dashboard from "../../views/Dashboard";
 import Header from "../../views/Header";
 import UserProfile from "../../views/UserProfile";
-import Register from "../../views/Register";
 import CreateTrip from "../../views/CreateTrip";
 import FriendListPage from "../../views/FriendListPage";
 import ChooseConnection from "../../views/ChooseConnection";
@@ -29,17 +27,9 @@ const AppRouter = ({ alertUser }) => {
 
         <Route path="/testpage" element={<TestPage />} />
 
-        <Route path="/registernew" element={<RegisterExampleNew alertUser={alertUser} />} />
-
         {/*---------------------------------------------- */}
         
-        <Route path="/login" element={<LoginGuard />}>
-          <Route path="" element={<Login alertUser={alertUser} />} />
-        </Route>
-
-        <Route path="/register" element={<LoginGuard />}>
-          <Route path="" element={<Register alertUser={alertUser} />} />
-        </Route>
+        <Route path="/auth" element={<RegisterExampleNew alertUser={alertUser} />} />
 
         <Route path="/dashboard" element={<GameGuard />}>
           <Route path="" element={<Dashboard alertUser={alertUser} />} />

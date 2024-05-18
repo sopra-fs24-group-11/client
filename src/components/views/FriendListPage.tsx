@@ -192,7 +192,7 @@ const FriendListPage = ({ alertUser }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Show loader for x seconds
+    }, 1000); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);

@@ -218,7 +218,7 @@ const CreateTrip = ({ alertUser }) => {
   //-------- What is actually being executed -------- //
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1400);
+    const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 

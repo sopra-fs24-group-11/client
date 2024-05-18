@@ -17,7 +17,7 @@ export const GameGuard = () => {
     return <Outlet />;
   }
   
-  return <Navigate to="/registernew" replace />;
+  return <Navigate to="/auth" replace />;
 };
 
 GameGuard.propTypes = {
