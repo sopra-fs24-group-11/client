@@ -355,7 +355,7 @@ const CustomizeTrip = ({ alertUser }) => {
                         onClick={handleLocationSubmit}
                         backgroundColor="#14AE5C"
                       >
-                        Wähle den Zielort:
+                        Speichern
                       </Button>
                     </DialogFooter>
                     <DialogClose ref={closeDialogRef} className="hidden" />

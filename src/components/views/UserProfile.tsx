@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import { Label } from "../ui/label";
 import PropTypes from "prop-types";
-import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/UserProfile.scss";
-import ConfirmPopup from "../ui/ConfirmPopup";
 import defaultImage from "../../graphics/Get-Together.png";
 import { HashLoader, ScaleLoader } from "react-spinners";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
 
 // Main Profile component
 const ProfilePage: React.FC = ({ alertUser }) => {
@@ -28,8 +31,8 @@ const ProfilePage: React.FC = ({ alertUser }) => {
     password: "",
     password2: "",
   });
-  const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [isDeleted, setDeleted] = useState<boolean>(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000);
@@ -55,7 +58,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
 
         getAvatar();
       } catch (error) {
-        alertUser("error", "Something went wrong.", error);
+        alertUser("error", "Etwas ging schief.", error);
       }
     };
     fetchData();
@@ -74,7 +77,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
         avatar: imageUrl,
       }));
     } catch (error) {
-      alertUser("error", "Couldn't receive avatar.", error);
+      alertUser("error", "Profilbild konnte nicht geladen werden.", error);
     }
   };
 
@@ -93,14 +96,14 @@ const ProfilePage: React.FC = ({ alertUser }) => {
         setAvatar(event.target.files[0]);
         setSelectedFileName(event.target.files[0].name);
       } else {
-        alertUser("error", "File is not an image.");
+        alertUser("error", "Das File muss ein Bild sein.");
       }
     }
   };
 
   const handleAvatarUpload = async () => {
     if (!avatar) {
-      alertUser("error", "Choose a file first!");
+      alertUser("error", "Wähle zuerst ein File aus!");
       return;
     }
 
@@ -129,12 +132,12 @@ const ProfilePage: React.FC = ({ alertUser }) => {
           avatar: imageUrl, // This should trigger a re-render of the component displaying the avatar
         }));
         setAvatar(null); // Clear the avatar state
-        alertUser("success", "Image uploaded successfully.");
+        alertUser("success", "Das Bild wurde hochgeladen und gespeichert.");
       } else {
         throw new Error(`Unexpected response status: ${response.status}`);
       }
     } catch (error) {
-      alertUser("error", "Couldn't update the image.", error);
+      alertUser("error", "Das Bild konnte nicht gespeichert werden.", error);
     }
   };
 
@@ -150,9 +153,9 @@ const ProfilePage: React.FC = ({ alertUser }) => {
       }
       getAvatar();
       setSelectedFileName("");
-      alertUser("success", "Avatar deleted and new default avatar created.");
+      alertUser("success", "Profilbild gelöscht und neues Default Profilbild erstellt.");
     } catch (error) {
-      alertUser("error", "Couldn't delete the image.", error);
+      alertUser("error", "Das Bild konnte nicht gelöscht werden.", error);
     }
   };
 
@@ -170,9 +173,9 @@ const ProfilePage: React.FC = ({ alertUser }) => {
       });
       setUser((prev) => ({ ...prev, ...updatedUser }));
       setEditMode(false);
-      alertUser("success", "Profile updated successfully.");
+      alertUser("success", "Profil erfolgreich geändert.");
     } catch (error) {
-      alertUser("error", "Couldn't update the information.", error);
+      alertUser("error", "Das Profil konnte nicht geändert werden.", error);
     }
   };
 
@@ -184,9 +187,9 @@ const ProfilePage: React.FC = ({ alertUser }) => {
       });
       setPasswords({ password: "", password2: "" });
       setEditMode(false);
-      alertUser("success", "Password updated successfully.");
+      alertUser("success", "Passwort erfolgreich geändert.");
     } catch (error) {
-      alertUser("error", "Couldn't update the password.", error);
+      alertUser("error", "Das Passwort konnte nicht geändert werden.", error);
     }
   };
 
@@ -208,14 +211,13 @@ const ProfilePage: React.FC = ({ alertUser }) => {
       await api.delete("/users", {
         headers: { Authorization: token },
       });
-      document.getElementsByClassName("popup");
+      setDeleted(true);
+      localStorage.removeItem("token");
     } catch (error) {
       alertUser("error", "", error);
     }
 
-    setPopupOpen(false);
-    setDeleted(true);
-    localStorage.removeItem("token");
+    
   };
 
   if (isLoading) {
@@ -262,13 +264,13 @@ const ProfilePage: React.FC = ({ alertUser }) => {
                   backgroundColor={"#6E90AE"}
                   onClick={handleAvatarUpload}
                 >
-                  Upload Avatar
+                  Bild speichern
                 </Button>
                 <Button
                   backgroundColor={"#6E90AE"}
                   onClick={handleAvatarDelete}
                 >
-                  Delete Avatar
+                  Bild löschen
                 </Button>
               </div>
             )}
@@ -278,7 +280,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
           {/* <h1 className="title font-extrabold text-3xl">Profile</h1> */}
           {editMode ? (
             <>
-              <Label className="label">Username</Label>
+              <Label className="label">Benutzername</Label>
               <input
                 className="input-username"
                 type="text"
@@ -294,7 +296,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
                 name="email"
                 onChange={handleChange}
               />
-              <Label className="label">Birthday</Label>
+              <Label className="label">Geburtsdatum</Label>
               <input
                 className="input-birthday"
                 type="date"
@@ -304,13 +306,13 @@ const ProfilePage: React.FC = ({ alertUser }) => {
               />
               <div className="buttons-container">
                 <Button backgroundColor={"#FFB703"} onClick={handleSubmit}>
-                  Save Changes
+                  Speichern
                 </Button>
                 <Button backgroundColor={"#E63946"} onClick={handleCancel}>
-                  Cancel
+                  Abbrechen
                 </Button>
               </div>
-              <Label className="label">New Password</Label>
+              <Label className="label">Neues Passwort</Label>
               <input
                 className="input-password"
                 type="password"
@@ -318,7 +320,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
                 name="password"
                 onChange={handlePasswordChange}
               />
-              <Label className="label">Confirm Password</Label>
+              <Label className="label">Passwort bestätigen</Label>
               <input
                 className="input-password"
                 type="password"
@@ -331,76 +333,124 @@ const ProfilePage: React.FC = ({ alertUser }) => {
                   backgroundColor={"#FFB703"}
                   onClick={handleNewPasswordSubmit}
                 >
-                  Save New Password
+                  Passwort speichern
                 </Button>
                 <Button backgroundColor={"#E63946"} onClick={handleCancel}>
-                  Cancel
+                  Abbrechen
                 </Button>
               </div>
             </>
           ) : (
             <>
-              <Label className="label">Username</Label>
+              <Label className="label">Benutzername:</Label>
               <p>{user.username}</p>
-              <Label className="label">Email</Label>
+              <Label className="label">Email:</Label>
               <p>{user.email}</p>
-              <Label className="label">Birthday</Label>
-              <p>{user.birthday}</p>
-              <Label className="label">Creation Date</Label>
-              <p>{user.creationDate}</p>
+              <Label className="label">Geburtsdatum:</Label>
+              <p>{new Date(user.birthday).toLocaleDateString(
+                    "de-DE",
+                    {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    }
+                  )}</p>
+              <Label className="label">Nutzer seit:</Label>
+              <p>{new Date(user.creationDate).toLocaleDateString(
+                    "de-DE",
+                    {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    }
+                  )}</p>
               <div className="buttons-container">
                 <Button
                   backgroundColor={"#FFB703"}
                   onClick={() => setEditMode(true)}
                 >
-                  Edit Profile
+                  Account anpassen
                 </Button>
                 <Button
                   backgroundColor={"#FF0006FF"}
                   onClick={() => {
                     // opens popup for confirmation of deletion
-                    setPopupOpen(true);
+                    setOpenDeleteDialog(true);
                   }}
                 >
-                  Delete Profile
+                  Account löschen
                 </Button>
-
-                <ConfirmPopup
-                  // popup asks for confirmation of profile deletion
-                  header="Are you sure you want to delete your profile?"
-                  info="You won't be able to recover your account"
-                  className="popup"
-                  isOpen={isPopupOpen}
+                <Dialog
+                  open={openDeleteDialog}
+                  onClose={() => setOpenDeleteDialog(false)}
+                  sx={{
+                    "& .MuiBackdrop-root": {
+                      backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+                    },
+                    "& .MuiPaper-root": {
+                      // Targeting the Paper component inside the Dialog
+                      boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+                      borderRadius: "10px",
+                    },
+                  }}
                 >
-                  <div>
-                    <button
-                      className="left confirm-button"
-                      onClick={handleProfileDelete}
+                  <DialogTitle id="delete-dialog-title">
+                    Bestätige die Löschung
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="delete-dialog-description">
+                      Bist du sicher, dass du dein Profil löschen willst? Die Löschung ist endgültig.
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() => setOpenDeleteDialog(false)}
+                      style={{ backgroundColor: "#BCFFE3", color: "black" }}
+                      width={null}
+                      height={null}
+                      backgroundColor={null}
+                      color={null}
+                      className={null}
                     >
-                      Yes
-                    </button>
-                    <button
-                      className="right confirm-button"
-                      onClick={() => setPopupOpen(false)}
+                      Abbrechen
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setOpenDeleteDialog(false);
+                        handleProfileDelete();
+                      }}
+                      style={{ backgroundColor: "#FF7070", color: "black" }}
                     >
-                      No
-                    </button>
-                  </div>
-                </ConfirmPopup>
-                <ConfirmPopup
-                  // popup tells the user when profile was deleted
-                  header="Profile was deleted"
-                  className="popup"
-                  info=""
-                  isOpen={isDeleted}
+                      Löschen
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                <Dialog
+                  open={isDeleted}
+                  onClose={() => navigate("/registernew")}
+                  sx={{
+                    "& .MuiBackdrop-root": {
+                      backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+                    },
+                    "& .MuiPaper-root": {
+                      // Targeting the Paper component inside the Dialog
+                      boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+                      borderRadius: "10px",
+                    },
+                  }}
                 >
-                  <button
-                    className="confirm-button"
-                    onClick={() => navigate("/login")}
-                  >
-                    Return to Login
-                  </button>
-                </ConfirmPopup>
+                  <DialogTitle id="delete-dialog-title">
+                    Das Profil wurde gelöscht.
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button
+                      onClick={() => navigate("/registernew")}
+                      style={{ backgroundColor: "#FF7070", color: "black" }}
+                    >
+                      Beenden
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </div>
             </>
           )}

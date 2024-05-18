@@ -40,7 +40,7 @@ function SignInForm({ alertUser }) {
 
   return (
     <div className="form-container sign-in-container">
-      <form onSubmit={handleOnSubmit}>
+      <form className="Register-Login-form" onSubmit={handleOnSubmit}>
         <h1 className="h1_reg">Mit Profil anmelden</h1>
         <input
           className="inputreg"

@@ -8,12 +8,12 @@
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
-  padding: 50px 50px 50px 50px;
   max-width: $DESKTOP_WIDTH;
   
 
   @media (max-width: 768px) {
-    padding: 10%; // less padding on smaller screens
+    padding: 5%;
+    margin-top: 30px;
   }
 
   .avatar-and-text {
@@ -23,7 +23,7 @@
     border-radius: 30px;
     width: 100%;
     //animation: gradientAnimation 10s ease infinite;
-    background-color: rgba(230, 230, 255, 1);
+    background-color: #ffffff;
     // background: linear-gradient(-45deg, #e7e7e7, #c4c4c4, #3d3d3d, #929292);
     background-size: 400% 400%;
     color: black;
@@ -40,6 +40,9 @@
       align-items: center;
       gap: 5px; // Space between avatar and buttons
       padding: 30px 30px 30px 30px;
+      @media (max-width: 768px) {
+        width: 100%;
+      }
     }
 
     .avatar-buttons {
@@ -109,8 +112,7 @@
       padding: 30px;
 
       @media (max-width: 768px) {
-        align-items: center; // center text on smaller screens
-        text-align: center; // ensure text is centered
+        width: 100%;
       }
 
       .input-username,
@@ -118,7 +120,8 @@
       .input-birthday,
       .input-password{
         color: black;
-        border-radius: 5px;
+        padding: 4px;
+        background-color: #eee;
       }
     }
 

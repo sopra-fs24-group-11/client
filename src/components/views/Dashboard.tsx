@@ -10,6 +10,8 @@ import "../../styles/views/Dashboard.scss";
 import LinearIndeterminate from "components/ui/loader";
 import Favourites from "components/ui/favourites";
 import { FadeLoader, HashLoader, PacmanLoader, ScaleLoader } from "react-spinners";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 const FriendList = ({ setIsLoading, alertUser }) => {
@@ -135,20 +137,8 @@ const FriendList = ({ setIsLoading, alertUser }) => {
               <div key={index} className="request">
                 <span className="name">{request.username}</span>
                 <div className="acceptdeny-buttons">
-                  <Button
-                    className="accept-button"
-                    backgroundColor="#82FF6D"
-                    onClick={() => handleAcceptFriendRequest(request.friendId)}
-                  >
-                    Annehmen
-                  </Button>
-                  <Button
-                    className="deny-button"
-                    backgroundColor={"red"}
-                    onClick={() => handleDenyFriendRequest(request.friendId)}
-                  >
-                    Ablehnen
-                  </Button>
+                  <FontAwesomeIcon icon={faCheck} className="accept-request-icon" onClick={() => handleAcceptFriendRequest(request.friendId)} />
+                  <FontAwesomeIcon icon={faXmark} className="deny-request-icon" onClick={() => handleDenyFriendRequest(request.friendId)} />
                 </div>
               </div>
             ))}
@@ -426,7 +416,7 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
         {tripInvitations.length > 0 ? (
           tripInvitations.map((invitation) => (
             <div key={invitation.id} className="trip-invitation">
-              <div>
+              <div className="invitation-text">
                 Einladung zu &quot;{invitation.tripName}&quot; am{" "}
                 {new Date(invitation.meetUpTime).toLocaleDateString("de-DE", {
                   day: "2-digit",
@@ -434,20 +424,10 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
                   year: "numeric",
                 })}
               </div>
-              <Button
-                className="accept-button"
-                backgroundColor="#82FF6D"
-                onClick={() => handleAcceptInvitation(invitation.id)}
-              >
-                Annehmen
-              </Button>
-              <Button
-                className="deny-button"
-                backgroundColor="red"
-                onClick={() => handleDenyInvitation(invitation.id)}
-              >
-                Ablehnen
-              </Button>
+              <div className="acceptdeny-buttons">
+                <FontAwesomeIcon icon={faCheck} className="accept-request-icon" onClick={() => handleAcceptInvitation(invitation.id)} />
+                <FontAwesomeIcon icon={faXmark} className="deny-request-icon" onClick={() => handleDenyInvitation(invitation.id)} />
+              </div>
             </div>
           ))
         ) : (
