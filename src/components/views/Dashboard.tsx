@@ -550,7 +550,7 @@ const Dashboard = ({ alertUser }) => {
     //OLD LOADER
     const timer = setTimeout(() => {
       setIsLoadingOld(false);
-    }, 2500);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);

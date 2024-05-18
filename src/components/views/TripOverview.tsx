@@ -468,7 +468,7 @@ const TripOverview = ({ alertUser }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2200); // Show loader for x seconds
+    }, 1000); // Show loader for x seconds
 
     return () => clearTimeout(timer);
   }, []);
