@@ -97,7 +97,8 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
 
           name: el.connectionName,
           departureTime: returnTime(el.departureTime),
-          arrivalTime: returnTime(el.arrivalTime)
+          arrivalTime: returnTime(el.arrivalTime),
+          departurePlatform: el.departurePlatform
         }
         x.push(temp);
       }
@@ -141,6 +142,8 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
         }
 
         setChangePoints(pointList);
+        console.log("*********************");
+        console.log(getInfoOfTrip());
         setTripInformation(getInfoOfTrip());
       };
       placeChangePoints();
@@ -148,7 +151,7 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
 
     return (
       <div style={{height: "auto"}}>
-        <div className="box" onClick={onClick}>
+        <div className="box" onClick={onClick} style={{alignItems: "center"}}>
           <div className={!isClicked ? "presentation" : "clickedPresentation"}>
             <div
               id="startCircle"
@@ -201,22 +204,29 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
           {showAdditionalInfo &&
               <div className="presentation table">
 
-                  <DataTable style={{width: "100px"}} columns={
+                  <DataTable customStyles={{
+                    table: {
+                      style: {width: "281px"}
+                    }
+                  }} columns={
                     [
                       {
-                        name: "From", selector: row => row.from, width: "150px",
+                        name: "Von", selector: row => row.from, width: "150px",
                       },
                       {
-                        name: "To", selector: row => row.to, width: "150px",
+                        name: "Nach", selector: row => row.to, width: "150px",
                       },
                       {
-                        name: "Departure", selector: row => row.departureTime
+                        name: "Abfahrt", selector: row => row.departureTime,
                       },
                       {
-                        name: "Arrival", selector: row => row.arrivalTime
+                        name: "Ankunft", selector: row => row.arrivalTime,
                       },
                       {
-                        name: "Name", selector: row => row.name
+                        name: "Name", selector: row => row.name,
+                      },
+                      {
+                        name: "Gleis", selector: row => row.departurePlatform ? row.departurePlatform : "--",
                       }
                     ]
                   } data={tripInformation}>

@@ -429,10 +429,12 @@ const ChooseConnection = ({ alertUser }) => {
               >
                 Zurück
               </Button>
-              <Button backgroundColor="#14AE5C"
-               id="confirmButton" onClick={handleConnectionSubmit}>
-                Bestätigen
-              </Button>
+              {showConnections &&
+                  <Button backgroundColor="#14AE5C"
+                          id="confirmButton" onClick={handleConnectionSubmit}>
+                      Bestätigen
+                  </Button>
+              }
             </div>
           </div>
         </div>
