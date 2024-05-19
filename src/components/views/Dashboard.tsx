@@ -14,51 +14,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 // Components
-const FriendList = ({ setIsLoading, alertUser }) => {
+const FriendList = ({ alertUser }) => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  const fetchFriendData = async () => {
+    try {
+      const requestsResponse = await api.get("/users/friends/requests", {
+        headers: { Authorization: token },
+      });
+      setFriendRequests(requestsResponse.data);
+
+      const friendsResponse = await api.get("/users/friends", {
+        headers: { Authorization: token },
+      });
+      setFriendList(friendsResponse.data);
+
+    } catch (error) {
+      alertUser("error", "", error);
+    }
+  }
+
   useEffect(() => {
-    let isComponentMounted = true; // Track if the component is still mounted
-
-    const fetchFriendData = async () => {
-      try {
-        const requestsResponse = await api.get("/users/friends/requests", {
-          headers: { Authorization: token },
-        });
-        setFriendRequests(requestsResponse.data);
-        console.log("FRIEND REQUESTS INFO:", requestsResponse.data);
-
-        const friendsResponse = await api.get("/users/friends", {
-          headers: { Authorization: token },
-        });
-        console.log("FRIENDS:", friendsResponse.data);
-        setFriendList(friendsResponse.data);
-      } catch (error) {
-        alertUser("error", "", error);
-      } finally {
-        // Only set loading to false if the component is still mounted
-        if (isComponentMounted) {
-          console.log("---- FRIENDS LOADED ----");
-          setIsLoading(false);
-        }
-      }
-    };
-
     fetchFriendData(); // Fetch immediately when the component mounts
-
     // Set up the interval for fetching data every 7 seconds
     const intervalId = setInterval(fetchFriendData, 7000);
-
     // Cleanup function to clear the interval when the component unmounts
-    return () => {
-      isComponentMounted = false; // Indicate the component has been unmounted
-      clearInterval(intervalId);
-    };
-  }, [setIsLoading, token]);
+    return () => {clearInterval(intervalId);};
+  }, []);
 
   const handleAcceptFriendRequest = async (friendRequestId) => {
     try {
@@ -70,10 +56,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
         }
       );
       alertUser("success", "Friend request accepted.");
-      setFriendRequests(
-        friendRequests.filter((request) => request.id !== friendRequestId)
-      );
-      window.location.reload();
+      fetchFriendData();
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -86,13 +69,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
       });
       // Remove the denied request from the list
       alertUser("success", "Friend request denied.");
-      setFriendRequests(
-        friendRequests.filter((request) => request.id !== friendRequestId)
-      );
-      setFriendRequests((prevRequests) =>
-        prevRequests.filter((request) => request.id !== friendRequestId)
-      );
-      window.location.reload();
+      fetchFriendData();
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -102,10 +79,6 @@ const FriendList = ({ setIsLoading, alertUser }) => {
     return status.toLowerCase() === "online"
       ? "status online"
       : "status offline";
-  };
-
-  const handleShowDetails = () => {
-    navigate("/friends");
   };
 
   return (
@@ -149,7 +122,7 @@ const FriendList = ({ setIsLoading, alertUser }) => {
 
         <div className="show-details-button-container">
           <Button
-            onClick={handleShowDetails}
+            onClick={() => navigate("/friends")}
             width="150px"
             backgroundColor="#FFB703"
           >
@@ -161,53 +134,40 @@ const FriendList = ({ setIsLoading, alertUser }) => {
   );
 };
 
-const WelcomeMessage = ({ setIsLoading, alertUser }) => {
+const WelcomeMessage = ({ alertUser, newChangeInCurrentTrips }) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentTrips, setCurrentTrips] = useState([]);
 
-  const handleCreateTrip = () => {
-    navigate("/createTrip");
-  };
+  const fetchData = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const userdata = await api.get("/users", {
+        headers: { Authorization: token },
+      });
+      setCurrentUser(userdata.data);
+    } catch (error) {
+      alertUser("error", "", error);
+    }
+
+    try {
+      const response = await api.get("/trips/current", {
+        headers: { Authorization: token },
+      });
+      setCurrentTrips(response.data);
+    } catch (error) {
+      alertUser("error", "", error);
+    }
+  }
 
   useEffect(() => {
-    let isComponentMounted = true;
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const userdata = await api.get("/users", {
-          headers: { Authorization: token },
-        });
-        setCurrentUser(userdata.data);
-        console.log("CURRENT USER DATA:", userdata.data);
-      } catch (error) {
-        alertUser("error", "", error);
-      }
-
-      try {
-        const response = await api.get("/trips/current", {
-          headers: { Authorization: token },
-        });
-        setCurrentTrips(response.data);
-        console.log("CURRENT TRIPS:", response.data);
-      } catch (error) {
-        alertUser("error", "", error);
-      } finally {
-        if (isComponentMounted) {
-          console.log("---- WELCOME MESSAGE LOADED ----");
-          setIsLoading(false);
-        }
-      }
-    };
-
     fetchData(); // Fetch immediately when the component mounts
     const intervalId = setInterval(fetchData, 7000); // Fetch data every 7 seconds
 
     return () => {
-      isComponentMounted = false;
       clearInterval(intervalId);
-    };
-  }, [setIsLoading]);
+    }; 
+  }, [newChangeInCurrentTrips]); // important! this makes it available so that this component updates when accepting a trip invitation!
 
   return (
     <div className="welcome component">
@@ -276,7 +236,7 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
         <Button
           width="150px"
           backgroundColor="#FB8500"
-          onClick={handleCreateTrip}
+          onClick={() => navigate("/createTrip")}
         >
           Reise erstellen
         </Button>
@@ -285,42 +245,30 @@ const WelcomeMessage = ({ setIsLoading, alertUser }) => {
   );
 };
 
-const NotificationsLog = ({ setIsLoading, alertUser }) => {
+const NotificationsLog = ({ alertUser }) => {
   const [notifications, setNotifications] = useState([]);
 
+  const fetchNotifications = async () => {
+    try {
+      const response = await api.get("/users/notifications", {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+      // Sort notifications by timeStamp in ascending order
+      const sortedNotifications = response.data.sort(
+        (a, b) =>
+          new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
+      );
+      setNotifications(sortedNotifications);
+    } catch (error) {
+      alertUser("error", "", error);
+    } 
+  };
+
   useEffect(() => {
-    let isComponentMounted = true;
-    const fetchNotifications = async () => {
-      try {
-        const response = await api.get("/users/notifications", {
-          headers: { Authorization: localStorage.getItem("token") },
-        });
-        // Sort notifications by timeStamp in ascending order
-        const sortedNotifications = response.data.sort(
-          (a, b) =>
-            new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
-        );
-        console.log("NOTIFICATIONS:", sortedNotifications);
-        setNotifications(sortedNotifications);
-      } catch (error) {
-        alertUser("error", "", error);
-      } finally {
-        if (isComponentMounted) {
-          console.log("---- NOTIFICATIONS LOADED ----");
-          setIsLoading(false);
-        }
-      }
-    };
-
     fetchNotifications();
-
     const intervalId = setInterval(fetchNotifications, 7000);
-
-    return () => {
-      isComponentMounted = false;
-      clearInterval(intervalId);
-    };
-  }, [setIsLoading]);
+    return () => {clearInterval(intervalId);};
+  }, []);
 
   const formatDateTime = (isoString) => {
     const date = new Date(isoString);
@@ -347,36 +295,26 @@ const NotificationsLog = ({ setIsLoading, alertUser }) => {
   );
 };
 
-const TripInvitations = ({ setIsLoading, alertUser }) => {
+const TripInvitations = ({ alertUser, setNewChangeInCurrentTrips }) => {
   const [tripInvitations, setTripInvitations] = useState([]);
   const token = localStorage.getItem("token");
 
+  const fetchTripInvitations = async () => {
+    try {
+      const response = await api.get("/trips/invitations", {
+        headers: { Authorization: token },
+      });
+      setTripInvitations(response.data);
+    } catch (error) {
+      alertUser("error", "", error);
+    }
+  };
+
   useEffect(() => {
-    let isComponentMounted = true;
-    const fetchTripInvitations = async () => {
-      try {
-        const response = await api.get("/trips/invitations", {
-          headers: { Authorization: token },
-        });
-        setTripInvitations(response.data);
-        console.log("TRIP INVITATIONS:", response.data);
-      } catch (error) {
-        alertUser("error", "", error);
-      } finally {
-        if (isComponentMounted) {
-          console.log("---- TRIP INVITATIONS LOADED ----");
-          setIsLoading(false);
-        }
-      }
-    };
-
+    fetchTripInvitations();
     const intervalId = setInterval(fetchTripInvitations, 7000);
-
-    return () => {
-      isComponentMounted = false;
-      clearInterval(intervalId);
-    };
-  }, [setIsLoading]);
+    return () => {clearInterval(intervalId);};
+  }, []);
 
   const handleAcceptInvitation = async (tripId) => {
     try {
@@ -385,11 +323,8 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
         {},
         { headers: { Authorization: token } }
       );
-      setTripInvitations(
-        tripInvitations.filter((invitation) => invitation.id !== tripId)
-      );
-
-      window.location.reload(); // I don't like this one, why not give down a "change" state (or rather setChange method) that you can increase here and in the dashboard, whenever the change changes, the whole dashboard fetches again?
+      fetchTripInvitations();
+      setNewChangeInCurrentTrips(old => old+1);
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -400,10 +335,7 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
       await api.delete(`/trips/${tripId}/invitation`, {
         headers: { Authorization: token },
       });
-      setTripInvitations(
-        tripInvitations.filter((invitation) => invitation.id !== tripId)
-      );
-      window.location.reload();
+      fetchTripInvitations();
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -441,52 +373,29 @@ const TripInvitations = ({ setIsLoading, alertUser }) => {
   );
 };
 
-const YourFavorites = ({ setIsLoading, alertUser }) => {
-  return <Favourites alertUser={alertUser}></Favourites>;
-};
-
-const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
+const FriendLeaderboard = ({ alertUser }) => {
   const [leaderboard, setLeaderboard] = useState([]);
-  const [currentUser, setCurrentUser] = useState<User | null>(null); // why??
+
+  const fetchFriends = async () => {
+    try {
+      const response = await api.get("/users/friends", {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+      setLeaderboard(response.data);
+    } catch (error) {
+      alertUser("error", "", error);
+    }
+  };
 
   useEffect(() => {
-    let isComponentMounted = true;
-    const fetchFriends = async () => {
-      try {
-        const response = await api.get("/users/friends", {
-          headers: { Authorization: localStorage.getItem("token") },
-        });
-        console.log("FRIENDS FOR LEADERBOARD:", response.data);
-        setLeaderboard(response.data);
-      } catch (error) {
-        alertUser("error", "", error);
-      } finally {
-        if (isComponentMounted) {
-          console.log("---- LEADERBOARD LOADED ----");
-          //setIsLoading(false);
-        }
-      }
-      try {
-        const userdata = await api.get("/users", {
-          // why this request?
-          headers: { Authorization: localStorage.getItem("token") },
-        });
-        setCurrentUser(userdata.data);
-        console.log("CURRENT USER DATA:", userdata.data);
-      } catch (error) {
-        alertUser("error", "", error);
-      }
-    };
-
     fetchFriends();
 
     const intervalId = setInterval(fetchFriends, 7000);
 
     return () => {
-      isComponentMounted = false;
       clearInterval(intervalId);
     };
-  }, [setIsLoading]);
+  }, []);
 
   leaderboard.sort((a, b) => b.points - a.points || b.level - a.level); // Sort by points, then level
 
@@ -533,18 +442,8 @@ const FriendLeaderboard = ({ setIsLoading, alertUser }) => {
 // Main Dashboard component
 const Dashboard = ({ alertUser }) => {
   const [isLoadingOld, setIsLoadingOld] = useState(true);
-  const [isFriendListLoading, setIsFriendListLoading] = useState(true);
-  const [isWelcomeMessageLoading, setIsWelcomeMessageLoading] = useState(true);
-  const [isNotificationsLogLoading, setIsNotificationsLogLoading] =
-    useState(true);
-  const [isTripInvitationsLoading, setIsTripInvitationsLoading] =
-    useState(true);
+  const [newChangeInCurrentTrips, setNewChangeInCurrentTrips] = useState(0);
 
-  const allLoaded =
-    !isFriendListLoading &&
-    !isWelcomeMessageLoading &&
-    !isNotificationsLogLoading &&
-    !isTripInvitationsLoading;
 
   useEffect(() => {
     //OLD LOADER
@@ -573,27 +472,25 @@ const Dashboard = ({ alertUser }) => {
     <div className="dashboard">
       <div className="column left">
         <FriendList
-          setIsLoading={setIsFriendListLoading}
           alertUser={alertUser}
         />
         <FriendLeaderboard alertUser={alertUser} />
       </div>
       <div className="column middle">
         <WelcomeMessage
-          setIsLoading={setIsWelcomeMessageLoading}
           alertUser={alertUser}
+          newChangeInCurrentTrips={newChangeInCurrentTrips}
         />
         <TripInvitations
-          setIsLoading={setIsTripInvitationsLoading}
           alertUser={alertUser}
+          setNewChangeInCurrentTrips={setNewChangeInCurrentTrips}
         />
       </div>
       <div className="column right">
         <NotificationsLog
-          setIsLoading={setIsNotificationsLogLoading}
           alertUser={alertUser}
         />
-        <YourFavorites alertUser={alertUser} />
+        <Favourites alertUser={alertUser}></Favourites>
       </div>
     </div>
   ) : (
@@ -602,32 +499,24 @@ const Dashboard = ({ alertUser }) => {
 };
 
 FriendList.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
   alertUser: PropTypes.func,
 };
 
 WelcomeMessage.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
   alertUser: PropTypes.func,
+  newChangeInCurrentTrips: PropTypes.number,
 };
 
 NotificationsLog.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
   alertUser: PropTypes.func,
 };
 
 TripInvitations.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
   alertUser: PropTypes.func,
-};
-
-YourFavorites.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
-  alertUser: PropTypes.func,
+  setNewChangeInCurrentTrips: PropTypes.func,
 };
 
 FriendLeaderboard.propTypes = {
-  setIsLoading: PropTypes.func.isRequired,
   alertUser: PropTypes.func,
 };
 
