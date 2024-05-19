@@ -9,6 +9,8 @@
   margin-right: auto;
   overflow: hidden;
   max-width: $DESKTOP_WIDTH;
+  opacity: 0; // Start with an opacity of 0
+  animation: fadeIn 2s forwards;
   
 
   @media (max-width: 768px) {

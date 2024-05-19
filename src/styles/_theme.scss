@@ -44,3 +44,12 @@ $borderRadius: 6px;
   align-items: center;
   justify-content: center;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

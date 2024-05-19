@@ -10,6 +10,8 @@
   padding-left: 50px;
   position: relative;
   overflow: hidden; // Contain the pseudo-element for the overlay
+  opacity: 0; // Start with an opacity of 0
+  animation: fadeIn 2s forwards;
 }
 
 .column {

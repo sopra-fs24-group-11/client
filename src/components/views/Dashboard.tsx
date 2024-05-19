@@ -444,7 +444,6 @@ const Dashboard = ({ alertUser }) => {
   const [isLoadingOld, setIsLoadingOld] = useState(true);
   const [newChangeInCurrentTrips, setNewChangeInCurrentTrips] = useState(0);
 
-
   useEffect(() => {
     //OLD LOADER
     const timer = setTimeout(() => {
@@ -468,7 +467,7 @@ const Dashboard = ({ alertUser }) => {
     );
   }
 
-  return true ? ( // REPLACE TRUE WITH allLoaded IF REAL LOADING IS IMPLEMENTED
+  return (
     <div className="dashboard">
       <div className="column left">
         <FriendList
@@ -492,10 +491,8 @@ const Dashboard = ({ alertUser }) => {
         />
         <Favourites alertUser={alertUser}></Favourites>
       </div>
-    </div>
-  ) : (
-    <LinearIndeterminate />
-  );
+    </div> 
+  )
 };
 
 FriendList.propTypes = {
