@@ -117,6 +117,8 @@ Potentially interesting additions to our project could be:
 * **Livio Hartmann** - [livio-h](https://github.com/livio-h)
 * **Patrik Rosenkranz** - [pr-120](https://github.com/pr-120)
 * **Jan Joos** - [jxnjo](https://github.com/jxnjo)
+* **Marc Heinimann** - [Marc-Hei](https://github.com/Marc-hei)
+* **Gabriel Stegmaier** - [gstegm](https://github.com/gstegm)
 
 ### Acknowledgments
 We would like to thank our TA [Cédric](https://github.com/cedric-vr) and the whole team of the course Software Engineering Lab from the University of Zurich.
