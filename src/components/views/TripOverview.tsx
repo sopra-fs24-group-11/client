@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { api } from "helpers/api";
-import { useNavigate, useParams } from "react-router-dom";
-import { Button } from "components/ui/Button";
+import React, {useState, useEffect} from "react";
+import {api} from "helpers/api";
+import {useNavigate, useParams} from "react-router-dom";
+import {Button} from "components/ui/Button";
 import PropTypes from "prop-types";
-import { Progress } from "../ui/progress";
+import {Progress} from "../ui/progress";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,79 +14,90 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 
-import { ListCarousel } from "../ui/ListCarousel";
+import {ListCarousel} from "../ui/ListCarousel";
 
 import "../../styles/views/TripOverview.scss";
 import "../../styles/views/Dashboard.scss";
 
 import LinearIndeterminate from "components/ui/loader";
 
-import { styled } from "@mui/material/styles";
+import {styled} from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { HashLoader, ScaleLoader } from "react-spinners";
+import {HashLoader, ScaleLoader} from "react-spinners";
 import notificationLog from "../../graphics/notification_log.png";
+import infoIcon from "../../graphics/info_Icon.png";
+import ConnectionContainer from "../ui/ConnectionContainer";
 
 // ============== HELPER FUNCTIONS ==============
 
-const ConnectionItem = ({ connection }) => {
+const ConnectionItem = ({connection}) => {
   const username = sessionStorage.getItem("username");
 
   const [timer, setTimer] = useState<number>(null); // controls timer
   const [showTimer, setShowTimer] = useState<boolean>(null);
+  const [showConnectionPopup, setShowConnectionPopup] = useState<boolean>(false);
 
   function parseTime() {
     const timeStr = connection.startTime;
 
-    const timeParts = timeStr.match(/(\d+):(\d+):\d+ (AM|PM)/i);
+    const timeParts = timeStr.match(/(\d+):(\d+)/i);
 
     if (!timeParts) return null;
 
-    let [_, hours, minutes, period] = timeParts;
+    let [_, hours, minutes] = timeParts;
     hours = parseInt(hours, 10);
     minutes = parseInt(minutes, 10);
 
-    if (period.toLowerCase() === "pm" && hours !== 12) {
-      hours += 12;
-    } else if (period.toLowerCase() === "am" && hours === 12) {
-      hours = 0;
-    }
-
+    // get date and time of departure
     let departureDate = sessionStorage.getItem("departureDate");
-    console.log(departureDate.split("T"));
     const date = new Date(departureDate.split("T"));
+    date.setHours(hours, minutes, 0); // Set the time to the parsed hours and minutes, seconds to 0
     console.log(date);
 
-    date.setHours(hours, minutes, 0); // Set the time to the parsed hours and minutes, seconds to 0
-    console.log(hours, minutes);
+    // get present date and time
     const now = new Date();
+    console.log(now);
 
-    const timeDiffInSeconds = Math.floor(date - now / 1000);
+    const timeDiffInSeconds = Math.floor((date - now) / 1000);
     console.log(timeDiffInSeconds);
     return timeDiffInSeconds;
   }
 
   useEffect(() => {
-    setTimer(parseTime());
-    let timer = setInterval(() => {
-      setTimer((timer) => {
-        if (timer <= 0 || timer > 1000000) {
-          // the timer is hidden when all seconds are run up OR the start time is in the past which results in a huge number
+    const initialTime = parseTime();
+    setTimer(initialTime);
+
+    const intervalId = setInterval(() => {
+      setTimer((currentTimer) => {
+        if (currentTimer <= 0 || currentTimer > 1000000) {
+          console.log(currentTimer);
+          console.log("haaaaaaaaaa");
           setShowTimer(false);
-          clearInterval(timer);
+          clearInterval(intervalId);
           return 0;
         } else {
           setShowTimer(true);
-          return timer - 1; // increments timer}
+          return currentTimer - 1;
         }
-      }, 1000);
-    });
-  }, []);
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []); // Ensure the dependency array is empty
 
   return (
     <div className="connection-item">
-      <h3 className="connection-name">{connection.username}</h3>
+      <h3 className="connection-name" style={{display: "flex", alignItems: "center"}}>
+        {connection.username}
+        <img src={infoIcon} alt="Info icon" style={{height: "50px", position: "relative", left: "55%"}}
+             onClick={() => setShowConnectionPopup(!showConnectionPopup)}/>
+      </h3>
+      {showConnectionPopup &&
+          <ConnectionContainer departureTime={connection.startTime} arrivalTime={connection.endTime}
+                               wholeTrip={connection.allInfo}></ConnectionContainer>
+      }
       {showTimer &&
         username === connection.username &&
         connection.startTime !== "N/A" && (
@@ -105,7 +116,7 @@ const ConnectionItem = ({ connection }) => {
           </p>
         )}
       <p className="start-text">Startzeit: {connection.startTime} Uhr</p>
-      <Progress className="progress-bar" value={connection.progress} />
+      <Progress className="progress-bar" value={connection.progress}/>
       <p className="arrival-text">
         Voraussichtliche Ankunft: {connection.endTime} Uhr
       </p>
@@ -121,6 +132,7 @@ ConnectionItem.propTypes = {
     progress: PropTypes.number.isRequired,
     startTime: PropTypes.string.isRequired,
     endTime: PropTypes.string.isRequired,
+    allInfo: PropTypes.object.isRequired,
   }),
 };
 
@@ -134,8 +146,8 @@ const calculateProgress = (departureTime, arrivalTime) => {
   return ((now - departure) / (arrival - departure)) * 100;
 };
 
-const TripLog = ({ setIsLoading, alertUser }) => {
-  const { tripId } = useParams();
+const TripLog = ({setIsLoading, alertUser}) => {
+  const {tripId} = useParams();
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -143,7 +155,7 @@ const TripLog = ({ setIsLoading, alertUser }) => {
     const fetchNotifications = async () => {
       try {
         const response = await api.get("/trips/" + tripId + "/notifications", {
-          headers: { Authorization: localStorage.getItem("token") },
+          headers: {Authorization: localStorage.getItem("token")},
         });
         // Sort notifications by timeStamp in ascending order
         const sortedNotifications = response.data.sort(
@@ -198,7 +210,7 @@ const TripLog = ({ setIsLoading, alertUser }) => {
 };
 
 // ============== MAIN FUNCTION ==============
-const TripOverview = ({ alertUser }) => {
+const TripOverview = ({alertUser}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentTrip, setCurrentTrip] = useState({
     tripName: "",
@@ -229,7 +241,7 @@ const TripOverview = ({ alertUser }) => {
   const [isTripLogLoading, setIsTripLogLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
-  const { tripId } = useParams();
+  const {tripId} = useParams();
   const token = localStorage.getItem("token");
 
   const handleBackClick = () => {
@@ -248,7 +260,7 @@ const TripOverview = ({ alertUser }) => {
     try {
       // Fetch current user data
       const userResponse = await api.get("/users", {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       const currentUserData = userResponse.data;
       console.log("CURRENT USER:", currentUserData);
@@ -258,7 +270,7 @@ const TripOverview = ({ alertUser }) => {
       let tripData = null;
       try {
         const tripResponse = await api.get(`/trips/${tripId}`, {
-          headers: { Authorization: token },
+          headers: {Authorization: token},
         });
         tripData = tripResponse.data;
         console.log("CURRENT TRIP INFORMATION:", tripData);
@@ -270,7 +282,7 @@ const TripOverview = ({ alertUser }) => {
 
       // Fetch admin status
       const adminStatusResponse = await api.get(`/trips/${tripId}/admin/`, {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       const isAdmin = adminStatusResponse.data;
       console.log("ADMIN?:", isAdmin);
@@ -278,35 +290,39 @@ const TripOverview = ({ alertUser }) => {
       // Fetch connections
       const connectionsResponse = await api.get(
         `/trips/${tripId}/connections`,
-        { headers: { Authorization: token } }
+        {headers: {Authorization: token}}
       );
+      console.log("******************")
+      console.log(connectionsResponse);
       const connectionsData = connectionsResponse.data.map((participant) => {
-        const { connectionDTO } = participant;
+        const {connectionDTO} = participant;
         const firstConnection = connectionDTO[0];
         const lastConnection = connectionDTO[connectionDTO.length - 1];
         return {
           username: participant.username,
           startTime: firstConnection?.departureTime
             ? new Date(firstConnection.departureTime).toLocaleTimeString(
-                "de-DE",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                }
-              )
-            : "N/A",
-          endTime: lastConnection?.arrivalTime
-            ? new Date(lastConnection.arrivalTime).toLocaleTimeString("de-DE", {
+              "de-DE",
+              {
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: false,
-              })
+              }
+            )
+            : "N/A",
+          endTime: lastConnection?.arrivalTime
+            ? new Date(lastConnection.arrivalTime).toLocaleTimeString("de-DE", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            })
             : "N/A",
           progress: calculateProgress(
             firstConnection?.departureTime,
             lastConnection?.arrivalTime
           ),
+          allInfo: connectionDTO,
+
         };
       });
       console.log("CONNECTIONS:", connectionsData);
@@ -328,7 +344,7 @@ const TripOverview = ({ alertUser }) => {
     //Only for Admin
     try {
       const response = await api.get(`/trips/${tripId}/participants`, {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       setTripMembers(response.data);
       console.log("TRIP MEMBERS:", response.data);
@@ -376,7 +392,7 @@ const TripOverview = ({ alertUser }) => {
           `/trips/${tripId}/admin/${newAdminId}`,
           {},
           {
-            headers: { Authorization: token },
+            headers: {Authorization: token},
           }
         );
         alertUser("success", "Neuer Admin wurde erfolgreich gesetzt.");
@@ -395,7 +411,7 @@ const TripOverview = ({ alertUser }) => {
 
     try {
       await api.delete(`/trips/${tripId}/exit`, {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       alertUser("success", "You left the trip.");
       setTimeout(() => navigate("/dashboard"), 1000);
@@ -409,7 +425,7 @@ const TripOverview = ({ alertUser }) => {
     handleCloseDeleteDialog(); // Close the dialog first
     try {
       await api.delete(`/trips/${tripId}`, {
-        headers: { Authorization: token },
+        headers: {Authorization: token},
       });
       alertUser("success", "Trip deleted.");
       setTimeout(() => navigate("/dashboard"), 3000); // 3 seconds too long? Or couple with await? Because when fetching the Trip not found error could come.
@@ -435,7 +451,7 @@ const TripOverview = ({ alertUser }) => {
         `/trips/${tripId}/favorites `,
         {},
         {
-          headers: { Authorization: token },
+          headers: {Authorization: token},
         }
       );
       alertUser(
@@ -444,7 +460,7 @@ const TripOverview = ({ alertUser }) => {
           ? "Von Favouriten gelöscht."
           : "Zu Favouriten hinzugefügt."
       );
-      setCurrentTrip((old) => ({ ...old, favourite: !old.favourite }));
+      setCurrentTrip((old) => ({...old, favourite: !old.favourite}));
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -517,12 +533,12 @@ const TripOverview = ({ alertUser }) => {
           defaultValue={currentTrip.favourite ? 1 : 0}
           max={1}
           precision={1}
-          icon={<FavoriteIcon fontSize="inherit" />}
-          emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+          icon={<FavoriteIcon fontSize="inherit"/>}
+          emptyIcon={<FavoriteBorderIcon fontSize="inherit"/>}
           onMouseDown={handleToFavourites}
           //onTouchStart={handleToFavourites}
         />
-        <div style={{ position: "relative", top: "0%", marginLeft: "50px" }}>
+        <div style={{position: "relative", top: "0%", marginLeft: "50px"}}>
           <Button
             onClick={() => {
               setShowLog(!showLog);
@@ -536,7 +552,7 @@ const TripOverview = ({ alertUser }) => {
             />
           </Button>
           {showLog && (
-            <TripLog setIsLoading={setIsTripLogLoading} alertUser={alertUser} />
+            <TripLog setIsLoading={setIsTripLogLoading} alertUser={alertUser}/>
           )}
         </div>
       </div>
@@ -553,10 +569,10 @@ const TripOverview = ({ alertUser }) => {
           <h3 className="trip-arrival">
             Gewählte Ankunft:{" "}
             {new Date(currentTrip.meetUpTime).toLocaleDateString("de-DE", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            }) +
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }) +
               ", " +
               new Date(currentTrip.meetUpTime).toLocaleTimeString("de-DE", {
                 hour: "2-digit",
@@ -573,7 +589,7 @@ const TripOverview = ({ alertUser }) => {
         </h1>
         <div className="connections-list">
           {connections.map((connection, index) => (
-            <ConnectionItem key={index} connection={connection} />
+            <ConnectionItem key={index} connection={connection}/>
           ))}
         </div>
         <div className="trip-buttons">
@@ -696,7 +712,7 @@ const TripOverview = ({ alertUser }) => {
         <DialogActions>
           <Button
             onClick={handleCloseDeleteDialog}
-            style={{ backgroundColor: "#BCFFE3", color: "black" }}
+            style={{backgroundColor: "#BCFFE3", color: "black"}}
           >
             Abbrechen
           </Button>
@@ -748,7 +764,7 @@ const TripOverview = ({ alertUser }) => {
                     },
                   }}
                 >
-                  <ListItemText primary={member.username} />
+                  <ListItemText primary={member.username}/>
                 </ListItem>
               ))}
             </List>
@@ -759,7 +775,7 @@ const TripOverview = ({ alertUser }) => {
             Abbrechen
           </Button>
           <Button
-            style={{ backgroundColor: "#FFB703", color: "black" }}
+            style={{backgroundColor: "#FFB703", color: "black"}}
             onClick={handleSelectNewAdmin}
             disabled={!newAdminId}
           >
