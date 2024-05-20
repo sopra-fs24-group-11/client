@@ -4,7 +4,7 @@ import User from "models/User";
 import { useNavigate } from "react-router-dom";
 import image from "../../graphics/add.png";
 import { Button } from "components/ui/Button";
-import "styles/views/Flex.scss";
+import "styles/views/Trip.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import DateTimePicker from "react-datetime-picker";
@@ -246,16 +246,16 @@ const CreateTrip = ({ alertUser }) => {
 
   return (
     <BaseContainer>
-      <div className="flex container">
-        <div className="flex outer-form">
-          <h1 className="text-3xl mb-5 font-bold text-white">
+      <div className="trip container">
+        <div className="trip outer-form">
+          <h1 className="trip header-create">
             {" "}
             Neue Reise erstellen
           </h1>
-          <div className="flex inner-form">
-            <div className="flex row-form">
-              <div className="flex box">
-                <label className="flex label">Name der Reise:</label>
+          <div className="trip inner-form">
+            <div className="trip row-form">
+              <div className="trip box">
+                <label className="trip label">Name der Reise:</label>
                 <input
                   className="input"
                   placeholder="eingeben..."
@@ -265,9 +265,9 @@ const CreateTrip = ({ alertUser }) => {
                 <Dialog>
                   <DialogTrigger asChild ref={dialogTriggerRef}>
                     <div>
-                      <label className="flex label">Zielort:</label>
+                      <label className="trip label">Zielort:</label>
                       <input
-                        className="flex input"
+                        className="trip input"
                         placeholder="eingeben..."
                         value={
                           meetUpPlace.stationName === ""
@@ -336,20 +336,20 @@ const CreateTrip = ({ alertUser }) => {
                   </DialogContent>
                 </Dialog>
               </div>
-              <div className="flex box">
-                <label className="flex label">Reisebeschreibung:</label>
+              <div className="trip box">
+                <label className="trip label">Reisebeschreibung:</label>
                 <textarea
-                  className="flex input-large"
+                  className="trip input-large"
                   placeholder="eingeben..."
                   onChange={(e) => setTripDescription(e.target.value)}
                 ></textarea>
               </div>
             </div>
-            <div className="flex row-form">
-              <div className="flex box-line">
-                <label className="flex label">Datum & Zeit der Ankunft:</label>
+            <div className="trip row-form">
+              <div className="trip box-line">
+                <label className="trip label">Datum & Zeit der Ankunft:</label>
                 <input
-                  className="flex date"
+                  className="trip date"
                   type="datetime-local"
                   value={meetUpTime}
                   onChange={(e) => setMeetUpTime(e.target.value)}
@@ -358,11 +358,11 @@ const CreateTrip = ({ alertUser }) => {
             </div>
             <Dialog>
               <DialogTrigger asChild>
-                <button className="flex bar">
+                <button className="trip bar">
                   <label className="add-friends-label">
                     Füge Freund zur aktuellen Reise hinzu:
                   </label>
-                  <img className="flex image" src={image} />
+                  <img className="trip image" src={image} />
                 </button>
               </DialogTrigger>
               <DialogContent>
@@ -412,19 +412,19 @@ const CreateTrip = ({ alertUser }) => {
               </DialogContent>
             </Dialog>
 
-            <div className="flex box-line">
-              <label className="flex label">
+            <div className="trip box-line">
+              <label className="trip label">
                 Zurzeit auf der Reise mit dir:
               </label>
               <hr className="horizontal-line" />
             </div>
 
-            <div className="flex names">
+            <div className="trip names">
               {Object.entries(friends).map(([key, value]) => (
-                <div className="flex participants" key={key}>
+                <div className="trip participants" key={key}>
                   {value}
                   <label
-                    className="flex button"
+                    className="trip button"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                     onClick={() => removeParticipant(parseInt(key))}
@@ -435,7 +435,7 @@ const CreateTrip = ({ alertUser }) => {
               ))}
             </div>
 
-            <div className="flex row-form-end">
+            <div className="trip row-form-end">
               <Button
                 width="200px"
                 backgroundColor="#BF3132"
