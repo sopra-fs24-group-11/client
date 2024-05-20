@@ -10,7 +10,7 @@ import "../../styles/views/History.scss";
 import Heart from "components/ui/Heart"
 import PropTypes from "prop-types";
 import {HashLoader} from "react-spinners";
-import "styles/views/Flex.scss";
+import "styles/views/Trip.scss";
 import {Fireworks, FireworksHandlers} from "@fireworks-js/react";
 
 const Feedback = ({alertUser}) => {
@@ -70,7 +70,7 @@ const Feedback = ({alertUser}) => {
       {!hasSubmitted &&
           <div>
               <h3>Geben Sie gerne ein Feedback an das Get-Together-Team! &lt;3</h3><textarea
-              className="flex input-large"
+              className="trip input-large"
               placeholder="enter..."
               onChange={(e) => setFeedbackText(e.target.value)}
               style={{
