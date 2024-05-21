@@ -11,7 +11,7 @@
   position: relative;
   overflow: hidden; // Contain the pseudo-element for the overlay
   opacity: 0; // Start with an opacity of 0
-  animation: fadeIn 2s forwards;
+  animation: fadeIn 2s forwards; // Increase opacity to 1
 }
 
 .column {
@@ -276,8 +276,19 @@
 @media (max-width: 768px) {
   .dashboard {
     grid-template-columns: 1fr; /* Stack columns on small screens */
+    padding: 30px 20px;
+    .middle {
+      grid-row: 1/2;
+    }
+    .left {
+      grid-row: 2/3;
+    }
+    .right {
+      grid-row: 3/4;
+    }
   }
   .column {
     width: 100%; /* Full width on small screens */
   }
+  
 }

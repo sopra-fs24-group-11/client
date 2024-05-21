@@ -137,6 +137,7 @@ const FriendListPage = ({ alertUser }) => {
   };
 
   const handleCloseDeleteDialog = () => {
+    setFriendToDelete(null);
     setOpenDeleteDialog(false);
   };
 
@@ -239,51 +240,6 @@ const FriendListPage = ({ alertUser }) => {
                 >
                   X
                 </Button>
-                <Dialog
-                  open={openDeleteDialog}
-                  onClose={handleCloseDeleteDialog}
-                  sx={{
-                    "& .MuiBackdrop-root": {
-                      backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
-                    },
-                    "& .MuiPaper-root": {
-                      // Targeting the Paper component inside the Dialog
-                      boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
-                      borderRadius: "10px",
-                    },
-                  }}
-                >
-                  <DialogTitle id="delete-dialog-title">
-                    Bestätige die Löschung
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="delete-dialog-description">
-                      Bist du sicher, dass du diesen Freund löschen willst?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={handleCloseDeleteDialog}
-                      style={{ backgroundColor: "#BCFFE3", color: "black" }}
-                      width={null}
-                      height={null}
-                      backgroundColor={null}
-                      color={null}
-                      className={null}
-                    >
-                      Abbrechen
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        handleRemoveFriend();
-                        handleCloseDeleteDialog();
-                      }}
-                      style={{ backgroundColor: "#FF7070", color: "black" }}
-                    >
-                      Löschen
-                    </Button>
-                  </DialogActions>
-                </Dialog>
               </li>
             ))}
           </ul>
@@ -293,7 +249,51 @@ const FriendListPage = ({ alertUser }) => {
             um eine Anfrage zu senden!
           </div>
         )}
-
+        <Dialog
+          open={openDeleteDialog}
+          onClose={handleCloseDeleteDialog}
+          sx={{
+            "& .MuiBackdrop-root": {
+              backgroundColor: "rgba(0, 0, 0, 0.8)", // Increase the opacity here
+            },
+            "& .MuiPaper-root": {
+              // Targeting the Paper component inside the Dialog
+              boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <DialogTitle id="delete-dialog-title">
+            Bestätige die Löschung
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="delete-dialog-description">
+              Bist du sicher, dass du diesen Freund löschen willst?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleCloseDeleteDialog}
+              style={{ backgroundColor: "#BCFFE3", color: "black" }}
+              width={null}
+              height={null}
+              backgroundColor={null}
+              color={null}
+              className={null}
+            >
+              Abbrechen
+            </Button>
+            <Button
+              onClick={() => {
+                handleRemoveFriend();
+                handleCloseDeleteDialog();
+              }}
+              style={{ backgroundColor: "#FF7070", color: "black" }}
+            >
+              Löschen
+            </Button>
+          </DialogActions>
+        </Dialog>
         <h1>Freundschaftsanfragen</h1>
         {friendRequests.length > 0 ? (
           <ul className="friend-requests">
