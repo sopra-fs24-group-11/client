@@ -47,7 +47,7 @@ export const handleError1 = (error, handleAlert, errorMessage, severity) => {
     return;
   }
   if (error && error.message && error.message.match(/Network Error/)) {
-    handleAlert("No Internet Connection!", "error");
+    handleAlert("Kein Internet!", "error");
     return;
   }
   if (errorMessage === "") {
