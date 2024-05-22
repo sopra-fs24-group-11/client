@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "helpers/api";
 import PropTypes from "prop-types";
@@ -13,10 +13,42 @@ import signalImage from "../../graphics/signal.png";
 import stationImage from "../../graphics/station.png";
 import rails from "../../graphics/rails.png";
 import "../../styles/views/Header.scss";
+import { useWindowSize } from 'react-use';
+import ConfettiComponent from "components/ui/Confetti";
+
 
 const Header = ({ alertUser }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+
+  const { width, height } = useWindowSize();
+  const [clickCount, setClickCount] = useState(0);
+  
+  const [isConfettiActive, setIsConfettiActive] = useState(false);
+  const [runConfetti, setRunConfetti] = useState(false);
+
+  const handleTrainClick = () => {
+    setClickCount(prevCount => prevCount + 1);
+  };
+
+  useEffect(() => {
+    if (clickCount >= 5) {
+      setIsConfettiActive(true);
+      setRunConfetti(true);
+      setClickCount(0);
+      setTimeout(() => {
+        setIsConfettiActive(false);
+      }, 5000);
+    }
+  }, [clickCount])
+
+  useEffect(() => {
+    if (isConfettiActive) {
+      setTimeout(() => {
+        setRunConfetti(false);
+      }, 3000);
+    }
+  }, [isConfettiActive]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -93,13 +125,14 @@ const Header = ({ alertUser }) => {
         <MenuItem onClick={() => navigate("/feedback")}>Feedback</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu></>}
-      <div className="train-container">
-        <img src={trainImage} alt="Animierter Zug" className="train" />
+
+      <div className="train-container" >
+        <img src={trainImage} alt="Animierter Zug" className="train" onClick={handleTrainClick} />
         {
           // <div className="rails"></div>
         }
       </div>
-
+      {isConfettiActive && <ConfettiComponent width={width} height={height} run={runConfetti} />}
       <img src={signalImage} alt="Signal" className="signal" />
       {
         //<img src={stationImage} alt="Station" className="station" />

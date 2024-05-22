@@ -15,7 +15,6 @@ const Feedback = ({alertUser}) => {
   const [feedbackText, setFeedbackText] = useState<string>("");
   const fireworks = useRef<FireworksHandlers>(null);
 
-
   const handleBackClick = () => {
     navigate("/dashboard");
   };
