@@ -85,25 +85,6 @@
         min-width: 90px;
         max-width: 90px;
       }
-      .accept-deny-buttons {
-        display: flex;
-        gap: 20px;
-        .accept-request {
-          animation: glow 3s infinite ease-in-out;
-
-          @keyframes glow {
-            0%,
-            100% {
-              box-shadow: 0 0 8px rgb(0, 255, 8), 0 0 8px rgb(0, 255, 4),
-                0 0 8px rgb(0, 255, 30);
-            }
-            50% {
-              box-shadow: 0 0 8px rgba(105, 105, 105, 0.504),
-                0 0 8px rgba(96, 96, 96, 0.389), 0 0 8px rgba(87, 87, 87, 0.382);
-            }
-          }
-        }
-      }
     }
   }
   .action-buttons {

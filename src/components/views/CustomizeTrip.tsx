@@ -18,7 +18,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "components/ui/dialog";
-import { HashLoader, ScaleLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 
 const CustomizeTrip = ({ alertUser }) => {
   // used to navigate
