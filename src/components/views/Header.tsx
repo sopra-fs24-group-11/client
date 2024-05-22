@@ -13,7 +13,7 @@ import signalImage from "../../graphics/signal.png";
 import stationImage from "../../graphics/station.png";
 import rails from "../../graphics/rails.png";
 import "../../styles/views/Header.scss";
-import { useWindowSize } from 'react-use';
+import { useWindowSize } from "react-use";
 import ConfettiComponent from "components/ui/Confetti";
 
 
