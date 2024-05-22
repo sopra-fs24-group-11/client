@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
 import { Input } from "components/ui/input";
+import Rating from "react-rating";
 import {
   Dialog as DialogSCN,
   DialogContent as DialogContentSCN,
@@ -27,7 +28,8 @@ import DialogActions from "@mui/material/DialogActions";
 import { HashLoader, ScaleLoader } from "react-spinners";
 import ProgressHearts from "components/ui/ProgressHearts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faXmark, faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
 
 const FriendListPage = ({ alertUser }) => {
   const navigate = useNavigate();
@@ -232,6 +234,14 @@ const FriendListPage = ({ alertUser }) => {
             {friendList.map((friend) => (
               <li key={friend.friendId} className="friend">
                 <span className="name">{friend.username}</span>
+                <Rating 
+                  initialRating={friend.points*10}
+                  fractions={10}
+                  emptySymbol={<FontAwesomeIcon icon={faRegularHeart} />}
+                  fullSymbol={<FontAwesomeIcon icon={faSolidHeart} />}
+                  readonly={true}
+                  
+                  />                
                 {/* <ProgressHearts points={friend.points}/> */}
                 <div className="stage">Level: {Math.floor(friend.level)}</div>
                 <Button
