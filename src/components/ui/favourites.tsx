@@ -9,7 +9,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import "../../styles/ui/Favourites.scss";
 
-const Favourites = ({ alertUser }) => {
+const Favourites = ({ alertUser, setLoading }) => {
 
   const [favTrips, setFavTrips] = useState([]);
   const token = localStorage.getItem("token");
@@ -47,6 +47,7 @@ const Favourites = ({ alertUser }) => {
     } catch (error) {
       alertUser("error", "", error);
     }
+    setLoading(false);
   }
 
   const TripContainer = ({ name, id }) => {
@@ -105,4 +106,5 @@ export default Favourites;
 
 Favourites.propTypes = {
   alertUser: PropTypes.func,
+  setLoading: PropTypes.func,
 }

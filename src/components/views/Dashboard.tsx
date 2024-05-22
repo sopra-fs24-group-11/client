@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { api } from "helpers/api";
 import User from "models/User";
+import Rating from "react-rating";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
@@ -11,10 +12,11 @@ import LinearIndeterminate from "components/ui/loader";
 import Favourites from "components/ui/favourites";
 import { FadeLoader, HashLoader, PacmanLoader, ScaleLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faXmark, faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 
 // Components
-const FriendList = ({ alertUser }) => {
+const FriendList = ({ alertUser, setLoading }) => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [friendList, setFriendList] = useState([]);
 
@@ -36,6 +38,7 @@ const FriendList = ({ alertUser }) => {
     } catch (error) {
       alertUser("error", "", error);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -134,7 +137,7 @@ const FriendList = ({ alertUser }) => {
   );
 };
 
-const WelcomeMessage = ({ alertUser, newChangeInCurrentTrips }) => {
+const WelcomeMessage = ({ alertUser, setLoading , newChangeInCurrentTrips }) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentTrips, setCurrentTrips] = useState([]);
@@ -158,6 +161,7 @@ const WelcomeMessage = ({ alertUser, newChangeInCurrentTrips }) => {
     } catch (error) {
       alertUser("error", "", error);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -245,7 +249,7 @@ const WelcomeMessage = ({ alertUser, newChangeInCurrentTrips }) => {
   );
 };
 
-const NotificationsLog = ({ alertUser }) => {
+const NotificationsLog = ({ alertUser, setLoading }) => {
   const [notifications, setNotifications] = useState([]);
 
   const fetchNotifications = async () => {
@@ -262,6 +266,7 @@ const NotificationsLog = ({ alertUser }) => {
     } catch (error) {
       alertUser("error", "", error);
     } 
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -299,7 +304,7 @@ const NotificationsLog = ({ alertUser }) => {
   );
 };
 
-const TripInvitations = ({ alertUser, setNewChangeInCurrentTrips }) => {
+const TripInvitations = ({ alertUser, setLoading , setNewChangeInCurrentTrips }) => {
   const [tripInvitations, setTripInvitations] = useState([]);
   const token = localStorage.getItem("token");
 
@@ -312,6 +317,7 @@ const TripInvitations = ({ alertUser, setNewChangeInCurrentTrips }) => {
     } catch (error) {
       alertUser("error", "", error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -377,7 +383,7 @@ const TripInvitations = ({ alertUser, setNewChangeInCurrentTrips }) => {
   );
 };
 
-const FriendLeaderboard = ({ alertUser }) => {
+const FriendLeaderboard = ({ alertUser, setLoading }) => {
   const [leaderboard, setLeaderboard] = useState([]);
 
   const fetchFriends = async () => {
@@ -389,6 +395,7 @@ const FriendLeaderboard = ({ alertUser }) => {
     } catch (error) {
       alertUser("error", "", error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -434,8 +441,14 @@ const FriendLeaderboard = ({ alertUser }) => {
               border: index < 3 ? "1px solid black" : "none", // Optional border for top 3
             }}
           >
-            {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) -{" "}
-            {friend.points} Punkte
+            {index + 1}. {friend.username} (Lv. {Math.floor(friend.level)}) {" "}
+            <Rating 
+              initialRating={friend.points}
+              fractions={10}
+              emptySymbol={<FontAwesomeIcon icon={faRegularHeart} className="red-hearts"/>}
+              fullSymbol={<FontAwesomeIcon icon={faSolidHeart} className="red-hearts"/>}
+              readonly={true}
+            />
           </li>
         ))}
       </ol>
@@ -445,80 +458,115 @@ const FriendLeaderboard = ({ alertUser }) => {
 
 // Main Dashboard component
 const Dashboard = ({ alertUser }) => {
+  const navigate = useNavigate();
   const [isLoadingOld, setIsLoadingOld] = useState(true);
   const [newChangeInCurrentTrips, setNewChangeInCurrentTrips] = useState(0);
+
+  const [loadingStates, setLoadingStates] = useState({
+    friendList: true,
+    friendLeaderboard: true,
+    welcomeMessage: true,
+    tripInvitations: true,
+    notificationsLog: true,
+    favourites: true,
+  });
+  const isLoading = Object.values(loadingStates).some((state) => state);
+  const setLoading = (component, isLoading) => {
+    setLoadingStates((prevLoadingStates) => ({
+      ...prevLoadingStates,
+      [component]: isLoading,
+    }));
+  };
 
   useEffect(() => {
     //OLD LOADER
     const timer = setTimeout(() => {
       setIsLoadingOld(false);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoadingOld) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <ScaleLoader
-          color="hsla(227, 0%, 100%, 1)"
-          height={50}
-          margin={4}
-          radius={40}
-          width={8}
-        />
-      </div>
-    );
-  }
+  const display_dashboard = (isLoadingOld || isLoading) ? {display:"none"} : {display:"grid"}
+  const display_loader = (isLoadingOld || isLoading) ? {display:"flex"} : {display:"none"}
+
 
   return (
-    <div className="dashboard">
+    <>
+      <div className="dashboard" style={display_dashboard}>
       <div className="column left">
         <FriendList
           alertUser={alertUser}
+          setLoading={(isLoading) => setLoading("friendList", isLoading)}
         />
-        <FriendLeaderboard alertUser={alertUser} />
+        <FriendLeaderboard
+          alertUser={alertUser}
+          setLoading={(isLoading) => setLoading("friendLeaderboard", isLoading)}
+        />
       </div>
       <div className="column middle">
         <WelcomeMessage
           alertUser={alertUser}
+          setLoading={(isLoading) => setLoading("welcomeMessage", isLoading)}
           newChangeInCurrentTrips={newChangeInCurrentTrips}
         />
         <TripInvitations
           alertUser={alertUser}
           setNewChangeInCurrentTrips={setNewChangeInCurrentTrips}
+          setLoading={(isLoading) => setLoading("tripInvitations", isLoading)}
         />
       </div>
       <div className="column right">
         <NotificationsLog
           alertUser={alertUser}
+          setLoading={(isLoading) => setLoading("notificationsLog", isLoading)}
         />
-        <Favourites alertUser={alertUser}></Favourites>
+        <Favourites
+          alertUser={alertUser}
+          setLoading={(isLoading) => setLoading("favourites", isLoading)}
+        />
       </div>
-    </div> 
+    </div>
+    <div className="flex justify-center items-center min-h-screen column" style={display_loader}>
+      <ScaleLoader
+        color="hsla(227, 0%, 100%, 1)"
+        height={50}
+        margin={4}
+        radius={40}
+        width={8}
+      />
+      <h1 style={{color:"white"}}>Unsere Seite wärmt sich gerade auf.😁</h1>
+      <h1 style={{color:"white"}}>Hinterlasse <span className="feedback-clicker" onClick={() => navigate("/feedback")}>hier</span> eine Nachricht falls innerhalb von 20 Sekunden nichts passiert.</h1>
+    </div>
+    </>
   )
 };
 
 FriendList.propTypes = {
   alertUser: PropTypes.func,
+  setLoading: PropTypes.func,
 };
 
 WelcomeMessage.propTypes = {
   alertUser: PropTypes.func,
+  setLoading: PropTypes.func,
   newChangeInCurrentTrips: PropTypes.number,
 };
 
 NotificationsLog.propTypes = {
   alertUser: PropTypes.func,
+  setLoading: PropTypes.func,
 };
 
 TripInvitations.propTypes = {
   alertUser: PropTypes.func,
+  setLoading: PropTypes.func,
   setNewChangeInCurrentTrips: PropTypes.func,
 };
 
 FriendLeaderboard.propTypes = {
   alertUser: PropTypes.func,
+  setLoading: PropTypes.func,
 };
 
 export default Dashboard;

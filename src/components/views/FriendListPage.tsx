@@ -5,9 +5,7 @@ import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
-import LinearIndeterminate from "components/ui/loader";
 import "../../styles/views/FriendListPage.scss";
-import { Input } from "components/ui/input";
 import Rating from "react-rating";
 import {
   Dialog as DialogSCN,
@@ -25,8 +23,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import { HashLoader, ScaleLoader } from "react-spinners";
-import ProgressHearts from "components/ui/ProgressHearts";
+import { ScaleLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark, faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
@@ -237,8 +234,8 @@ const FriendListPage = ({ alertUser }) => {
                 <Rating 
                   initialRating={friend.points}
                   fractions={10}
-                  emptySymbol={<FontAwesomeIcon icon={faRegularHeart} />}
-                  fullSymbol={<FontAwesomeIcon icon={faSolidHeart} />}
+                  emptySymbol={<FontAwesomeIcon icon={faRegularHeart} className="red-hearts"/>}
+                  fullSymbol={<FontAwesomeIcon icon={faSolidHeart} className="red-hearts"/>}
                   readonly={true}
                   
                   />                

@@ -59,7 +59,10 @@ function SignInForm({ alertUser }) {
           onChange={handleChange}
         />
         <a className="a_reg" href="#" onClick={() => alertUser("warning", "Passwort kann zum aktuellen Zeitpunkt nicht zurückgesetzt werden. Erstellen Sie einen neuen Account.")}>Passwort vergessen?</a>
-        <button className="buttonreg">Jetzt Anmelden</button>
+        <button 
+          className="buttonreg">
+            Jetzt Anmelden
+        </button>
       </form>
     </div>
   );
