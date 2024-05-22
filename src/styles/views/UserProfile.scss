@@ -9,8 +9,8 @@
   margin-right: auto;
   overflow: hidden;
   max-width: $DESKTOP_WIDTH;
-  opacity: 0; // Start with an opacity of 0
-  animation: fadeIn 2s forwards; // Increase opacity to 1
+  opacity: 0; 
+  animation: fadeIn 2s forwards; 
   
 
   @media (max-width: 768px) {
@@ -20,27 +20,25 @@
 
   .avatar-and-text {
     display: flex;
-    max-width: 800px; // limit the width of the container
+    max-width: 800px; 
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
     border-radius: 30px;
     width: 100%;
-    //animation: gradientAnimation 10s ease infinite;
     background-color: #ffffff;
-    // background: linear-gradient(-45deg, #e7e7e7, #c4c4c4, #3d3d3d, #929292);
     background-size: 400% 400%;
     color: black;
-    border-radius: 20px; /* Adjust as necessary */
+    border-radius: 20px; 
 
     @media (max-width: 768px) {
-      flex-direction: column; // stack elements vertically on smaller screens
-      align-items: center; // center items when stacked
+      flex-direction: column; 
+      align-items: center; 
       width: 100%;
     }
     .avatar-and-buttons {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px; // Space between avatar and buttons
+      gap: 5px; 
       padding: 30px 30px 30px 30px;
       @media (max-width: 768px) {
         width: 100%;
@@ -51,7 +49,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px; // Space between buttons
+      gap: 15px; 
 
       .file-upload-container {
         display: flex;
@@ -60,7 +58,7 @@
         margin: 10px;
 
         .choose-file {
-          display: none; // Verstecke das tatsächliche Input-Element
+          display: none; 
         }
 
         .file-upload-btn {
@@ -73,7 +71,7 @@
           border-radius: 4px;
           cursor: pointer;
           transition: all 0.4s ease;
-          margin-bottom: 10px; // Abstand zum "Keine ausgewählt"-Text
+          margin-bottom: 10px; 
 
           &:hover {
             background-color: darken(#007bff, 90%);
@@ -90,17 +88,18 @@
     .avatar {
       width: 200px;
       height: 200px;
-      margin: 30px; // shorthand for margin values
+      margin: 30px; 
       border-radius: 50%;
       object-fit: cover;
       animation: float 4s ease-in-out infinite;
       
       @media (max-width: 768px) {
-        width: 40vw; // make the avatar width responsive
-        height: 40vw; // maintain aspect ratio
-        margin: 20px 0; // adjust margins for smaller screens
+        width: 40vw; 
+        height: 40vw; 
+        margin: 20px 0; 
       }
     }
+
     .label {
       font-size: 1.2rem;
       margin-bottom: 0.2rem;
@@ -133,8 +132,8 @@
       margin-top: 20px;
 
       @media (max-width: 768px) {
-        flex-direction: column; // stack buttons vertically on smaller screens
-        align-items: center; // center buttons when stacked
+        flex-direction: column; 
+        align-items: center; 
       }
     }
   }

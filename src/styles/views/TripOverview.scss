@@ -110,9 +110,9 @@
           color: $textColor;
           font-size: 1rem;
           font-weight: 500;
-          overflow: hidden; /* Prevents text from flowing outside the box */
-          white-space: nowrap; /* Keeps the text on a single line */
-          text-overflow: ellipsis; /* Adds an ellipsis (...) at the end when text overflows */
+          overflow: hidden; 
+          white-space: nowrap; 
+          text-overflow: ellipsis; 
           border-right: $borderLine;
         }
 
@@ -306,8 +306,6 @@
       }
     }
   }
-
-
 }
 
 @keyframes blink {

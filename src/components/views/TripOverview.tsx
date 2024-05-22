@@ -54,14 +54,10 @@ const ConnectionItem = ({connection}) => {
     let departureDate = sessionStorage.getItem("departureDate");
     const date = new Date(departureDate.split("T"));
     date.setHours(hours, minutes, 0); // Set the time to the parsed hours and minutes, seconds to 0
-    console.log(date);
 
     // get present date and time
     const now = new Date();
-    console.log(now);
-
     const timeDiffInSeconds = Math.floor((date - now) / 1000);
-    console.log(timeDiffInSeconds);
     return timeDiffInSeconds;
   }
 
@@ -72,8 +68,6 @@ const ConnectionItem = ({connection}) => {
     const intervalId = setInterval(() => {
       setTimer((currentTimer) => {
         if (currentTimer <= 0 || currentTimer > 1000000) {
-          console.log(currentTimer);
-          console.log("haaaaaaaaaa");
           setShowTimer(false);
           clearInterval(intervalId);
           return 0;
@@ -162,13 +156,11 @@ const TripLog = ({setIsLoading, alertUser}) => {
           (a, b) =>
             new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
         );
-        console.log("NOTIFICATIONS:", sortedNotifications);
         setNotifications(sortedNotifications);
       } catch (error) {
         alertUser("error", "", error);
       } finally {
         if (isComponentMounted) {
-          console.log("---- NOTIFICATIONS LOADED ----");
           setIsLoading(false);
         }
       }
@@ -263,7 +255,6 @@ const TripOverview = ({alertUser}) => {
         headers: {Authorization: token},
       });
       const currentUserData = userResponse.data;
-      console.log("CURRENT USER:", currentUserData);
       sessionStorage.setItem("username", currentUserData.username);
 
       // Fetch trip information
@@ -273,7 +264,6 @@ const TripOverview = ({alertUser}) => {
           headers: {Authorization: token},
         });
         tripData = tripResponse.data;
-        console.log("CURRENT TRIP INFORMATION:", tripData);
         sessionStorage.setItem("departureDate", tripData.meetUpTime);
       } catch (error) {
         alertUser("error", "", error);
@@ -285,15 +275,12 @@ const TripOverview = ({alertUser}) => {
         headers: {Authorization: token},
       });
       const isAdmin = adminStatusResponse.data;
-      console.log("ADMIN?:", isAdmin);
 
       // Fetch connections
       const connectionsResponse = await api.get(
         `/trips/${tripId}/connections`,
         {headers: {Authorization: token}}
       );
-      console.log("******************")
-      console.log(connectionsResponse);
       const connectionsData = connectionsResponse.data.map((participant) => {
         const {connectionDTO} = participant;
         const firstConnection = connectionDTO[0];
@@ -325,8 +312,6 @@ const TripOverview = ({alertUser}) => {
 
         };
       });
-      console.log("CONNECTIONS:", connectionsData);
-
       // Perform the connection check with the most up-to-date data
       checkIfUserHasConnection(connectionsData, currentUserData);
 
@@ -347,7 +332,6 @@ const TripOverview = ({alertUser}) => {
         headers: {Authorization: token},
       });
       setTripMembers(response.data);
-      console.log("TRIP MEMBERS:", response.data);
     } catch (error) {
       alertUser("error", "", error);
     }
@@ -415,7 +399,6 @@ const TripOverview = ({alertUser}) => {
       });
       alertUser("success", "You left the trip.");
       setTimeout(() => navigate("/dashboard"), 1000);
-      console.log("TRIP LEFT!!!");
     } catch (error) {
       alertUser("error", "Failed to leave the trip.", error);
     }
@@ -429,8 +412,6 @@ const TripOverview = ({alertUser}) => {
       });
       alertUser("success", "Trip deleted.");
       setTimeout(() => navigate("/dashboard"), 3000); // 3 seconds too long? Or couple with await? Because when fetching the Trip not found error could come.
-
-      console.log("TRIP DELETED!!!");
     } catch (error) {
       alertUser("error", "Trip deletion failed.", error);
     }
@@ -467,15 +448,11 @@ const TripOverview = ({alertUser}) => {
   };
 
   const checkIfUserHasConnection = (connections, currentUser) => {
-    console.log("Checking connections for:", currentUser.username);
-
     const hasConnection = connections.some(
       (connection) =>
         connection.username === currentUser.username &&
         connection.startTime !== "N/A"
     );
-    console.log("Has connection:", hasConnection);
-
     setCurrentUserHasConnection(hasConnection);
   };
 
@@ -485,7 +462,6 @@ const TripOverview = ({alertUser}) => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000); // Show loader for x seconds
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -500,7 +476,6 @@ const TripOverview = ({alertUser}) => {
 
     // Fetch immediately when the component mounts
     fetchPeriodically();
-    console.log(currentUser);
     // Set up the interval for fetching data every 10 seconds
     const intervalId = setInterval(fetchPeriodically, 10000);
 
@@ -657,7 +632,6 @@ const TripOverview = ({alertUser}) => {
             backgroundColor: "rgba(0, 0, 0, 0.8)",
           },
           "& .MuiPaper-root": {
-            // Targeting the Paper component inside the Dialog
             boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
             borderRadius: "10px",
           },
@@ -697,7 +671,6 @@ const TripOverview = ({alertUser}) => {
             backgroundColor: "rgba(0, 0, 0, 0.8)",
           },
           "& .MuiPaper-root": {
-            // Targeting the Paper component inside the Dialog
             boxShadow: "5px 15px 20px rgba(0, 0, 0, 1)",
             borderRadius: "10px",
           },

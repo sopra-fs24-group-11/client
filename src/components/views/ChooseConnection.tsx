@@ -92,7 +92,6 @@ const ChooseConnection = ({ alertUser }) => {
       );
       setConnections(filteredList);
       setShowConnections(true);
-      console.log(possibleConnections);
     } catch (error) {
       alertUser("error", "Couldn't render the connection.", error);
     }
@@ -140,9 +139,6 @@ const ChooseConnection = ({ alertUser }) => {
           headers: { Authorization: token },
         });
       }
-
-      console.log(connectionAlreadyExists);
-
       await api.post(`/trips/${tripId}/connection`, requestBody, {
         headers: { Authorization: token },
       });
@@ -232,11 +228,7 @@ const ChooseConnection = ({ alertUser }) => {
         const response = await api.get(`/trips/${tripId}`, {
           headers: { Authorization: token },
         });
-
-        console.log(response.data.meetUpPlace);
-
         await checkConnectionAlreadyExisting();
-
         setDestination(response.data.meetUpPlace.stationName);
       } catch (error) {
         alertUser("error", "Couldn't fetch the trip's destination.", error);

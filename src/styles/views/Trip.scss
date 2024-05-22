@@ -3,7 +3,7 @@
 .trip {
   &.container {
     display: flex;
-    margin-top: 2em; // Abstand oben
+    margin-top: 2em; 
     margin-bottom: 2em;
     min-height: 300px;
     @include center;
@@ -39,13 +39,13 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    flex-wrap: wrap; // boxen rücken nach unten, wenn kein platz mehr
+    flex-wrap: wrap; 
     width: 100%;
   }
 
   .row-form-center {
-    @extend .row-form; /* Erbe alle Eigenschaften von .row-form */
-    justify-content: center; /* Überschreibe justify-content mit center */
+    @extend .row-form; 
+    justify-content: center; 
     align-items: center;
   }
 
@@ -128,8 +128,8 @@
   }
 
   .input-large {
-    @extend .input; /* Erbe alle Eigenschaften von .row-form */
-    height: 100%; /* Überschreibe justify-content mit center */
+    @extend .input; 
+    height: 100%; 
     resize: none;
   }
 
@@ -188,10 +188,9 @@
   }
 
   .button {
-    cursor: pointer; // change to finger pointer
+    cursor: pointer; 
 
     &:hover {
-      //color: red;
       text-shadow: 0 0 10px black;
     }
   }

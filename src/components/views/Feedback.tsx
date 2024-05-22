@@ -26,7 +26,6 @@ const Feedback = ({alertUser}) => {
       const response = await api.post("/users/feedback", requestBody, {
         headers: {Authorization: token},
       });
-      console.log(response);
       setHasSubmitted(true);
       //starts and stops fireworks after submitting
       fireworks.current.start();
@@ -34,7 +33,6 @@ const Feedback = ({alertUser}) => {
     } catch (error) {
       alertUser("error", "Das Feedback konnte nicht versendet werden.", error);
     }
-    
   }
 
   useEffect(() => {

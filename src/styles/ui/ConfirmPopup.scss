@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Darkens the background */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,7 +12,7 @@
 
 @media (max-width: 800px) {
     .popup-overlay {
-        align-items: start; // for list on smartphone
+        align-items: start; 
     }
 }
 
@@ -45,6 +45,6 @@
     background-color: grey;
     border-radius: 5px;
     font-size: large;
-    margin: 0 100px; /* Adds 10px margin to left and right of each button */
+    margin: 0 100px; 
     padding: 10px 20px;
 }

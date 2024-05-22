@@ -3,7 +3,7 @@
 .connection {
   &.container {
     display: flex;
-    margin-top: 2em; // Abstand oben
+    margin-top: 2em; 
     margin-bottom: 2em;
     min-height: 300px;
     @include center;

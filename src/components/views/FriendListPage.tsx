@@ -49,9 +49,7 @@ const FriendListPage = ({ alertUser }) => {
       let x = response.data.sort((a, b) =>
         a.username.localeCompare(b.username)
       );
-
       setFriendList(x);
-      console.log("Friend list: ", x);
     } catch (error) {
       alertUser("error", "Couldn't fetch the friend list.", error);
     }
@@ -163,7 +161,6 @@ const FriendListPage = ({ alertUser }) => {
   const handleAddFriendSubmit = async () => {
     if (selectedFriend) {
       try {
-        console.log("SELECTED FRIEND", selectedFriend);
         await api.post(
           `/users/friends/${selectedFriend.id}`,
           {},
@@ -200,7 +197,6 @@ const FriendListPage = ({ alertUser }) => {
     const fetchAllData = async () => {
       await fetchFriends();
       await fetchFriendRequests();
-      console.log("------ FETCHED FRIENDS AND REQUESTS ------");
     };
     fetchAllData();
     const intervalId = setInterval(fetchAllData, 5000);

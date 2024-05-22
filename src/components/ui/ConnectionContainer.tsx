@@ -85,8 +85,6 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
 
       setConnectionName(name);
 
-
-      console.log(wholeTrip)
       let x = [];
       for (const el of wholeTrip) {
 
@@ -142,8 +140,6 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
         }
 
         setChangePoints(pointList);
-        console.log("*********************");
-        console.log(getInfoOfTrip());
         setTripInformation(getInfoOfTrip());
       };
       placeChangePoints();

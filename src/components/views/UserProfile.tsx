@@ -54,8 +54,6 @@ const ProfilePage: React.FC = ({ alertUser }) => {
           email: user.email,
           birthday: user.birthday || "",
         });
-        console.log("USER FROM BACKEND:", user);
-
         getAvatar();
       } catch (error) {
         alertUser("error", "Etwas ging schief.", error);
@@ -108,7 +106,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
     }
 
     const formData = new FormData();
-    formData.append("image", avatar); // Match the server's expected parameter name
+    formData.append("image", avatar); 
 
     try {
       const token = localStorage.getItem("token");

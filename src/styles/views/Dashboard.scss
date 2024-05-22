@@ -9,9 +9,9 @@
   padding-right: 50px;
   padding-left: 50px;
   position: relative;
-  overflow: hidden; // Contain the pseudo-element for the overlay
-  opacity: 0; // Start with an opacity of 0
-  animation: fadeIn 2s forwards; // Increase opacity to 1
+  overflow: hidden; 
+  opacity: 0; 
+  animation: fadeIn 2s forwards; 
 }
 
 .leaderboard-item {
@@ -23,7 +23,7 @@
 .column {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Spacing between items in the column */
+  gap: 20px; 
 }
 
 .component {
@@ -42,7 +42,6 @@
   margin-bottom: 20px;
 }
 
-/* Styling for the welcome message */
 .welcome {
   background: linear-gradient(to top, #001d3d, #003566);
   .welcome-title {
@@ -56,7 +55,7 @@
   }
 
   p {
-    margin-bottom: 10px; /* Adjust as needed */
+    margin-bottom: 10px; 
     color: rgb(255, 255, 255);
   }
   .create-button-container {
@@ -74,7 +73,7 @@
       text-align: center;
       margin-top: 20px;
       font-size: 1.1rem;
-      color: #000000; // choose a color that fits your design
+      color: #000000; 
       font-style: italic;
     }
   }
@@ -99,10 +98,7 @@
   }
 }
 
-// Friend list component styles
 .friends{
-  //min-height: 400px;
-
   .friend-list {
     overflow-y: auto;
     max-height: 200px;
@@ -227,12 +223,12 @@
 /* Styling for the current trips component */
 .current-trips {
   background: $containerFront;
-  padding: 10px; /* Smaller padding to make the component a bit smaller */
+  padding: 10px; 
   max-height: 300px;
   margin-bottom: 25px;
 
   h2 {
-    color: rgb(0, 0, 0); /* Color of the title text */
+    color: rgb(0, 0, 0); 
     margin-bottom: 10px;
   }
 }
@@ -249,28 +245,24 @@
       border-bottom: 1px solid #a5a5a5;
       padding: 5px 15px 5px 15px;
       gap: 10px;
-
       .invitation-text {
-        // Style for the invitation text
-        flex-grow: 1; // This allows the text to take up the available space, pushing the button to the right
-        margin-right: 20px; // Optional: Adds some space between the text and the button
-        margin-bottom: 10px; // Optional: Adds some space between the invitation items
-        margin-top: 10px; // Optional: Adds some space between the invitation items
+        flex-grow: 1; 
+        margin-right: 20px; 
+        margin-bottom: 10px; 
+        margin-top: 10px; 
       }
       Button {
         margin-top: 10px;
         margin-bottom: 10px;
       }
-
     }
     .no-current-trip-invitations{
       text-align: center;
       margin-top: 20px;
       margin-bottom: 20px;
       font-size: 1.1rem;
-      color: rgb(0, 0, 0); // choose a color that fits your design
+      color: rgb(0, 0, 0); 
       font-style: italic;
-    
     }
   }
 }
@@ -282,10 +274,9 @@
   }
 }
 
-/* Add media queries below for responsiveness */
 @media (max-width: 768px) {
   .dashboard {
-    grid-template-columns: 1fr; /* Stack columns on small screens */
+    grid-template-columns: 1fr; 
     padding: 30px 20px;
     .middle {
       grid-row: 1/2;
@@ -298,7 +289,6 @@
     }
   }
   .column {
-    width: 100%; /* Full width on small screens */
+    width: 100%; 
   }
-  
 }

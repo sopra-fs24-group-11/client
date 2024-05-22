@@ -1,10 +1,10 @@
 @import "../theme";
 
 .friend-list-page {
-  max-width: 600px; // or the max width you prefer
+  max-width: 600px; 
   margin: 50px auto;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.9); // semi-transparent white
+  background: rgba(255, 255, 255, 0.9); 
   border-radius: $borderRadius;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 
@@ -78,7 +78,6 @@
       background: #cecece;
       border-radius: 10px;
       min-height: 60px;
-
       overflow-y: auto;
 
       .name {
