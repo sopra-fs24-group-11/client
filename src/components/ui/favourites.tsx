@@ -50,26 +50,31 @@ const Favourites = ({ alertUser, setLoading }) => {
     setLoading(false);
   }
 
-  const TripContainer = ({ name, id }) => {
+  const TripContainer = ({ trip }) => {
     return (
       <div className="favourites-container">
-        <label className="trip-label">{name}</label>
-        <Button backgroundColor="#FFB703" className="reise-info-button" onClick={() => navigate(`/tripOverview/${id}`)}>Info</Button>
+        <span className="favourite-date">
+          {new Date(trip.meetUpTime).toLocaleDateString("de-DE", {
+            day: "2-digit",
+            month: "2-digit",
+          })}
+        </span>
+        <span className="favourite-name">{trip.tripName}</span>
+        <Button backgroundColor="#FFB703" className="reise-info-button" onClick={() => navigate(`/tripOverview/${trip.id}`)}>Info</Button>
         <StyledRating
           defaultValue={1} 
           max={1}
           precision={1}
           icon={<FavoriteIcon fontSize="inherit" />}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
-          onMouseDown={() => handleClick(id)}
+          onMouseDown={() => handleClick(trip.id)}
         />
       </div>
     );
   };
 
   TripContainer.propTypes = {
-    name: PropTypes.string,
-    id: PropTypes.number
+    trip: PropTypes.object,
   };
 
   useEffect(() => {
@@ -84,7 +89,7 @@ const Favourites = ({ alertUser, setLoading }) => {
           <ol>
             {favTrips.map((fav) => (
               <li key={fav.id}>
-                <TripContainer name={fav.tripName} id={fav.id}></TripContainer>
+                <TripContainer trip={fav}></TripContainer>
               </li>
             ))}
           </ol>

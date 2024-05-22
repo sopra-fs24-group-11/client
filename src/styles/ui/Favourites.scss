@@ -10,10 +10,14 @@
   padding: 5px 0px;
   border-radius: 10px;
 
-  .name {
-    font-weight: bold;
-    min-width: 90px;
-    max-width: 90px;
+  .favourite-date {
+    min-width: 60px;
+    max-width: 60px;
+  }
+  .favourite-name {
+    min-width: 100px;
+    max-width: 100px;        
+    word-wrap: break-word;
   }
 
   .reise-info-button {
