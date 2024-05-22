@@ -33,8 +33,7 @@ function SignInForm({ alertUser }) {
       localStorage.setItem("token", response.data);
       navigate("/dashboard");
     } catch (error) {
-      //alert("ERROR: "+ error);
-      alertUser("error", "username or password are wrong.", error);
+      alertUser("error", "Benutzername oder Passwort ist falsch.", error);
     }
   };
 

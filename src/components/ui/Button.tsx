@@ -6,7 +6,7 @@ export const Button = ({
   width,
   height,
   backgroundColor,
-  color, // Add this line to include text color
+  color, 
   style,
   className,
   children,
@@ -14,7 +14,7 @@ export const Button = ({
 }) => (
   <button
     {...rest}
-    style={{ width, height, backgroundColor, color, ...style }} // Apply the color here
+    style={{ width, height, backgroundColor, color, ...style }} 
     className={`primary-button ${className}`}
   >
     {children}

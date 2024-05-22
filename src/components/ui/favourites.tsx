@@ -29,7 +29,7 @@ const Favourites = ({ alertUser, setLoading }) => {
       await api.put(`/trips/${tripId}/favorites `, {}, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Removed from favourites.");
+      alertUser("success", "Aus den Favoriten entfernt.");
     } catch (error) {
       alertUser("error", "", error);
     } finally {

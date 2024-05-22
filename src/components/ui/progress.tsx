@@ -14,13 +14,12 @@ const Progress = React.forwardRef<
   const [loadedValue, setLoadedValue] = React.useState(0);
 
   React.useEffect(() => {
-    // Set a timeout to update the loaded value after 10 seconds
     const timeoutId = setTimeout(() => {
       setLoadedValue(value);
-    }, 500); // This timeout can be adjusted as needed
+    }, 500); 
     
     return () => clearTimeout(timeoutId);
-  }, [value]); // Only re-run if the value changes
+  }, [value]); 
 
   return (
     <ProgressPrimitive.Root

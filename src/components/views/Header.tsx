@@ -38,7 +38,7 @@ const Header = ({ alertUser }) => {
             headers: { Authorization: token },
           }
         );
-        alertUser("success", "Logout successful.");
+        alertUser("success", "Abmeldung erfolgreich.");
       } catch (error) {
         alertUser("error", "Etwas ging schief.", error);
       }

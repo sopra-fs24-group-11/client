@@ -20,7 +20,7 @@ const ListTemplate = ({alertUser}) => {
       });
       setList(response.data.sort((a, b) => a.id - b.id))
     } catch (error) {
-      alertUser("error", "Couldn't fetch the list.", error);
+      alertUser("error", "Liste konnte nicht geladen werden.", error);
     }
   };
 

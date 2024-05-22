@@ -65,7 +65,7 @@ const CreateTrip = ({ alertUser }) => {
       setSuggestions(response.data);
       setOriginalFriends(response.data);
     } catch (error) {
-      alertUser("error", "Couldn't fetch the friends.", error);
+      alertUser("error", "Freunde konnten nicht geladen werden.", error);
     }
   };
 
@@ -109,10 +109,10 @@ const CreateTrip = ({ alertUser }) => {
       const response = await api.post("/trips/new", requestBody, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Trip created!");
+      alertUser("success", "Reise erstellt!");
       navigate("/tripOverview/" + response.data);
     } catch (error) {
-      alertUser("error", "Trip creation failed.", error);
+      alertUser("error", "Erstellen der Reise fehlgeschalgen.", error);
     }
   };
 
@@ -133,7 +133,7 @@ const CreateTrip = ({ alertUser }) => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        alertUser("error", "Query Error. Try again.", error);
+        alertUser("error", "Abfragefehler. Versuchen Sie es erneut.", error);
       }
     }
   };

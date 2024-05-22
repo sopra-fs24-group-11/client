@@ -72,7 +72,7 @@ const CustomizeTrip = ({ alertUser }) => {
       setSuggestions(updatedFriends);
       setOriginalFriends(response.data);
     } catch (error) {
-      alertUser("error", "Failed to fetch the friends.", error);
+      alertUser("error", "Freunde konnten nicht geladen werden.", error);
     }
   };
 
@@ -92,7 +92,7 @@ const CustomizeTrip = ({ alertUser }) => {
       }));
       setValue(response.data.rating);
     } catch (error) {
-      alertUser("error", "Failed to fetch the trip.", error);
+      alertUser("error", "Die Reise konnte nicht geladen werden.", error);
     }
   };
 
@@ -108,7 +108,7 @@ const CustomizeTrip = ({ alertUser }) => {
       });
       setFriends(tempObject);
     } catch (error) {
-      alertUser("error", "Failed to fetch the participants.", error);
+      alertUser("error", "Die Teilnehmer konnten nicht geladen werden.", error);
     }
   };
 
@@ -177,7 +177,7 @@ const CustomizeTrip = ({ alertUser }) => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        alertUser("error", "Query Error. Try again.", error);
+        alertUser("error", "Abfragefehler. Versuchen Sie es erneut.", error);
       }
     }
   };

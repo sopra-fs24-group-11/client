@@ -397,10 +397,10 @@ const TripOverview = ({alertUser}) => {
       await api.delete(`/trips/${tripId}/exit`, {
         headers: {Authorization: token},
       });
-      alertUser("success", "You left the trip.");
+      alertUser("success", "Reise verlassen.");
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
-      alertUser("error", "Failed to leave the trip.", error);
+      alertUser("error", "Reise konnte nicht verlassen werden.", error);
     }
   };
 
@@ -410,10 +410,10 @@ const TripOverview = ({alertUser}) => {
       await api.delete(`/trips/${tripId}`, {
         headers: {Authorization: token},
       });
-      alertUser("success", "Trip deleted.");
+      alertUser("success", "Reise gelöscht.");
       setTimeout(() => navigate("/dashboard"), 3000); // 3 seconds too long? Or couple with await? Because when fetching the Trip not found error could come.
     } catch (error) {
-      alertUser("error", "Trip deletion failed.", error);
+      alertUser("error", "Löschen der Reise fehlgeschlagen.", error);
     }
   };
 
@@ -438,8 +438,8 @@ const TripOverview = ({alertUser}) => {
       alertUser(
         "success",
         currentTrip.favourite
-          ? "Von Favouriten gelöscht."
-          : "Zu Favouriten hinzugefügt."
+          ? "Von Favoriten gelöscht."
+          : "Zu Favoriten hinzugefügt."
       );
       setCurrentTrip((old) => ({...old, favourite: !old.favourite}));
     } catch (error) {

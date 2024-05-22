@@ -51,7 +51,7 @@ const FriendListPage = ({ alertUser }) => {
       );
       setFriendList(x);
     } catch (error) {
-      alertUser("error", "Couldn't fetch the friend list.", error);
+      alertUser("error", "Freundesliste konnte nicht geladen werden.", error);
     }
   };
 
@@ -62,7 +62,7 @@ const FriendListPage = ({ alertUser }) => {
       });
       setFriendRequests(response.data); // Assuming this is an array of friend requests
     } catch (error) {
-      alertUser("error", "Couldn't fetch the friend requests.", error);
+      alertUser("error", "Freundschaftsanfrage konnte nicht abgerufen werden.", error);
     }
   };
 
@@ -75,14 +75,14 @@ const FriendListPage = ({ alertUser }) => {
           headers: { Authorization: token },
         }
       );
-      alertUser("success", "Friend request accepted.");
+      alertUser("success", "Freundschaftsanfrage angenommen.");
       await fetchFriends();
       await fetchFriendRequests();
       if (closeDialogRef.current) {
         closeDialogRef.current.click();
       }
     } catch (error) {
-      alertUser("error", "Couldn't accept the friend request.", error);
+      alertUser("error", "Freundschaftsanfrage konnte nicht angenommen werden.", error);
     }
   };
 
@@ -91,14 +91,14 @@ const FriendListPage = ({ alertUser }) => {
       await api.delete(`/users/friends/${friendRequestId}`, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Friend request denied.");
+      alertUser("success", "Freundschaftsanfrage abgelehnt.");
       await fetchFriends();
       await fetchFriendRequests();
       if (closeDialogRef.current) {
         closeDialogRef.current.click();
       }
     } catch (error) {
-      alertUser("error", "Couldn't deny the friend request.", error);
+      alertUser("error", "Freundschaftsanfrage konnte nicht abgelehnt werden.", error);
     }
   };
 
@@ -116,7 +116,7 @@ const FriendListPage = ({ alertUser }) => {
         );
         setSuggestions(response.data); // Assuming this is an array of user objects
       } catch (error) {
-        alertUser("error", "Query error. Try again.", error);
+        alertUser("error", "Abfragefehler. Versuchen Sie es erneut.", error);
       }
     }
   };
@@ -144,7 +144,7 @@ const FriendListPage = ({ alertUser }) => {
         await api.delete(`/users/friends/${friendToDelete}`, {
           headers: { Authorization: token },
         });
-        alertUser("success", "Friend removed.");
+        alertUser("success", "Freund entfernt.");
         // Remove the friend from the friendList in the UI after successful deletion
         setFriendList(
           friendList.filter((friend) => friend.friendId !== friendToDelete)
@@ -153,7 +153,7 @@ const FriendListPage = ({ alertUser }) => {
         setFriendToDelete(null);
         setOpenDeleteDialog(false);
       } catch (error) {
-        alertUser("error", "Couldn't remove the friend.", error);
+        alertUser("error", "Freund konnte nicht entfernt werden.", error);
       }
     }
   };
@@ -168,7 +168,7 @@ const FriendListPage = ({ alertUser }) => {
             headers: { Authorization: token },
           }
         );
-        alertUser("success", "Friend request sent.");
+        alertUser("success", "Freundschaftsanfrage gesendet.");
         // Refresh the friend list to show the newly added friend
         fetchFriends();
         setSearchTerm(""); // Clear the search term
@@ -180,7 +180,7 @@ const FriendListPage = ({ alertUser }) => {
         if (closeDialogRef.current) {
           closeDialogRef.current.click();
         }
-        alertUser("error", "Couldn't send the friend request.", error);
+        alertUser("error", "Freundschaftsanfrage konnte nicht gesendet werden.", error);
       }
     }
   };

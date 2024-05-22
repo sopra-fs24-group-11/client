@@ -62,7 +62,7 @@ const ChooseConnection = ({ alertUser }) => {
         );
         setLocationSuggestions(response.data);
       } catch (error) {
-        alertUser("error", "Query Error. Try again.", error);
+        alertUser("error", "Abfragefehler. Erneut versuchen.", error);
       }
     }
   };
@@ -93,7 +93,7 @@ const ChooseConnection = ({ alertUser }) => {
       setConnections(filteredList);
       setShowConnections(true);
     } catch (error) {
-      alertUser("error", "Couldn't render the connection.", error);
+      alertUser("error", "Die Verbindung konnte nicht gerendert werden.", error);
     }
   };
 
@@ -107,11 +107,11 @@ const ChooseConnection = ({ alertUser }) => {
             arrivalTime={connection[connection.length - 1].arrivalTime}
             key={index}
             wholeTrip={connection}
-            isClicked={activeConnection === index} // Pass down whether this connection is active
+            isClicked={activeConnection === index} 
             onClick={() => {
               setActiveConnection(index);
               setChosenConnection(connection);
-            }} // Pass down function to set active connection
+            }} 
           />
         ))}
       </div>
@@ -144,7 +144,7 @@ const ChooseConnection = ({ alertUser }) => {
       });
       navigate(`/tripOverview/${tripId}`);
     } catch (error) {
-      alertUser("error", "Choosing the connection failed.", error);
+      alertUser("error", "Auswahl der Verbindung fehlgeschlagen.", error);
     }
   };
 
@@ -178,7 +178,7 @@ const ChooseConnection = ({ alertUser }) => {
 
             await renderConnectionContainers(departurePoint.stationCode);
           } catch (error) {
-            alertUser("error", "Geolocation failed.", error);
+            alertUser("error", "Geolokalisierung fehlgeschlagen.", error);
           }
         },
         function (error) {
@@ -193,7 +193,7 @@ const ChooseConnection = ({ alertUser }) => {
       );
     } else {
       resetLocationLoadingView();
-      alertUser("error", "Geolocation is currently not available.");
+      alertUser("error", "Geolokalisierung ist derzeit nicht verfügbar.");
     }
   }
 
@@ -231,7 +231,7 @@ const ChooseConnection = ({ alertUser }) => {
         await checkConnectionAlreadyExisting();
         setDestination(response.data.meetUpPlace.stationName);
       } catch (error) {
-        alertUser("error", "Couldn't fetch the trip's destination.", error);
+        alertUser("error", "Das Ziel der Reise konnte nicht ermittelt werden.", error);
       }
     };
     fetchData();

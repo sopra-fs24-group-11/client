@@ -24,7 +24,7 @@ const Heart = ({tripId, isFavourite, alertUser}) => {
       await api.put(`/trips/${tripId}/favorites `, {}, {
         headers: { Authorization: token },
       });
-      alertUser("success", favourite ? "Removed from favourites." : "Added to favourites.");
+      alertUser("success", favourite ? "Aus den Favoriten entfernt." : "Zu den Favoriten hinzugefügt.");
       setFavourite(!favourite);
     } catch (error) {
       alertUser("error", "", error);
