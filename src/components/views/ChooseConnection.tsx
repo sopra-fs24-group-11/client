@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import BaseContainer from "components/ui/BaseContainer";
-import DateTimePicker from "react-datetime-picker";
 import "styles/views/Connections.scss";
 import ConnectionContainer from "../ui/ConnectionContainer";
 import {
@@ -25,10 +24,6 @@ const ChooseConnection = ({ alertUser }) => {
   const token = localStorage.getItem("token");
   const { tripId } = useParams();
   const [showSpinner, setShowSpinner] = useState<boolean>(false);
-
-  const [departureTime, setDepartureTime] = useState<string>("");
-  const [arrivalTime, setArrivalTime] = useState<string>("");
-  const [travelTime, setTravelTime] = useState<string>("");
   const [connections, setConnections] = useState([]);
   const [chosenConnection, setChosenConnection] = useState([]);
   const [showConnections, setShowConnections] = useState<boolean>(false);

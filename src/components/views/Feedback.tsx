@@ -3,20 +3,14 @@ import React, {useState, useEffect, useRef} from "react";
 import {api} from "helpers/api";
 import {useNavigate} from "react-router-dom";
 import {Button} from "components/ui/Button";
-import {Progress} from "../ui/progress";
-import LinearIndeterminate from "components/ui/loader";
-import {Input} from "components/ui/input";
 import "../../styles/views/History.scss";
-import Heart from "components/ui/Heart"
 import PropTypes from "prop-types";
-import {HashLoader} from "react-spinners";
 import "styles/views/Trip.scss";
 import {Fireworks, FireworksHandlers} from "@fireworks-js/react";
 
 const Feedback = ({alertUser}) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [feedbackText, setFeedbackText] = useState<string>("");
   const fireworks = useRef<FireworksHandlers>(null);
@@ -28,41 +22,24 @@ const Feedback = ({alertUser}) => {
 
   const submitFeedback = async () => {
     const requestBody = {message: feedbackText};
-
-    const response = await api.post("/users/feedback", requestBody, {
-      headers: {Authorization: token},
-    });
-    console.log(response);
-
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    setHasSubmitted(true);
-
-    //starts and stops fireworks after submitting
-    fireworks.current.start();
-    setTimeout(() => fireworks.current.waitStop(), 5000);
-
-    return () => clearTimeout(timer);
+    try {
+      const response = await api.post("/users/feedback", requestBody, {
+        headers: {Authorization: token},
+      });
+      console.log(response);
+      setHasSubmitted(true);
+      //starts and stops fireworks after submitting
+      fireworks.current.start();
+      setTimeout(() => fireworks.current.waitStop(), 5000);
+    } catch (error) {
+      alertUser("error", "Das Feedback konnte nicht versendet werden.", error);
+    }
+    
   }
-
-  const showTripOverview = (id) => {
-    navigate(`/tripOverview/${id}`);
-  };
 
   useEffect(() => {
     fireworks.current.stop();
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <HashLoader color="#001f33" size={250}/>
-      </div>
-    );
-  }
 
   return (
     <div className="history-list-page">
@@ -110,7 +87,7 @@ const Feedback = ({alertUser}) => {
           color="black"
           onClick={handleBackClick}
         >
-          Back to Dashboard
+          Zurück zum Dashboard
         </Button>
       </div>
       <Fireworks

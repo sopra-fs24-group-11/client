@@ -8,8 +8,6 @@ import { Button } from "components/ui/Button";
 import "styles/views/Trip.scss";
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import DateTimePicker from "react-datetime-picker";
-import LinearIndeterminate from "components/ui/loader";
 import {
   Dialog,
   DialogContent,

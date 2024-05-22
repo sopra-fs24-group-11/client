@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import ScareCrow from "../../graphics/Scarecrow.png"
 import "styles/ui/NotFound.scss"
 import { useNavigate } from "react-router-dom";
@@ -12,12 +11,11 @@ const NotFound = () => {
             <img src={ScareCrow} alt="404-Scarecrow" />
           </div>
           <div className="not-found-display__content">
-            <h2 className="not-found-display__content--info">I have bad news for you</h2>
+            <h2 className="not-found-display__content--info">Wir haben schlechte Neuigkeiten</h2>
             <p className="not-found-display__content--text">
-              The page you are looking for might be removed or is temporarily
-              unavailable
+              Die Seite die Du suchst ist vermutlich entfernt worden oder zurzeit unerreichbar.
             </p>
-            <button className="not-found-btn" onClick={() => navigate("/")}>Back to homepage</button>
+            <button className="not-found-btn" onClick={() => navigate("/")}>Zurück zum Dashboard</button>
           </div>
         </div>
       );

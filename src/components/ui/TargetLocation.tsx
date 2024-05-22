@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import PropTypes from "prop-types";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@radix-ui/react-dialog";
 
 // dieses File ist zurzeit in Bearbeitung und kann nicht als vollständig angesehen werden.

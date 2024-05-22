@@ -8,7 +8,6 @@ import UserProfile from "../../views/UserProfile";
 import CreateTrip from "../../views/CreateTrip";
 import FriendListPage from "../../views/FriendListPage";
 import ChooseConnection from "../../views/ChooseConnection";
-import TestPage from "../../views/TestPage";
 import TripOverview from "../../views/TripOverview";
 import CustomizeTrip from "../../views/CustomizeTrip";
 import ListTemplate from "../../views/ListTemplate";
@@ -23,14 +22,9 @@ const AppRouter = ({ alertUser }) => {
     <BrowserRouter>
       <Header alertUser={alertUser} />
       <Routes>
-        {/*------------------ TESTPAGES ------------------*/}
-
-        <Route path="/testpage" element={<TestPage />} />
-
-        {/*---------------------------------------------- */}
-        
-        <Route path="/auth" element={<RegisterExampleNew alertUser={alertUser} />} />
-
+        <Route path="/auth" element={<LoginGuard />}>
+          <Route path="" element={<RegisterExampleNew alertUser={alertUser} />} />
+        </Route>
         <Route path="/dashboard" element={<GameGuard />}>
           <Route path="" element={<Dashboard alertUser={alertUser} />} />
         </Route>
@@ -74,7 +68,7 @@ const AppRouter = ({ alertUser }) => {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
         <Route path="*" element={<GameGuard />}>
-          <Route path="" element={<NotFound />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
         
       </Routes>

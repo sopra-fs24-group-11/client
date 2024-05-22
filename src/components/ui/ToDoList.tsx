@@ -47,9 +47,9 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       });
       setNewItemName("");
       setList((oldList) => ([...oldList, response.data]));
-      alertUser("success", "Item added.");
+      alertUser("success", "Item hinzugefügt.");
     } catch (error) {
-      alertUser("error", "Item couldn't be added.", error);
+      alertUser("error", "Das Item konnte nicht hinzugefügt werden.", error);
     }
   };
 
@@ -58,10 +58,10 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       await api.delete(`/trips/${tripId}/todos/${item.id}`, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Item deleted.");
+      alertUser("success", "Item gelöscht.");
       fetchList();
     } catch (error) {
-      alertUser("error", "Item couldn't be deleted.", error);
+      alertUser("error", "Das Item konnte nicht gelöscht werden.", error);
     }
   };
 
@@ -73,7 +73,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
       });
       fetchList();
     } catch (error) {
-      alertUser("error", "Item couldn't be completed.", error);
+      alertUser("error", "Das Item konnte nicht abgeschlossen werden.", error);
     }
   };
 
@@ -85,7 +85,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
         });
         fetchList();
       } catch (error) {
-        alertUser("error", "Item couldn't be selected.", error);
+        alertUser("error", "Das Item konnte nicht ausgewählt werden.", error);
       }
     } else {
       try{
@@ -94,7 +94,7 @@ const ToDoList = ({avatars, userId, alertUser}) => {
         });
         fetchList();
       } catch (error) {
-        alertUser("error", "Item couldn't be deselected.", error);
+        alertUser("error", "Das Item konnte nicht entwählt werden.", error);
       }
     }
   };
@@ -106,9 +106,9 @@ const ToDoList = ({avatars, userId, alertUser}) => {
         headers: { Authorization: token },
       });
       fetchList();
-      alertUser("success", "Item updated.");
+      alertUser("success", "Item geändert.");
     } catch (error) {
-      alertUser("error", "Item couldn't be updated.", error);
+      alertUser("error", "Das Item konnte nicht geändert werden.", error);
     }
   };
 

@@ -5,12 +5,10 @@ import Rating from "react-rating";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
 import PropTypes from "prop-types";
-import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
 import "../../styles/views/Dashboard.scss";
-import LinearIndeterminate from "components/ui/loader";
 import Favourites from "components/ui/favourites";
-import { FadeLoader, HashLoader, PacmanLoader, ScaleLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark, faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
@@ -58,7 +56,7 @@ const FriendList = ({ alertUser, setLoading }) => {
           headers: { Authorization: token },
         }
       );
-      alertUser("success", "Friend request accepted.");
+      alertUser("success", "Freundschaftsanfrage angenommen.");
       fetchFriendData();
     } catch (error) {
       alertUser("error", "", error);
@@ -71,7 +69,7 @@ const FriendList = ({ alertUser, setLoading }) => {
         headers: { Authorization: token },
       });
       // Remove the denied request from the list
-      alertUser("success", "Friend request denied.");
+      alertUser("success", "Freundschaftsanfrage abgelehnt.");
       fetchFriendData();
     } catch (error) {
       alertUser("error", "", error);
@@ -417,7 +415,7 @@ const FriendLeaderboard = ({ alertUser, setLoading }) => {
       case 1:
         return "#C0C0C0"; // silver
       case 2:
-        return "#CD7F32"; // bronze
+        return "#CD7F3270"; // bronze
       default:
         return "#dddddd"; // default background
     }
@@ -482,7 +480,7 @@ const Dashboard = ({ alertUser }) => {
     //OLD LOADER
     const timer = setTimeout(() => {
       setIsLoadingOld(false);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -530,13 +528,13 @@ const Dashboard = ({ alertUser }) => {
     <div className="flex justify-center items-center min-h-screen column" style={display_loader}>
       <ScaleLoader
         color="hsla(227, 0%, 100%, 1)"
-        height={50}
-        margin={4}
+        height={100}
+        margin={8}
         radius={40}
-        width={8}
+        width={10}
       />
-      <h1 style={{color:"white"}}>Unsere Seite wärmt sich gerade auf.😁</h1>
-      <h1 style={{color:"white"}}>Hinterlasse <span className="feedback-clicker" onClick={() => navigate("/feedback")}>hier</span> eine Nachricht falls innerhalb von 20 Sekunden nichts passiert.</h1>
+      <h1 style={{color:"white", textAlign:"center"}}>Unsere Seite wärmt sich gerade auf.😁</h1>
+      <h1 style={{color:"white", textAlign:"center"}}>Hinterlasse <span className="feedback-clicker" onClick={() => navigate("/feedback")}>hier</span> eine Nachricht falls innerhalb von 30 Sekunden nichts geschieht.</h1>
     </div>
     </>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { api } from "helpers/api";
@@ -52,8 +52,8 @@ const Favourites = ({ alertUser, setLoading }) => {
 
   const TripContainer = ({ name, id }) => {
     return (
-      <div className="favourites-container">
-        <label className="trip-label" onClick={() => navigate(`/tripOverview/${id}`)}>{name}</label>
+      <div className="favourites-container" onClick={() => navigate(`/tripOverview/${id}`)}>
+        <label className="trip-label">{name}</label>
         <StyledRating
           defaultValue={1} 
           max={1}

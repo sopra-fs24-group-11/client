@@ -36,10 +36,10 @@ const IndividualPackingList = ({alertUser}) => {
         headers: { Authorization: token },
       });
       setNewItemName("");
-      alertUser("success", "Item added.");
+      alertUser("success", "Item hinzugefügt.");
       setList((oldList) => ([...oldList, response.data]));
     } catch (error) {
-      alertUser("error", "Item couldn't be added.", error);
+      alertUser("error", "Das Item konnte nicht hinzugefügt werden.", error);
     }
   };
 
@@ -48,10 +48,10 @@ const IndividualPackingList = ({alertUser}) => {
       await api.post(`/trips/${tripId}/transfer/packings`, {}, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Template transferred.");
+      alertUser("success", "Template transferiert.");
       fetchData();
     } catch (error) {
-      alertUser("error", "Template couldn't be transferred.", error);
+      alertUser("error", "Das Template konnte nicht transferiert werden.", error);
     }
   };
 
@@ -73,10 +73,10 @@ const IndividualPackingList = ({alertUser}) => {
       await api.put(`/trips/${tripId}/individualPackings/${item.id}`, requestBody, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Item updated.");
+      alertUser("success", "Item geändert.");
       fetchData();
     } catch (error) {
-      alertUser("error", "Item couldn't be updated.", error);
+      alertUser("error", "Das Item konnte nicht geändert werden.", error);
     }
   };
 
@@ -85,10 +85,10 @@ const IndividualPackingList = ({alertUser}) => {
       await api.delete(`/trips/${tripId}/individualPackings/${item.id}`, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Item deleted.");
+      alertUser("success", "Item gelöscht.");
       fetchData();
     } catch (error) {
-      alertUser("error", "Item couldn't be deleted.", error);
+      alertUser("error", "Das Item konnte nicht gelöscht werden.", error);
     }
   };
   

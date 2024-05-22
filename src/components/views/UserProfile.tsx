@@ -7,7 +7,7 @@ import { Label } from "../ui/label";
 import PropTypes from "prop-types";
 import "../../styles/views/UserProfile.scss";
 import defaultImage from "../../graphics/Get-Together.png";
-import { HashLoader, ScaleLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";

@@ -36,10 +36,10 @@ const ListTemplate = ({alertUser}) => {
         headers: { Authorization: token },
       });
       setNewItemName("");
-      alertUser("success", "Item added.");
+      alertUser("success", "Item hinzugefügt.");
       setList((oldList) => ([...oldList, {item:response.data.item, id:response.data.id}]));
     } catch (error) {
-      alertUser("error", "Couldn't add the item.", error);
+      alertUser("error", "Das Item konnte nicht hinzugefügt werden.", error);
     }
   };
 
@@ -48,10 +48,10 @@ const ListTemplate = ({alertUser}) => {
       await api.delete(`/users/packings/${itemId}`, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Item deleted.");
+      alertUser("success", "Item gelöscht.");
       fetchData();
     } catch (error) {
-      alertUser("error", "Couldn't delete the item.", error);
+      alertUser("error", "Das Item konnte nicht gelöscht werden.", error);
     }
   };
 
@@ -61,10 +61,10 @@ const ListTemplate = ({alertUser}) => {
       await api.put(`/users/packings/${itemId}`, requestBody, {
         headers: { Authorization: token },
       });
-      alertUser("success", "Item updated."); 
+      alertUser("success", "Item geändert."); 
       fetchData();
     } catch (error) {
-      alertUser("error", "Couldn't update the item.", error);
+      alertUser("error", "Das Item konnte nicht geändert werden.", error);
     }
   };
 
@@ -109,7 +109,7 @@ const ListTemplate = ({alertUser}) => {
         </div>
       </div>}
       {!isPopupOpen && <div className="ListTemplate button-holder">
-        <Button onClick={() => {setPopupOpen(true)}}>Add Item</Button>
+        <Button onClick={() => {setPopupOpen(true)}}>Item hinzufügen</Button>
         <Button onClick={() => {setEditMode(old => !old)}}>{editMode ? "Editor schliessen" : "Editieren"}</Button>
       </div>}
       {!isPopupOpen && content}

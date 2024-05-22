@@ -1,15 +1,12 @@
 // For List
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { api } from "helpers/api";
 import { useNavigate } from "react-router-dom";
 import { Button } from "components/ui/Button";
-import { Progress } from "../ui/progress";
-import LinearIndeterminate from "components/ui/loader";
-import { Input } from "components/ui/input";
 import "../../styles/views/History.scss";
 import Heart from "components/ui/Heart";
 import PropTypes from "prop-types";
-import { HashLoader, ScaleLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 
 // Das ist ein Test
 
@@ -62,12 +59,12 @@ const History = ({ alertUser }) => {
 
   return (
     <div className="history-list-page">
-      <h1>Your Trip History</h1>
+      <h1>Vergangene Reisen</h1>
       {historyTrips.length > 0 ? (
         <ul className="history-list">
           {historyTrips.map((trip) => (
-            <li key={trip.id} className="trip">
-              <span className="name" onClick={() => showTripOverview(trip.id)}>
+            <li key={trip.id} className="trip" onClick={() => showTripOverview(trip.id)}>
+              <span className="name">
                 {trip.tripName}
               </span>
               <Heart
@@ -79,7 +76,7 @@ const History = ({ alertUser }) => {
           ))}
         </ul>
       ) : (
-        <div className="no-friends-message">No trips completed yet!</div>
+        <div className="no-friends-message">Noch keine vergangenen Reisen!</div>
       )}
       <div className="button-container">
         <Button
@@ -87,7 +84,7 @@ const History = ({ alertUser }) => {
           color="black"
           onClick={handleBackClick}
         >
-          Back to Dashboard
+          Zurück zum Dashboard
         </Button>
       </div>
     </div>
