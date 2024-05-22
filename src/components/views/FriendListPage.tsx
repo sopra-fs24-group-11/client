@@ -29,7 +29,7 @@ import { HashLoader, ScaleLoader } from "react-spinners";
 import ProgressHearts from "components/ui/ProgressHearts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark, faHeart as faSolidHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
 
 const FriendListPage = ({ alertUser }) => {
   const navigate = useNavigate();
