@@ -55,9 +55,9 @@ const Header = ({ alertUser }) => {
       setWidth(window.innerWidth);
       setHeight(window.innerHeight);
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
