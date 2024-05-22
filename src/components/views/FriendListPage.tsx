@@ -235,7 +235,7 @@ const FriendListPage = ({ alertUser }) => {
               <li key={friend.friendId} className="friend">
                 <span className="name">{friend.username}</span>
                 <Rating 
-                  initialRating={friend.points*10}
+                  initialRating={friend.points}
                   fractions={10}
                   emptySymbol={<FontAwesomeIcon icon={faRegularHeart} />}
                   fullSymbol={<FontAwesomeIcon icon={faSolidHeart} />}
