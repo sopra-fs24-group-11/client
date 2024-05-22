@@ -13,7 +13,6 @@ import signalImage from "../../graphics/signal.png";
 import stationImage from "../../graphics/station.png";
 import rails from "../../graphics/rails.png";
 import "../../styles/views/Header.scss";
-import { useWindowSize } from "react-use";
 import ConfettiComponent from "components/ui/Confetti";
 
 
@@ -21,7 +20,8 @@ const Header = ({ alertUser }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
-  const { width, height } = useWindowSize();
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
   const [clickCount, setClickCount] = useState(0);
   
   const [isConfettiActive, setIsConfettiActive] = useState(false);
@@ -49,6 +49,17 @@ const Header = ({ alertUser }) => {
       }, 3000);
     }
   }, [isConfettiActive]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+      setHeight(window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
