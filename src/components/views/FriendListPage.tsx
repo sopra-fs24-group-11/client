@@ -232,7 +232,7 @@ const FriendListPage = ({ alertUser }) => {
             {friendList.map((friend) => (
               <li key={friend.friendId} className="friend">
                 <span className="name">{friend.username}</span>
-                <ProgressHearts points={friend.points}/>
+                {/* <ProgressHearts points={friend.points}/> */}
                 <div className="stage">Level: {Math.floor(friend.level)}</div>
                 <Button
                   className="remove-friend"
