@@ -52,8 +52,9 @@ const Favourites = ({ alertUser, setLoading }) => {
 
   const TripContainer = ({ name, id }) => {
     return (
-      <div className="favourites-container" onClick={() => navigate(`/tripOverview/${id}`)}>
+      <div className="favourites-container">
         <label className="trip-label">{name}</label>
+        <Button backgroundColor="#FFB703" className="reise-info-button" onClick={() => navigate(`/tripOverview/${id}`)}>Info</Button>
         <StyledRating
           defaultValue={1} 
           max={1}

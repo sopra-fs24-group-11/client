@@ -63,10 +63,11 @@ const History = ({ alertUser }) => {
       {historyTrips.length > 0 ? (
         <ul className="history-list">
           {historyTrips.map((trip) => (
-            <li key={trip.id} className="trip" onClick={() => showTripOverview(trip.id)}>
+            <li key={trip.id} className="trip" >
               <span className="name">
                 {trip.tripName}
               </span>
+              <Button backgroundColor="#FFB703" className="reise-info-button" onClick={() => showTripOverview(trip.id)}>Info</Button>
               <Heart
                 tripId={trip.id}
                 isFavourite={trip.favourite}
