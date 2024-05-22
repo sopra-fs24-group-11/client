@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/views/RegisterExampleNew.css";
+import "../../styles/views/RegisterExampleNew.scss";
 import SignInForm from "../ui/SignIn";
 import SignUpForm from "../ui/SignUp";
 import PropTypes from "prop-types";

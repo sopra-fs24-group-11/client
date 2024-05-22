@@ -31,10 +31,14 @@
       border-radius: 10px;
       min-height: 60px;
 
-      .name {
-        font-weight: bold;
-        min-width: 90px;
-        max-width: 90px;
+      .history-date {
+        min-width: 60px;
+        max-width: 60px;
+      }
+      .history-name {
+        min-width: 130px;
+        max-width: 130px;
+        word-wrap: break-word;
       }
 
       .reise-info-button {

@@ -64,7 +64,13 @@ const History = ({ alertUser }) => {
         <ul className="history-list">
           {historyTrips.map((trip) => (
             <li key={trip.id} className="trip" >
-              <span className="name">
+              <span className="history-date">
+                {new Date(trip.meetUpTime).toLocaleDateString("de-DE", {
+                  day: "2-digit",
+                  month: "2-digit",
+                })}
+              </span>
+              <span className="history-name">
                 {trip.tripName}
               </span>
               <Button backgroundColor="#FFB703" className="reise-info-button" onClick={() => showTripOverview(trip.id)}>Info</Button>
