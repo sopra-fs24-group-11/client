@@ -142,6 +142,20 @@
           margin: 2px 2px 0 0;
           z-index:2;
         }
+        
+        #timer {
+          font-size:0.8rem;
+        }
+        @media (min-width: 769px) {
+          #timer {
+            position:absolute;
+            top:7px;
+            left:45%;
+          }
+        }
+        .bold-timer {
+          font-weight: bold;
+        }
       }
     }
 

@@ -143,9 +143,8 @@ const ConnectionItem = ({connection, alertUser}) => {
         </DataTable>) : (
       <>
         {showTimer &&
-          username === connection.username &&
           connection.startTime !== "N/A" && (
-            <p id="timer">
+            <p id="timer" className={username === connection.username && "bold-timer"}>
               Startet in:
               {`\n${Math.floor(timer / (60 * 60 * 24))}`.padStart(2, 0)}d
               {` ${Math.floor((timer % (60 * 60 * 24)) / (60 * 60))}`.padStart(
