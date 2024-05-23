@@ -88,7 +88,7 @@ const ProfilePage: React.FC = ({ alertUser }) => {
   };
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
+    if (event.target.files && event.target.files[0] && event.target.files[0].type) {
       if (event.target.files[0].type.match("image.*")) {
         // checks if image is of MIME image type
         if (event.target.files[0].size < 3*1024*1024) {
