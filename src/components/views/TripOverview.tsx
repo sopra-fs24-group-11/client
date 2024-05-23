@@ -25,19 +25,17 @@ import {styled} from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import {HashLoader, ScaleLoader} from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 import notificationLog from "../../graphics/notification_log.png";
-import infoIcon from "../../graphics/info_Icon.png";
-import ConnectionContainer from "../ui/ConnectionContainer";
 
 // ============== HELPER FUNCTIONS ==============
 
 const ConnectionItem = ({connection, alertUser}) => {
   const username = sessionStorage.getItem("username");
-  console.log(connection)
   const [timer, setTimer] = useState<number>(null); // controls timer
   const [showTimer, setShowTimer] = useState<boolean>(null);
   const [showConnectionPopup, setShowConnectionPopup] = useState<boolean>(false);
+  let connectionForDataTable = [];
   const hasConnection = connection.allInfo.length > 0;
 
   function parseTime() {
@@ -81,32 +79,38 @@ const ConnectionItem = ({connection, alertUser}) => {
 
     return () => clearInterval(intervalId);
   }, []); // Ensure the dependency array is empty
+
   const handleShowConnectionPopup = () => {
     if (hasConnection) {
       setShowConnectionPopup(old => !old);
     } else {
-      alertUser("info", "This person has not yet chosen a connection");
+      alertUser("info", `${connection.username} hat noch keine Verbindung ausgewählt.`);
     }
   }
-  function returnTime(str) {
+  const returnTime = (str) => {
     return str.slice(str.length - 8, str.length - 3);
   }
-  let x = [];
-  for (const el of connection.allInfo) {
 
-    let temp = {
-      to: el.arrivalPoint.stationName,
-      from: el.departurePoint.stationName,
-      type: el.connectionType,
+  const renameConnections = () => {
+    let x = [];
+    for (const el of connection.allInfo) {
+      let temp = {
+        to: el.arrivalPoint.stationName,
+        from: el.departurePoint.stationName,
+        type: el.connectionType,
 
-      name: el.connectionName,
-      departureTime: returnTime(el.departureTime),
-      arrivalTime: returnTime(el.arrivalTime),
-      departurePlatform: el.departurePlatform
+        name: el.connectionName,
+        departureTime: returnTime(el.departureTime),
+        arrivalTime: returnTime(el.arrivalTime),
+        departurePlatform: el.departurePlatform
+        }
+      x.push(temp);
     }
-    x.push(temp);
+    return x;
   }
 
+  connectionForDataTable = renameConnections();
+  
   return (
     <div className="connection-item">
       <FontAwesomeIcon icon={faCircleInfo} className="info-for-connection" onClick={handleShowConnectionPopup}/>
@@ -114,17 +118,13 @@ const ConnectionItem = ({connection, alertUser}) => {
         {connection.username}
       </h3> 
       {showConnectionPopup ?
-        (<DataTable customStyles={{
-          table: {
-            style: {width: "281px"}
-          }
-        }} columns={
+        (<DataTable  columns={
           [
             {
-              name: "Von", selector: row => row.from, width: "150px",
+              name: "Von", selector: row => row.from, width:"200px",
             },
             {
-              name: "Nach", selector: row => row.to, width: "150px",
+              name: "Nach", selector: row => row.to, width: "200px",
             },
             {
               name: "Abfahrt", selector: row => row.departureTime,
@@ -139,7 +139,7 @@ const ConnectionItem = ({connection, alertUser}) => {
               name: "Gleis", selector: row => row.departurePlatform ? row.departurePlatform : "--",
             }
           ]
-        } data={x}>
+        } data={connectionForDataTable}>
         </DataTable>) : (
       <>
         {showTimer &&
