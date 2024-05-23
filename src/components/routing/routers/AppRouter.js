@@ -46,7 +46,7 @@ const AppRouter = ({ alertUser }) => {
         </Route>
 
         <Route path="/feedback" element={<GameGuard />}>
-          <Route path="" element={<Feedback alertUser={alertUser}/>} />
+          <Route path="" element={<Feedback alertUser={alertUser} />} />
         </Route>
 
         <Route path="/createTrip" element={<GameGuard />}>
@@ -70,7 +70,6 @@ const AppRouter = ({ alertUser }) => {
         <Route path="*" element={<GameGuard />}>
           <Route path="*" element={<NotFound />} />
         </Route>
-        
       </Routes>
     </BrowserRouter>
   );

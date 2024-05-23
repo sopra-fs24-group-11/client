@@ -32,7 +32,7 @@ const Header = ({ alertUser }) => {
   };
 
   useEffect(() => {
-    if (clickCount >= 5) {
+    if (clickCount >= 1) {
       setIsConfettiActive(true);
       setRunConfetti(true);
       setClickCount(0);
