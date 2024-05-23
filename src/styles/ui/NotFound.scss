@@ -1,10 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@700&family=Montserrat:wght@600&family=Space+Mono:wght@400;700&display=swap");
 
 
-.not-found-btn,
-.not-found-btn:active,
-.not-found-btn:hover,
-.not-found-btn:focus {
+.not-found-btn {
   margin-top: 2rem;
   font-family: "Space Mono", monospace;
   color: #fff;
@@ -15,6 +12,7 @@
   font-size: 1.4rem;
   text-transform: uppercase;
   cursor: pointer;
+  width: 300px;
 }
 
 .not-found-display {
@@ -23,13 +21,15 @@
 }
 
 .not-found-display__img {
-  width: 500px;
+  flex:1;
 }
 
 .not-found-display__content {
+  flex:1;
   font-family: "Space Mono", monospace;
   color: #fff;
   text-align: center;
+  margin: 0px 10px;
 
   &--info {
     font-size:5rem;
@@ -49,10 +49,6 @@
 @media (max-width: 768px) {
   .not-found-display {
     flex-direction: column;
-  }
-  .not-found-display__img {
-    width: 300px;
-    margin:auto;
   }
   .not-found-display__content {
     &--info {

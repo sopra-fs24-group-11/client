@@ -4,7 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button} from "components/ui/Button";
 import PropTypes from "prop-types";
 import {Progress} from "../ui/progress";
-
+import DataTable from "react-data-table-component";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -18,8 +18,8 @@ import {ListCarousel} from "../ui/ListCarousel";
 
 import "../../styles/views/TripOverview.scss";
 import "../../styles/views/Dashboard.scss";
-
-import LinearIndeterminate from "components/ui/loader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 import {styled} from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
@@ -32,12 +32,13 @@ import ConnectionContainer from "../ui/ConnectionContainer";
 
 // ============== HELPER FUNCTIONS ==============
 
-const ConnectionItem = ({connection}) => {
+const ConnectionItem = ({connection, alertUser}) => {
   const username = sessionStorage.getItem("username");
-
+  console.log(connection)
   const [timer, setTimer] = useState<number>(null); // controls timer
   const [showTimer, setShowTimer] = useState<boolean>(null);
   const [showConnectionPopup, setShowConnectionPopup] = useState<boolean>(false);
+  const hasConnection = connection.allInfo.length > 0;
 
   function parseTime() {
     const timeStr = connection.startTime;
@@ -80,54 +81,97 @@ const ConnectionItem = ({connection}) => {
 
     return () => clearInterval(intervalId);
   }, []); // Ensure the dependency array is empty
+  const handleShowConnectionPopup = () => {
+    if (hasConnection) {
+      setShowConnectionPopup(old => !old);
+    } else {
+      alertUser("info", "This person has not yet chosen a connection");
+    }
+  }
+  function returnTime(str) {
+    return str.slice(str.length - 8, str.length - 3);
+  }
+  let x = [];
+  for (const el of connection.allInfo) {
+
+    let temp = {
+      to: el.arrivalPoint.stationName,
+      from: el.departurePoint.stationName,
+      type: el.connectionType,
+
+      name: el.connectionName,
+      departureTime: returnTime(el.departureTime),
+      arrivalTime: returnTime(el.arrivalTime),
+      departurePlatform: el.departurePlatform
+    }
+    x.push(temp);
+  }
 
   return (
     <div className="connection-item">
+      <FontAwesomeIcon icon={faCircleInfo} className="info-for-connection" onClick={handleShowConnectionPopup}/>
       <h3 className="connection-name" style={{display: "flex", alignItems: "center"}}>
         {connection.username}
-        <img src={infoIcon} alt="Info icon" style={{height: "50px", position: "relative", left: "55%"}}
-             onClick={() => setShowConnectionPopup(!showConnectionPopup)}/>
-      </h3>
-      {showConnectionPopup &&
-          <ConnectionContainer departureTime={connection.startTime} arrivalTime={connection.endTime}
-                               wholeTrip={connection.allInfo}></ConnectionContainer>
-      }
-      {showTimer &&
-        username === connection.username &&
-        connection.startTime !== "N/A" && (
-          <p id="timer">
-            Starts in:
-            {`\n${Math.floor(timer / (60 * 60 * 24))}`.padStart(2, 0)}d
-            {` ${Math.floor((timer % (60 * 60 * 24)) / (60 * 60))}`.padStart(
-              2,
-              0
-            )}
-            h
-            {` ${Math.floor(
-              ((timer % (60 * 60 * 24)) % (60 * 60)) / 60
-            )}`.padStart(2, 0)}
-            min
-          </p>
-        )}
-      <p className="start-text">Startzeit: {connection.startTime} Uhr</p>
-      <Progress className="progress-bar" value={connection.progress}/>
-      <p className="arrival-text">
-        Voraussichtliche Ankunft: {connection.endTime} Uhr
-      </p>
+      </h3> 
+      {showConnectionPopup ?
+        (<DataTable customStyles={{
+          table: {
+            style: {width: "281px"}
+          }
+        }} columns={
+          [
+            {
+              name: "Von", selector: row => row.from, width: "150px",
+            },
+            {
+              name: "Nach", selector: row => row.to, width: "150px",
+            },
+            {
+              name: "Abfahrt", selector: row => row.departureTime,
+            },
+            {
+              name: "Ankunft", selector: row => row.arrivalTime,
+            },
+            {
+              name: "Name", selector: row => row.name,
+            },
+            {
+              name: "Gleis", selector: row => row.departurePlatform ? row.departurePlatform : "--",
+            }
+          ]
+        } data={x}>
+        </DataTable>) : (
+      <>
+        {showTimer &&
+          username === connection.username &&
+          connection.startTime !== "N/A" && (
+            <p id="timer">
+              Startet in:
+              {`\n${Math.floor(timer / (60 * 60 * 24))}`.padStart(2, 0)}d
+              {` ${Math.floor((timer % (60 * 60 * 24)) / (60 * 60))}`.padStart(
+                2,
+                0
+              )}
+              h
+              {` ${Math.floor(
+                ((timer % (60 * 60 * 24)) % (60 * 60)) / 60
+              )}`.padStart(2, 0)}
+              min
+            </p>
+          )}
+        <p className="start-text">Startzeit: {connection.startTime} Uhr</p>
+        <Progress className="progress-bar" value={connection.progress}/>
+        <p className="arrival-text">
+          Voraussichtliche Ankunft: {connection.endTime} Uhr
+        </p>
+      </>)}
     </div>
   );
 };
 
 ConnectionItem.propTypes = {
-  connection: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    startStation: PropTypes.string.isRequired,
-    endStation: PropTypes.string.isRequired,
-    progress: PropTypes.number.isRequired,
-    startTime: PropTypes.string.isRequired,
-    endTime: PropTypes.string.isRequired,
-    allInfo: PropTypes.object.isRequired,
-  }),
+  alertUser: PropTypes.func,
+  connection: PropTypes.object,
 };
 
 const calculateProgress = (departureTime, arrivalTime) => {
@@ -563,7 +607,7 @@ const TripOverview = ({alertUser}) => {
         </h1>
         <div className="connections-list">
           {connections.map((connection, index) => (
-            <ConnectionItem key={index} connection={connection}/>
+            <ConnectionItem key={index} connection={connection} alertUser={alertUser}/>
           ))}
         </div>
         <div className="trip-buttons">

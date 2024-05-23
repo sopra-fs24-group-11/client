@@ -7,7 +7,7 @@
   align-items: center;
   width: 100%;
   margin-bottom: 4px;
-  padding: 5px 0px;
+  padding: 0px;
   border-radius: 10px;
 
   .favourite-date {
@@ -29,7 +29,7 @@
 
 .favourites-log-list {
   overflow-y: auto;
-  max-height: 400px;
+  max-height: 300px;
 
   ol {
     li {

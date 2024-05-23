@@ -101,8 +101,8 @@
 .friends{
   .friend-list {
     overflow-y: auto;
-    max-height: 200px;
-    min-height: 100px;
+    max-height: 190px;
+    min-height: 190px;
     padding: 0px 6px 10px 0px;
     margin-bottom: 20px;
 
@@ -141,6 +141,7 @@
 .request-list {
   overflow-y: auto;
   max-height: 110px;
+  min-height:70px;
   
   .request {
     display: flex;
@@ -193,6 +194,7 @@
 .notifications-log-list {
   overflow-y: auto;
   max-height: 400px;
+  min-height: 400px;
 
   ol {
     li {
@@ -253,7 +255,7 @@
 }
 .friend-leaderboard {
   .leaderboard-list {
-    max-height: 300px;
+    max-height: 361px;
     overflow-y: auto;
     padding-right: 15px;
   }

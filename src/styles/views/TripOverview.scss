@@ -102,6 +102,7 @@
         box-shadow: inset $dropShadow;
         min-height: 80px;
         padding: 10px;
+        position:relative;
 
         .connection-name {
           min-width: 170px;
@@ -132,6 +133,14 @@
           padding-left: 20px;
           min-width: 130px;
           font-size: 0.8rem;
+        }
+        .info-for-connection {
+          position:absolute;
+          top:0;
+          right:0;
+          font-size:1.5rem;
+          margin: 2px 2px 0 0;
+          z-index:3;
         }
       }
     }
