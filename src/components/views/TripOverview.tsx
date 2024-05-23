@@ -19,8 +19,7 @@ import {ListCarousel} from "../ui/ListCarousel";
 import "../../styles/views/TripOverview.scss";
 import "../../styles/views/Dashboard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
-
+import { faCircleInfo, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import {styled} from "@mui/material/styles";
 import Rating from "@mui/material/Rating";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -110,10 +109,11 @@ const ConnectionItem = ({connection, alertUser}) => {
   }
 
   connectionForDataTable = renameConnections();
-  
+
   return (
     <div className="connection-item">
-      <FontAwesomeIcon icon={faCircleInfo} className="info-for-connection" onClick={handleShowConnectionPopup}/>
+      {showConnectionPopup ? (<FontAwesomeIcon icon={faCircleXmark} className="info-for-connection" onClick={handleShowConnectionPopup}/>) : (
+      <FontAwesomeIcon icon={faCircleInfo} className="info-for-connection" onClick={handleShowConnectionPopup}/>)}
       <h3 className="connection-name" style={{display: "flex", alignItems: "center"}}>
         {connection.username}
       </h3> 

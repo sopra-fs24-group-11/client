@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import PropTypes from "prop-types";
 import "../../styles/ui/ConnectionContainer.scss";
-import picture from "../../graphics/infoIcon.jpeg";
 import DataTable from "react-data-table-component";
 import trainIcon from "../../graphics/connectionContainerIcons/train.png";
 import shipIcon from "../../graphics/connectionContainerIcons/ship-icon.png";
@@ -9,7 +8,7 @@ import tramIcon from "../../graphics/connectionContainerIcons/tram_icon.png";
 import busIcon from "../../graphics/connectionContainerIcons/bus-icon.png";
 import cablewayIcon from "../../graphics/connectionContainerIcons/Cableway_icon.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faCircleInfo, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 
 interface ConnectionContainerProps {
@@ -190,9 +189,11 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
             <p id="departureTime" className="time">
               {returnTime(departureTime)}
             </p>
-            < FontAwesomeIcon icon={faCircleInfo} className="info-for-connection2" 
+            {/* < FontAwesomeIcon icon={faCircleInfo} className="info-for-connection2" 
               onClick={() => setShowAdditionalInfo(!showAdditionalInfo)}
-            />
+            /> */}
+            {showAdditionalInfo ? (<FontAwesomeIcon icon={faCircleXmark} className="info-for-connection2" onClick={() => setShowAdditionalInfo(!showAdditionalInfo)}/>) : (
+            <FontAwesomeIcon icon={faCircleInfo} className="info-for-connection2" onClick={() => setShowAdditionalInfo(!showAdditionalInfo)}/>)}
 
 
           </div>
@@ -202,10 +203,10 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
                   <DataTable columns={
                     [
                       {
-                        name: "Von", selector: row => row.from, minWidth: "150px",
+                        name: "Von", selector: row => row.from, minWidth: "200px",
                       },
                       {
-                        name: "Nach", selector: row => row.to, minWidth: "150px",
+                        name: "Nach", selector: row => row.to, minWidth: "200px",
                       },
                       {
                         name: "Abfahrt", selector: row => row.departureTime,

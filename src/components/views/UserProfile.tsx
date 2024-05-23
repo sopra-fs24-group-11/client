@@ -275,7 +275,6 @@ const ProfilePage: React.FC = ({ alertUser }) => {
           </div>
         )}
         <div className="text">
-          {/* <h1 className="title font-extrabold text-3xl">Profile</h1> */}
           {editMode ? (
             <>
               <Label className="label">Benutzername</Label>
@@ -363,6 +362,12 @@ const ProfilePage: React.FC = ({ alertUser }) => {
                     }
                   )}</p>
               <div className="buttons-container">
+                <Button
+                  backgroundColor="#a2d2ff"
+                  onClick={() => navigate("/dashboard")}
+                >
+                  Zurück zum Dashboard
+                </Button>
                 <Button
                   backgroundColor={"#FFB703"}
                   onClick={() => setEditMode(true)}
