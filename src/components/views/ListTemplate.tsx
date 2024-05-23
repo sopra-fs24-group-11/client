@@ -96,7 +96,7 @@ const ListTemplate = ({alertUser}) => {
         {isPopupOpen && <div className="List popup-container11">
         <div className="List popup11">
           <input
-            className="List popup-input11"
+            className="List popup-input12"
             type="text"
             value={newItemName}
             placeholder={"Nächstes Item "}

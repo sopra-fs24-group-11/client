@@ -14,7 +14,7 @@
     min-height: 300px;
     @include center;
     flex-direction: column;
-    background-color: rgba(230, 230, 230, 1);
+    background-color: #ffffff;
     justify-content: start;
     padding: 5px;
     user-select: none;
@@ -56,6 +56,13 @@
     border-radius:10px;
     color: black;
     margin-bottom:15px;
+  }
+  &.popup-input12 {
+    padding: 5px;
+    border-radius:10px;
+    color: black;
+    margin-bottom:15px;
+    background-color: #b8cad7a6;
   }
   &.popup-buttons11 {
     display:flex;
