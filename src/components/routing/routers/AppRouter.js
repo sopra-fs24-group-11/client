@@ -14,7 +14,7 @@ import ListTemplate from "../../views/ListTemplate";
 import History from "../../views/History";
 import PropTypes from "prop-types";
 import Feedback from "../../views/Feedback";
-import RegisterExampleNew from "../../views/RegisterExampleNew";
+import Register from "../../views/Register";
 import NotFound from "../../ui/NotFound";
 
 const AppRouter = ({ alertUser }) => {
@@ -23,7 +23,7 @@ const AppRouter = ({ alertUser }) => {
       <Header alertUser={alertUser} />
       <Routes>
         <Route path="/auth" element={<LoginGuard />}>
-          <Route path="" element={<RegisterExampleNew alertUser={alertUser} />} />
+          <Route path="" element={<Register alertUser={alertUser} />} />
         </Route>
         <Route path="/dashboard" element={<GameGuard />}>
           <Route path="" element={<Dashboard alertUser={alertUser} />} />

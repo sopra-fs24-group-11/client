@@ -476,8 +476,8 @@ const TripOverview = ({alertUser}) => {
 
     // Fetch immediately when the component mounts
     fetchPeriodically();
-    // Set up the interval for fetching data every 10 seconds
-    const intervalId = setInterval(fetchPeriodically, 10000);
+
+    const intervalId = setInterval(fetchPeriodically, 5000);
 
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
@@ -511,7 +511,6 @@ const TripOverview = ({alertUser}) => {
           icon={<FavoriteIcon fontSize="inherit"/>}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit"/>}
           onMouseDown={handleToFavourites}
-          //onTouchStart={handleToFavourites}
         />
         <div style={{position: "relative", top: "0%", marginLeft: "50px"}}>
           <Button
