@@ -91,8 +91,12 @@ const ProfilePage: React.FC = ({ alertUser }) => {
     if (event.target.files) {
       if (event.target.files[0].type.match("image.*")) {
         // checks if image is of MIME image type
-        setAvatar(event.target.files[0]);
-        setSelectedFileName(event.target.files[0].name);
+        if (event.target.files[0].size < 3*1024*1024) {
+          setAvatar(event.target.files[0]);
+          setSelectedFileName(event.target.files[0].name);
+        } else {
+          alertUser("error", "Das File ist grösser als 3MB.");
+        }
       } else {
         alertUser("error", "Das File muss ein Bild sein.");
       }
