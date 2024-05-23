@@ -14,25 +14,34 @@ const Feedback = ({alertUser}) => {
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [feedbackText, setFeedbackText] = useState<string>("");
   const fireworks = useRef<FireworksHandlers>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleBackClick = () => {
-    navigate("/dashboard");
+    if (!isSubmitting) {
+      navigate("/dashboard");
+    }
   };
-
+  
   const submitFeedback = async () => {
-    const requestBody = {message: feedbackText};
+    setIsSubmitting(true);
+    const requestBody = { message: feedbackText };
     try {
       const response = await api.post("/users/feedback", requestBody, {
-        headers: {Authorization: token},
+        headers: { Authorization: token },
       });
       setHasSubmitted(true);
-      //starts and stops fireworks after submitting
       fireworks.current.start();
-      setTimeout(() => fireworks.current.waitStop(), 5000);
+      setTimeout(() => {
+        if (fireworks.current) {
+          fireworks.current.waitStop();
+        }
+      }, 5000);
     } catch (error) {
       alertUser("error", "Das Feedback konnte nicht versendet werden.", error);
+    } finally {
+      setIsSubmitting(false);
     }
-  }
+  };
 
   useEffect(() => {
     fireworks.current.stop();

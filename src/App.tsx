@@ -29,7 +29,7 @@ const App = () => {
   }
 
   return (
-    <div className="" style={{ overflowX: "hidden" }}>
+    <div className="" style={{ overflowX: "hidden", overflowY: "hidden" }}>
       <AppRouter alertUser={alertUser}/>
       <Snackbar
         open={snackbarOpen}
