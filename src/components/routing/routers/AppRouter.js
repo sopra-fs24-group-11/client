@@ -14,7 +14,7 @@ import ListTemplate from "../../views/ListTemplate";
 import History from "../../views/History";
 import PropTypes from "prop-types";
 import Feedback from "../../views/Feedback";
-import { Register } from "../../views/Register";
+import Register from "../../views/Register";
 import NotFound from "../../ui/NotFound";
 
 const AppRouter = ({ alertUser }) => {
