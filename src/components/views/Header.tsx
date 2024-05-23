@@ -96,7 +96,6 @@ const Header = ({ alertUser }) => {
         className="logo"
         onClick={() => {
           navigate("/dashboard");
-          window.location.reload();
         }}
         style={{ cursor: "pointer" }}
       >
