@@ -198,19 +198,15 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
 
           </div>
           {showAdditionalInfo &&
-              <div className="presentation table">
+              <div className="presentation-table">
 
-                  <DataTable customStyles={{
-                    table: {
-                      style: {width: "281px"}
-                    }
-                  }} columns={
+                  <DataTable columns={
                     [
                       {
-                        name: "Von", selector: row => row.from, width: "150px",
+                        name: "Von", selector: row => row.from, minWidth: "150px",
                       },
                       {
-                        name: "Nach", selector: row => row.to, width: "150px",
+                        name: "Nach", selector: row => row.to, minWidth: "150px",
                       },
                       {
                         name: "Abfahrt", selector: row => row.departureTime,
