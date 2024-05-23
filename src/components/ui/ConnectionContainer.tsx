@@ -8,6 +8,8 @@ import shipIcon from "../../graphics/connectionContainerIcons/ship-icon.png";
 import tramIcon from "../../graphics/connectionContainerIcons/tram_icon.png";
 import busIcon from "../../graphics/connectionContainerIcons/bus-icon.png";
 import cablewayIcon from "../../graphics/connectionContainerIcons/Cableway_icon.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 
 interface ConnectionContainerProps {
@@ -188,29 +190,22 @@ const ConnectionContainer: React.FC<ConnectionContainerProps> = ({
             <p id="departureTime" className="time">
               {returnTime(departureTime)}
             </p>
-            < img
-              style={{width: "30px", position: "absolute", right: 0}}
-              src={picture}
-              alt="Information Icon"
+            < FontAwesomeIcon icon={faCircleInfo} className="info-for-connection2" 
               onClick={() => setShowAdditionalInfo(!showAdditionalInfo)}
             />
 
 
           </div>
           {showAdditionalInfo &&
-              <div className="presentation table">
+              <div className="presentation-table">
 
-                  <DataTable customStyles={{
-                    table: {
-                      style: {width: "281px"}
-                    }
-                  }} columns={
+                  <DataTable columns={
                     [
                       {
-                        name: "Von", selector: row => row.from, width: "150px",
+                        name: "Von", selector: row => row.from, minWidth: "150px",
                       },
                       {
-                        name: "Nach", selector: row => row.to, width: "150px",
+                        name: "Nach", selector: row => row.to, minWidth: "150px",
                       },
                       {
                         name: "Abfahrt", selector: row => row.departureTime,
