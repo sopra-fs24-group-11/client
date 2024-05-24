@@ -324,7 +324,7 @@ const CreateTrip = ({ alertUser }) => {
                         onClick={handleLocationSubmit}
                         backgroundColor="#14AE5C"
                       >
-                        Wähle den Zielort:
+                        Speichern
                       </Button>
                     </DialogFooter>
                     <DialogClose ref={closeDialogRef} className="hidden" />
@@ -400,7 +400,7 @@ const CreateTrip = ({ alertUser }) => {
                     onClick={handleAddFriendSubmit}
                     backgroundColor="#14AE5C"
                   >
-                    hinzufügen:
+                    hinzufügen
                   </Button>
                 </DialogFooter>
                 <DialogClose ref={closeDialogRef} className="hidden" />

@@ -345,7 +345,7 @@ const FriendListPage = ({ alertUser }) => {
               </DialogHeaderSCN>
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Suchen..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="input"

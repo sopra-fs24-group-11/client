@@ -322,7 +322,7 @@ const ChooseConnection = ({ alertUser }) => {
                             paddingLeft: "20px",
                           }}
                         >
-                          Jetztiger Standort
+                          Jetziger Standort
                         </div>
                       </li>
                       {locationSuggestions.length > 0 && (
