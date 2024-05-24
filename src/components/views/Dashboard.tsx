@@ -533,8 +533,8 @@ const Dashboard = ({ alertUser }) => {
         radius={40}
         width={10}
       />
-      <h1 style={{color:"white", textAlign:"center"}}>Unsere Seite wärmt sich gerade auf.😁</h1>
-      <h1 style={{color:"white", textAlign:"center"}}>Hinterlasse <span className="feedback-clicker" onClick={() => navigate("/feedback")}>hier</span> eine Nachricht falls innerhalb von 30 Sekunden nichts geschieht.</h1>
+      {/* <h1 style={{color:"white", textAlign:"center"}}>Unsere Seite wärmt sich gerade auf.😁</h1>
+      <h1 style={{color:"white", textAlign:"center"}}>Hinterlasse <span className="feedback-clicker" onClick={() => navigate("/feedback")}>hier</span> eine Nachricht falls innerhalb von 30 Sekunden nichts geschieht.</h1> */}
     </div>
     </>
   )
