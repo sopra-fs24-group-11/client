@@ -248,7 +248,7 @@ const ChooseConnection = ({ alertUser }) => {
         style={{ height: "auto" }}
       >
         <div className="connection outer-form" style={{ height: "auto" }}>
-          <h1 className="text-3xl mb-5 font-bold"> Wähle die Reiseverbindung</h1>
+          <h1 className="text-3xl mb-5 font-bold">Reiseverbindung wählen</h1>
           <div className="connection inner-form" style={{ height: "auto" }}>
             <div
               className="connection locations_container"
@@ -392,7 +392,7 @@ const ChooseConnection = ({ alertUser }) => {
               )
             ) : (
               <div id="results" className="connection box">
-                <h2 className="text-2xl mb-2">Select Your Connection:</h2>
+                <h2 className="text-2xl mb-2">Wähle eine Verbindung:</h2>
                 <div className="connectionContainer">
                   {/* {connections} */}
                   {content}

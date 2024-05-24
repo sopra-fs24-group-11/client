@@ -760,8 +760,8 @@ const TripOverview = ({alertUser}) => {
         <DialogContent>
           <DialogContentText>
             {tripMembers.length > 0
-              ? "Please select a new admin for this trip."
-              : "No other members to select as admin. Invite your friends first!"}
+              ? "Bitte ernenne einen neuen Admin für die Reise."
+              : "Keine Mitglieder. Lade zuerst Freunde ein!"}
           </DialogContentText>
           {tripMembers.length > 0 && (
             <List>
